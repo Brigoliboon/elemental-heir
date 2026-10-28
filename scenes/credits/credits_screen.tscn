@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://bxdrvn27jssva"]
 
-[ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://scripts/back_to_title.gd" id="2_back"]
+[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://b4xm6oxnuwds4" path="res://scripts/back_to_title.gd" id="2_back"]
 
-[node name="CreditsScreen" type="Control"]
+[node name="CreditsScreen" type="Control" unique_id=377315974]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=327347226]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.025, 0.03, 0.045, 1)
 
-[node name="Layout" type="VBoxContainer" parent="."]
+[node name="Layout" type="VBoxContainer" parent="." unique_id=998661457]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,14 +36,14 @@ grow_vertical = 2
 theme_override_constants/separation = 28
 alignment = 1
 
-[node name="Title" type="Label" parent="Layout"]
+[node name="Title" type="Label" parent="Layout" unique_id=1991678491]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
 theme_override_font_sizes/font_size = 64
 text = "Credits"
 horizontal_alignment = 1
 
-[node name="CreditsText" type="Label" parent="Layout"]
+[node name="CreditsText" type="Label" parent="Layout" unique_id=1113578746]
 custom_minimum_size = Vector2(1280, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -57,7 +57,7 @@ Cinzel font by Natanael Gama, licensed under the SIL Open Font License, Version 
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BackButton" type="Button" parent="Layout"]
+[node name="BackButton" type="Button" parent="Layout" unique_id=1424409368]
 custom_minimum_size = Vector2(240, 64)
 layout_mode = 2
 size_flags_horizontal = 4

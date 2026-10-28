@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://dognuqaltc7fd"]
+
+[ext_resource type="Script" uid="uid://4yd5ihrgkhry" path="res://entities/enemies/mob.gd" id="1_mpx5k"]
+[ext_resource type="Resource" uid="uid://c2rgw3x6hsdbt" path="res://resources/goblin.tres" id="2_d8mg4"]
+[ext_resource type="Texture2D" uid="uid://bctdikjsdpc73" path="res://assets/monsters/forest/sprite/attack/1.png" id="3_wkyq3"]
+[ext_resource type="Texture2D" uid="uid://8uygvwxy5ug4" path="res://assets/monsters/forest/sprite/attack/3.png" id="4_dgew0"]
+[ext_resource type="Texture2D" uid="uid://b1o5sia6ycks0" path="res://assets/monsters/forest/sprite/attack/4.png" id="5_dq8ki"]
+[ext_resource type="Texture2D" uid="uid://d016j87yo3o7a" path="res://assets/monsters/forest/sprite/attack/5.png" id="6_cgcak"]
+[ext_resource type="Texture2D" uid="uid://b5jeytkuiasg7" path="res://assets/monsters/forest/sprite/attack/6.png" id="7_blnaa"]
+[ext_resource type="Texture2D" uid="uid://ctq084g1nv4jv" path="res://assets/monsters/forest/sprite/attack/7.png" id="8_cqxp7"]
+[ext_resource type="Texture2D" uid="uid://n7ylgn4qm0rx" path="res://assets/monsters/forest/sprite/attack/8.png" id="9_0tsax"]
+[ext_resource type="Texture2D" uid="uid://dhn4ljvyl0dfo" path="res://assets/monsters/forest/sprite/attack/9.png" id="10_4yhmh"]
+[ext_resource type="Texture2D" uid="uid://8wms64bl4fy4" path="res://assets/monsters/forest/sprite/wolf-idle(6).png" id="11_hywe3"]
+[ext_resource type="Texture2D" uid="uid://cq7pp4qhhwnu3" path="res://assets/monsters/forest/sprite/wolf-idle(4).png" id="12_0hddx"]
+[ext_resource type="Texture2D" uid="uid://bi4l1ygqstyus" path="res://assets/monsters/forest/sprite/wolf-idle(3).png" id="13_qwdig"]
+[ext_resource type="Texture2D" uid="uid://c5ncwpj3ojgq6" path="res://assets/monsters/forest/sprite/wolf-idle(2).png" id="14_nx841"]
+[ext_resource type="Texture2D" uid="uid://cv1ajjstvkisa" path="res://assets/monsters/forest/sprite/wolf-idle(1).png" id="15_8cfiu"]
+[ext_resource type="Script" uid="uid://dpnb8jg5j8y0u" path="res://scripts/entity/hostile-mob.gd" id="16_fu0o6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cx2d5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_wkyq3")
+}, {
+"duration": 1.5,
+"texture": ExtResource("4_dgew0")
+}, {
+"duration": 3.0,
+"texture": ExtResource("5_dq8ki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_cgcak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_blnaa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_cqxp7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_0tsax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_4yhmh")
+}],
+"loop": 1,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_hywe3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_0hddx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_qwdig")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_nx841")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_8cfiu")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
+radius = 45.688404
+height = 156.12576
+
+[node name="Mob" type="CharacterBody2D" unique_id=1876476869]
+script = ExtResource("1_mpx5k")
+config = ExtResource("2_d8mg4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=457954062]
+position = Vector2(130, 6)
+scale = Vector2(1.3048555, 1.3142637)
+sprite_frames = SubResource("SpriteFrames_cx2d5")
+animation = &"attack"
+script = ExtResource("16_fu0o6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1303960305]
+position = Vector2(126, 20.999996)
+rotation = 1.2793263
+shape = SubResource("CapsuleShape2D_ws1ch")

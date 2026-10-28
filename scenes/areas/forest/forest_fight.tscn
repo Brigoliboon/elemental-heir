@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bcpg4k0emh18g" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://cxgvljscnbjb2" path="res://assets/backgrounds/forest/forest_fight.png" id="2_bg"]
+[ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="3_k40ib"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -141,5 +142,9 @@ shape = SubResource("CircleShape2D_ei6kh")
 one_way_collision = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Obstacles" index="1" unique_id=225373476]
+position = Vector2(-47, 64)
 polygon = PackedVector2Array(1693, 854, 1640, 876, 1580, 949, 1561, 874, 1495, 927, 1464, 971, 1448, 994, 1461, 1072, 1587, 1076)
 one_way_collision = true
+
+[node name="Mob" parent="." index="5" unique_id=1876476869 instance=ExtResource("3_k40ib")]
+position = Vector2(1252, 605)
