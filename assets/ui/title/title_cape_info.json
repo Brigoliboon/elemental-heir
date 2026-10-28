@@ -1,0 +1,14 @@
+{
+ "canvas": [
+  1920,
+  1080
+ ],
+ "cape_bbox": [
+  151,
+  405,
+  492,
+  910
+ ],
+ "anchor_y_shoulders": 405,
+ "notes": "Place both PNGs at (0,0) full screen; cape draws on top of bg_no_cape. Keep the shoulder line fixed; sway grows toward the bottom hem, mostly toward the left (wind from the right), about 10-25 px at the hem, ~2 s loop."
+}

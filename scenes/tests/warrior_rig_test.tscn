@@ -1,0 +1,120 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/tests/warrior_rig_test.gd" id="1_script"]
+[ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
+
+[node name="WarriorRigTest" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Background" type="ColorRect" parent="BackgroundLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.03, 0.045, 1)
+
+[node name="CharacterRoot" type="Node2D" parent="."]
+position = Vector2(960, 540)
+scale = Vector2(3, 3)
+
+[node name="Skeleton2D" type="Skeleton2D" parent="CharacterRoot"]
+unique_name_in_owner = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterRoot"]
+unique_name_in_owner = true
+root_node = NodePath("..")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="UI" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Title" type="Label" parent="UILayer/UI"]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 28.0
+offset_right = 780.0
+offset_bottom = 76.0
+theme_override_font_sizes/font_size = 32
+text = "Warrior T1 - Side Rig Test"
+
+[node name="Hint" type="Label" parent="UILayer/UI"]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 80.0
+offset_right = 900.0
+offset_bottom = 118.0
+theme_override_colors/font_color = Color(0.72, 0.68, 0.6, 1)
+theme_override_font_sizes/font_size = 24
+text = "Runtime Skeleton2D built from pivots.json - 128 px source, shown at 3x - A/D or arrows to walk"
+
+[node name="Controls" type="HBoxContainer" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -660.0
+offset_top = -100.0
+offset_right = 660.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="LeftButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "◀ Left"
+
+[node name="RightButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Right ▶"
+
+[node name="IdleButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Idle"
+
+[node name="WalkButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Walk"
+
+[node name="FacingButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Facing: Right"
+
+[node name="BackButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"
