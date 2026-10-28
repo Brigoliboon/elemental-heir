@@ -13,11 +13,6 @@ const RIG_CENTER_X := 31.0
 ## Distance from the Character origin down to the soles, in rig units (scale 1).
 const FEET_OFFSET_LOCAL := 141.7
 
-## Ground shadow drawn behind the rig, in rig units (scale 1).
-const SHADOW_RADIUS := 18.0
-const SHADOW_FLATTEN := 0.35
-const SHADOW_COLOR := Color(0.0, 0.0, 0.0, 0.3)
-
 @export var config: CharacterConfig
 
 var rig: CharacterRig
@@ -117,12 +112,6 @@ func set_render_scale(value: float) -> void:
 func _apply_scale() -> void:
 	skeleton.position.x = -RIG_CENTER_X
 	scale = Vector2(render_scale if facing_right else -render_scale, render_scale)
-
-
-func _draw() -> void:
-	draw_set_transform(Vector2(0.0, FEET_OFFSET_LOCAL), 0.0, Vector2(1.0, SHADOW_FLATTEN))
-	draw_circle(Vector2.ZERO, SHADOW_RADIUS, SHADOW_COLOR, true, -1.0, true)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 func toggle_facing() -> void:

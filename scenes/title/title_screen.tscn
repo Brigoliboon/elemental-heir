@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scenes/title/title_screen.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/title_screen_no_buttons_1920x1080.png" id="2_bg"]
+[ext_resource type="VideoStream" path="res://assets/ui/title/title_screen_no_buttons.ogv" id="2_bg"]
 [ext_resource type="Texture2D" path="res://assets/ui/title/btn_offline_normal.png" id="6_offline_normal"]
 [ext_resource type="Texture2D" path="res://assets/ui/title/btn_offline_pressed.png" id="7_offline_pressed"]
 [ext_resource type="Texture2D" path="res://assets/ui/title/btn_offline_disabled.png" id="8_offline_disabled"]
@@ -32,7 +32,7 @@ grow_vertical = 2
 theme = ExtResource("24_theme")
 script = ExtResource("1_script")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="VideoStreamPlayer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,9 +40,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_bg")
-expand_mode = 1
-stretch_mode = 0
+stream = ExtResource("2_bg")
+volume_db = -80.0
+expand = true
+loop = true
+autoplay = true
 
 [node name="SoundButton" type="TextureButton" parent="."]
 unique_name_in_owner = true

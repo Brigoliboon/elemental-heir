@@ -3,6 +3,15 @@
 [ext_resource type="PackedScene" uid="uid://bcpg4k0emh18g" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://cxgvljscnbjb2" path="res://assets/backgrounds/forest/forest_fight.png" id="2_bg"]
 
+[sub_resource type="Gradient" id="Gradient_i6ujb"]
+offsets = PackedFloat32Array(0, 0.6686747, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.042168677, 0.042168677, 0.042168677, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qjgrj"]
+gradient = SubResource("Gradient_i6ujb")
+fill = 1
+fill_from = Vector2(0.49565217, 0.526087)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_ei6kh"]
 radius = 97.89024
 
@@ -15,12 +24,122 @@ spawn_x_ratio = 0.1
 exit_left_scene = "res://scenes/areas/forest/forest_village_square.tscn"
 
 [node name="Background" parent="." index="0" unique_id=388695127]
+position = Vector2(1, 0)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_bg")
+
+[node name="lamp2" type="PointLight2D" parent="Background" index="0" unique_id=680565864]
+position = Vector2(1513.3334, 386.6667)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp3" type="PointLight2D" parent="Background" index="1" unique_id=465152215]
+position = Vector2(1390.6667, 638)
+scale = Vector2(1.7395843, 2.078125)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp4" type="PointLight2D" parent="Background" index="2" unique_id=744047555]
+position = Vector2(1336.6667, 247.33331)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp5" type="PointLight2D" parent="Background" index="3" unique_id=156601270]
+position = Vector2(2031.3334, 624.3334)
+scale = Vector2(1.8645804, 2.0104165)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp6" type="PointLight2D" parent="Background" index="4" unique_id=1549588846]
+position = Vector2(1816.0001, 456)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp7" type="PointLight2D" parent="Background" index="5" unique_id=76887593]
+position = Vector2(2160, 400.6667)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp8" type="PointLight2D" parent="Background" index="6" unique_id=1850347339]
+position = Vector2(1950.6667, 294.6667)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp9" type="PointLight2D" parent="Background" index="7" unique_id=344862021]
+position = Vector2(1826.6669, 243.33336)
+scale = Vector2(1.0416664, 1.0104163)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp10" type="PointLight2D" parent="Background" index="8" unique_id=444605888]
+position = Vector2(1726.0001, 240.66667)
+scale = Vector2(0.4895833, 0.4999995)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp11" type="PointLight2D" parent="Background" index="9" unique_id=329655325]
+position = Vector2(1172.6667, 274)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp12" type="PointLight2D" parent="Background" index="10" unique_id=1826113976]
+position = Vector2(950.33325, 658.66675)
+scale = Vector2(0.8854148, 0.87500113)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp13" type="PointLight2D" parent="Background" index="11" unique_id=538050354]
+position = Vector2(765.9998, 322.66666)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp14" type="PointLight2D" parent="Background" index="12" unique_id=1108578072]
+position = Vector2(432.66653, 303.3333)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="lamp15" type="PointLight2D" parent="Background" index="13" unique_id=879397639]
+position = Vector2(24.666424, 331.3333)
+scale = Vector2(1.187499, 1.2291665)
+color = Color(0.32941177, 0.5254902, 0.54509807, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_qjgrj")
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="HUD/UI" parent_id_path=PackedInt32Array(322130660) index="4" unique_id=420343154]
+position = Vector2(1291.773, 681.71716)
+color = Color(0.6181308, 0.60554236, 0.42371726, 1)
+energy = 0.16
+blend_mode = 2
+max_distance = 0.0
 
 [node name="Obstacles" type="StaticBody2D" parent="." index="4" unique_id=1361663244]
 
 [node name="Boulder" type="CollisionShape2D" parent="Obstacles" index="0" unique_id=1111918413]
 position = Vector2(2231, 887)
 shape = SubResource("CircleShape2D_ei6kh")
+one_way_collision = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Obstacles" index="1" unique_id=225373476]
+polygon = PackedVector2Array(1693, 854, 1640, 876, 1580, 949, 1561, 874, 1495, 927, 1464, 971, 1448, 994, 1461, 1072, 1587, 1076)
 one_way_collision = true
