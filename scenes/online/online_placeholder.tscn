@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cg42o70yuk4cm"]
 
-[ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://scripts/back_to_title.gd" id="2_back"]
+[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://b4xm6oxnuwds4" path="res://scripts/back_to_title.gd" id="2_back"]
 
-[node name="OnlinePlaceholder" type="Control"]
+[node name="OnlinePlaceholder" type="Control" unique_id=674481577]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=364531229]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.025, 0.03, 0.045, 1)
 
-[node name="Layout" type="VBoxContainer" parent="."]
+[node name="Layout" type="VBoxContainer" parent="." unique_id=450638230]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,14 +36,14 @@ grow_vertical = 2
 theme_override_constants/separation = 28
 alignment = 1
 
-[node name="Title" type="Label" parent="Layout"]
+[node name="Title" type="Label" parent="Layout" unique_id=402494396]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
 theme_override_font_sizes/font_size = 72
 text = "Online"
 horizontal_alignment = 1
 
-[node name="Body" type="Label" parent="Layout"]
+[node name="Body" type="Label" parent="Layout" unique_id=821068737]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.76, 0.68, 1)
 theme_override_font_sizes/font_size = 30
@@ -51,7 +51,7 @@ text = "Online matchmaking is coming in a later milestone."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BackButton" type="Button" parent="Layout"]
+[node name="BackButton" type="Button" parent="Layout" unique_id=1622965016]
 custom_minimum_size = Vector2(240, 64)
 layout_mode = 2
 size_flags_horizontal = 4

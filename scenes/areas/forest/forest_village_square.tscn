@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://8yyu6evsk17u"]
+
+[ext_resource type="PackedScene" uid="uid://bcpg4k0emh18g" path="res://scenes/areas/area_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://cujvxnmo3axkt" path="res://assets/backgrounds/forest/forest_village_square.png" id="2_bg"]
+
+[node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
+area_name = "Forest - Village Square"
+background_texture = ExtResource("2_bg")
+spawn_x_ratio = 0.3
+exit_right_scene = "res://scenes/areas/forest/forest_fight.tscn"
+
+[node name="Background" parent="." index="0" unique_id=388695127]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_bg")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="4" unique_id=2039500424]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" index="0" unique_id=1876472919]
+position = Vector2(2, -4)
+polygon = PackedVector2Array(1216, 868, 1167, 894, 1057, 899, 987, 895, 947, 874, 957, 861, 959, 821, 996, 804, 1058, 798, 1129, 800, 1196, 815, 1202, 825, 1205, 863)
+one_way_collision = true

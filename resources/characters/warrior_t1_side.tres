@@ -1,0 +1,182 @@
+[gd_resource type="Resource" script_class="CharacterConfig" format=3 uid="uid://cvfsb062l2mfn"]
+
+[ext_resource type="Script" uid="uid://c04qrmx6o36ow" path="res://scripts/characters/character_config.gd" id="1_config"]
+[ext_resource type="Script" uid="uid://d2lff1a3um7x4" path="res://scripts/characters/attack_data.gd" id="2_attack"]
+
+[sub_resource type="Resource" id="Resource_attack_1"]
+script = ExtResource("2_attack")
+id = &"attack_1"
+keys = Array[Dictionary]([{
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 0.0
+}, {
+"arm": 25.0,
+"fore": -25.0,
+"hand": -6.0,
+"lean": -5.0,
+"px": -1.0,
+"py": 0.5,
+"sword": -45.0,
+"t": 0.3
+}, {
+"arm": -75.0,
+"fore": 5.0,
+"hand": 4.0,
+"lean": 5.0,
+"px": 1.5,
+"py": 0.5,
+"sword": 40.0,
+"t": 0.5
+}, {
+"arm": -65.0,
+"fore": 10.0,
+"hand": 8.0,
+"lean": 4.0,
+"px": 1.5,
+"py": 0.5,
+"sword": 55.0,
+"t": 0.68
+}, {
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 1.0
+}])
+
+[sub_resource type="Resource" id="Resource_attack_2"]
+script = ExtResource("2_attack")
+id = &"attack_2"
+keys = Array[Dictionary]([{
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 0.0
+}, {
+"arm": -55.0,
+"fore": 15.0,
+"hand": 12.0,
+"lean": 3.0,
+"px": 1.0,
+"py": 1.0,
+"sword": 75.0,
+"t": 0.25
+}, {
+"arm": -125.0,
+"fore": -10.0,
+"hand": -16.0,
+"lean": -3.0,
+"px": 3.0,
+"py": 0.3,
+"sword": -50.0,
+"t": 0.5
+}, {
+"arm": -115.0,
+"fore": -15.0,
+"hand": -18.0,
+"lean": -4.0,
+"px": 3.0,
+"py": 0.3,
+"sword": -60.0,
+"t": 0.7
+}, {
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 1.0
+}])
+
+[sub_resource type="Resource" id="Resource_attack_3"]
+script = ExtResource("2_attack")
+id = &"attack_3"
+length = 0.56
+rigid_sword = true
+keys = Array[Dictionary]([{
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 0.0
+}, {
+"arm": -160.0,
+"fore": -20.0,
+"hand": -16.0,
+"lean": -6.0,
+"px": -1.0,
+"py": 0.0,
+"sword": -95.0,
+"t": 0.35
+}, {
+"arm": -55.0,
+"fore": 10.0,
+"hand": 6.0,
+"lean": 8.0,
+"px": 2.0,
+"py": 3.0,
+"sword": 95.0,
+"t": 0.52
+}, {
+"arm": -50.0,
+"fore": 12.0,
+"hand": 8.0,
+"lean": 8.0,
+"px": 2.0,
+"py": 3.0,
+"sword": 100.0,
+"t": 0.72
+}, {
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 1.0
+}])
+
+[resource]
+script = ExtResource("1_config")
+pivots_path = "res://assets/characters/warrior/t1_side/warrior_t1_side/pivots.json"
+part_dir = "res://assets/characters/warrior/t1_side/warrior_t1_side/"
+thigh_length_scale = 1.25
+draw_order = {
+"buckler": 3,
+"foot_l": 20,
+"foot_r": 10,
+"forearm_l": 1,
+"forearm_r": 34,
+"hand_l": 2,
+"hand_r": 35,
+"head": 30,
+"pelvis": 25,
+"shin_l": 22,
+"shin_r": 12,
+"sword": 32,
+"thigh_l": 21,
+"thigh_r": 11,
+"torso": 31,
+"upper_arm_l": 0,
+"upper_arm_r": 33
+}
+attacks = Array[ExtResource("2_attack")]([SubResource("Resource_attack_1"), SubResource("Resource_attack_2"), SubResource("Resource_attack_3")])

@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/tests/warrior_rig_test.gd" id="1_script"]
 [ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
+[ext_resource type="Script" path="res://scripts/characters/character.gd" id="3_character"]
+[ext_resource type="Resource" path="res://resources/characters/warrior_t1_side.tres" id="4_config"]
 
 [node name="WarriorRigTest" type="Node2D"]
 script = ExtResource("1_script")
@@ -22,6 +24,8 @@ color = Color(0.025, 0.03, 0.045, 1)
 [node name="CharacterRoot" type="Node2D" parent="."]
 position = Vector2(960, 540)
 scale = Vector2(3, 3)
+script = ExtResource("3_character")
+config = ExtResource("4_config")
 
 [node name="Skeleton2D" type="Skeleton2D" parent="CharacterRoot"]
 unique_name_in_owner = true
@@ -55,11 +59,11 @@ text = "Warrior T1 - Side Rig Test"
 layout_mode = 1
 offset_left = 48.0
 offset_top = 80.0
-offset_right = 900.0
+offset_right = 1400.0
 offset_bottom = 118.0
 theme_override_colors/font_color = Color(0.72, 0.68, 0.6, 1)
 theme_override_font_sizes/font_size = 24
-text = "Runtime Skeleton2D built from pivots.json - 128 px source, shown at 3x - A/D or arrows to walk"
+text = "Runtime Skeleton2D built from pivots.json - 128 px source, shown at 3x - A/D or arrows to walk - J/Z or Attack: combo"
 
 [node name="Controls" type="HBoxContainer" parent="UILayer/UI"]
 layout_mode = 1
@@ -104,6 +108,13 @@ custom_minimum_size = Vector2(180, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Walk"
+
+[node name="AttackButton" type="Button" parent="UILayer/UI/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Attack"
 
 [node name="FacingButton" type="Button" parent="UILayer/UI/Controls"]
 unique_name_in_owner = true

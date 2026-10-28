@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://bcpg4k0emh18g"]
+
+[ext_resource type="Script" uid="uid://cyquxwe1llfyr" path="res://scripts/areas/area.gd" id="1_area"]
+[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
+[ext_resource type="Script" uid="uid://cdvk47fqad5cp" path="res://scripts/characters/character.gd" id="3_character"]
+[ext_resource type="Resource" uid="uid://cvfsb062l2mfn" path="res://resources/characters/warrior_t1_side.tres" id="4_config"]
+
+[node name="Area" type="Node2D" unique_id=1298525957]
+script = ExtResource("1_area")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=388695127]
+unique_name_in_owner = true
+z_index = -100
+centered = false
+
+[node name="Player" type="Node2D" parent="." unique_id=1072421273]
+unique_name_in_owner = true
+script = ExtResource("3_character")
+config = ExtResource("4_config")
+
+[node name="Skeleton2D" type="Skeleton2D" parent="Player" unique_id=7598587]
+unique_name_in_owner = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player" unique_id=2079592272]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera2D" parent="." unique_id=923882717]
+unique_name_in_owner = true
+position = Vector2(964, 539)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=13059678]
+layer = 10
+
+[node name="UI" type="Control" parent="HUD" unique_id=322130660]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+
+[node name="AreaLabel" type="Label" parent="HUD/UI" unique_id=1580913267]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 48.0
+offset_top = 28.0
+offset_right = 900.0
+offset_bottom = 76.0
+theme_override_font_sizes/font_size = 32
+
+[node name="BackButton" type="Button" parent="HUD/UI" unique_id=29908890]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -228.0
+offset_top = 28.0
+offset_right = -48.0
+offset_bottom = 84.0
+grow_horizontal = 0
+text = "Back"
+
+[node name="MoveControls" type="GridContainer" parent="HUD/UI" unique_id=631287921]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -360.0
+offset_right = 444.0
+offset_bottom = -36.0
+grow_vertical = 0
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="SpacerTL" type="Control" parent="HUD/UI/MoveControls" unique_id=10592727]
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="UpButton" type="Button" parent="HUD/UI/MoveControls" unique_id=1976970630]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+text = "▲"
+
+[node name="SpacerTR" type="Control" parent="HUD/UI/MoveControls" unique_id=1406165394]
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LeftButton" type="Button" parent="HUD/UI/MoveControls" unique_id=175618653]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+text = "◀"
+
+[node name="SpacerMid" type="Control" parent="HUD/UI/MoveControls" unique_id=932805639]
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RightButton" type="Button" parent="HUD/UI/MoveControls" unique_id=707905724]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+text = "▶"
+
+[node name="SpacerBL" type="Control" parent="HUD/UI/MoveControls" unique_id=1915790389]
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="DownButton" type="Button" parent="HUD/UI/MoveControls" unique_id=1353106672]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(124, 100)
+layout_mode = 2
+text = "▼"
+
+[node name="AttackButton" type="Button" parent="HUD/UI" unique_id=2056788132]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -248.0
+offset_top = -136.0
+offset_right = -48.0
+offset_bottom = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Attack"
