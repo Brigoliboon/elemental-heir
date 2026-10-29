@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cdvk47fqad5cp" path="res://scripts/characters/character.gd" id="1_character"]
 [ext_resource type="Resource" uid="uid://di2wxqv05g1vg" path="res://resources/characters/warrior.tres" id="2_config"]
+[ext_resource type="Script" path="res://scripts/combat/health.gd" id="3_health"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_awfs0"]
 radius = 24.0
@@ -11,6 +12,11 @@ height = 130.0
 collision_layer = 2
 script = ExtResource("1_character")
 config = ExtResource("2_config")
+
+[node name="Health" type="Node" parent="." unique_id=1934801327]
+script = ExtResource("3_health")
+max_health = 100
+invulnerability_seconds = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=482147045]
 position = Vector2(0, 70)

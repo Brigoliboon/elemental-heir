@@ -4,6 +4,7 @@ extends CharacterBody2D
 ## Depth is resolved through DepthSort so it shares the player's front/behind order.
 
 signal health_changed(current: int, maximum: int)
+signal damaged(amount: int)
 signal died
 
 @export var config: EnemyData
@@ -14,6 +15,10 @@ signal died
 @export var aggro_radius: float = 325.0
 ## Root-to-feet offset used as the mob's depth anchor.
 @export var depth_foot_offset: float = 80.0
+## How quickly a hit's knockback impulse bleeds off (px/s per second).
+@export var knockback_decay: float = 1200.0
+## Time the corpse fades before the mob is removed from the scene.
+@export var death_fade_seconds: float = 0.35
 
 @export_group("Attack")
 ## Fraction of the attack clip where the hitbox is live.
@@ -30,10 +35,19 @@ var player_in_range: Node2D = null
 var attack_timer: float = 0.0
 var is_attacking: bool = false
 var attack_damage: int = 10
-var max_health: int = 100
-var current_health: int = 100
+## Shared health pool; initialized from EnemyData when the scene loads.
+var health: Health
+## Impulse velocity applied by the player's sword and decayed each physics frame.
+var knockback_velocity := Vector2.ZERO
 ## +1 facing right, -1 facing left.
 var facing_sign := 1.0
+
+var max_health: int:
+	get: return health.max_health if health != null else 0
+var current_health: int:
+	get: return health.current_health if health != null else 0
+var _is_dead := false
+var _flash_tween: Tween
 
 
 func _ready() -> void:
@@ -42,8 +56,7 @@ func _ready() -> void:
 		push_error("%s has no EnemyData" % name)
 	else:
 		attack_damage = config.attack_damage
-		max_health = config.max_health
-	current_health = max_health
+	_ensure_health()
 
 	attack_radius.body_entered.connect(_on_attack_radius_body_entered)
 	attack_radius.body_exited.connect(_on_attack_radius_body_exited)
@@ -55,8 +68,20 @@ func _ready() -> void:
 	_update_hitbox_position()
 
 
+func _ensure_health() -> void:
+	health = get_node_or_null("Health") as Health
+	if health == null:
+		health = Health.new()
+		health.name = "Health"
+		add_child(health)
+	health.configure(config.max_health if config != null else 100)
+	health.health_changed.connect(_on_health_changed)
+	health.damaged.connect(_on_health_damaged)
+	health.died.connect(_on_health_died)
+
+
 func _physics_process(delta: float) -> void:
-	if config == null:
+	if config == null or _is_dead:
 		return
 
 	if attack_timer > 0.0:
@@ -64,7 +89,8 @@ func _physics_process(delta: float) -> void:
 
 	if is_attacking:
 		_update_attack_hit()
-		velocity = Vector2.ZERO
+		velocity = knockback_velocity
+		_move_with_knockback(delta)
 		_apply_depth()
 		return
 
@@ -78,19 +104,25 @@ func _physics_process(delta: float) -> void:
 
 		if distance > attack_range:
 			var direction := to_player.normalized()
-			velocity = direction * config.move_speed
+			velocity = direction * config.move_speed + knockback_velocity
 			_play_move_animation()
-			move_and_slide()
 		else:
-			velocity = Vector2.ZERO
+			velocity = knockback_velocity
 			_play_idle_animation()
 			if attack_timer <= 0.0:
 				attack_player()
 	else:
-		velocity = Vector2.ZERO
+		velocity = knockback_velocity
 		_play_idle_animation()
 
+	_move_with_knockback(delta)
 	_apply_depth()
+
+
+func _move_with_knockback(delta: float) -> void:
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_decay * delta)
+	if velocity != Vector2.ZERO:
+		move_and_slide()
 
 
 ## Depth index: lower on screen (larger y) renders in front.
@@ -185,10 +217,58 @@ func _on_animation_finished() -> void:
 		animated_sprite.play("default")
 
 
-func take_damage(amount: int, _knockback: Vector2 = Vector2.ZERO) -> void:
-	if current_health <= 0:
+func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
+	if health == null or not health.is_alive() or health.is_invulnerable():
 		return
-	current_health = maxi(current_health - amount, 0)
-	health_changed.emit(current_health, max_health)
-	if current_health == 0:
-		died.emit()
+	if health.take_damage(amount) and not _is_dead and knockback != Vector2.ZERO:
+		knockback_velocity += knockback
+
+
+func is_alive() -> bool:
+	return health != null and health.is_alive()
+
+
+func is_dead() -> bool:
+	return _is_dead
+
+
+func _on_health_changed(current: int, maximum: int) -> void:
+	health_changed.emit(current, maximum)
+
+
+func _on_health_damaged(amount: int, _remaining: int) -> void:
+	_flash_damage()
+	damaged.emit(amount)
+
+
+func _on_health_died() -> void:
+	if _is_dead:
+		return
+	_is_dead = true
+	is_attacking = false
+	knockback_velocity = Vector2.ZERO
+	velocity = Vector2.ZERO
+	attack_hitbox.deactivate()
+	attack_radius.set_deferred("monitoring", false)
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
+	set_physics_process(false)
+	died.emit()
+	_play_death_fade()
+
+
+func _flash_damage() -> void:
+	if _is_dead:
+		return
+	animated_sprite.modulate = Color(1.0, 0.35, 0.35, 1.0)
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(animated_sprite, "modulate", Color.WHITE, 0.18)
+
+
+## Fades the whole corpse (sprite and health bar) and removes it from the scene.
+func _play_death_fade() -> void:
+	var tween := create_tween()
+	tween.tween_property(self, "modulate", Color(1.0, 1.0, 1.0, 0.0), death_fade_seconds)
+	tween.tween_callback(queue_free)

@@ -6,6 +6,7 @@ extends CharacterBody2D
 
 signal facing_changed(facing_right: bool)
 signal health_changed(current: int, maximum: int)
+signal damaged(amount: int)
 signal died
 signal blocking_changed(blocking: bool)
 
@@ -19,12 +20,17 @@ const FEET_OFFSET_LOCAL := 141.7
 ## its grip pivot near the top, so the box is centred down the blade.
 const SWORD_HITBOX_SIZE := Vector2(20.0, 58.0)
 const SWORD_HITBOX_CENTER := Vector2(0.0, 22.0)
+## Impulse applied to enemies hit by the sword, in px/s.
+const SWORD_KNOCKBACK := 260.0
 
 @export var config: CharacterData
 
 var rig: CharacterRig
 var animations: WarriorSideAnimations
 var combo: AttackCombo
+## Shared health pool. Scene entities own a `Health` child; a runtime one is created
+## when a scene (or test) does not provide it.
+var health: Health
 ## Lives under the sword bone so it follows every swing automatically.
 var sword_hitbox: Hitbox
 var walk_speed := 230.0
@@ -36,11 +42,18 @@ var render_scale := 3.0
 ## How fast the character moves up/down through the scene, relative to its run speed.
 var depth_speed_ratio := 0.6
 
+## Kept for compatibility with HUD/UI code: both read through the Health component.
+var max_health: int:
+	get: return health.max_health if health != null else 0
+var current_health: int:
+	get: return health.current_health if health != null else 0
+
 var _manual_animation := "idle"
 var _is_moving := false
 var _is_blocking := false
-var max_health := 0
-var current_health := 0
+var _is_dead := false
+var _flash_tween: Tween
+var _death_tween: Tween
 
 @onready var skeleton: Skeleton2D = $Skeleton2D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -51,8 +64,7 @@ func _ready() -> void:
 		push_error("%s has no CharacterData" % name)
 		return
 	add_to_group("player")
-	max_health = config.max_health
-	current_health = max_health
+	_ensure_health()
 	rig = CharacterRig.new(config, skeleton)
 	rig.build()
 	animations = WarriorSideAnimations.new(rig)
@@ -83,7 +95,7 @@ func move(direction: int, delta: float) -> void:
 ## Runs left/right (x) and up/down through the scene's depth (y); idle when zero.
 ## Ignored mid-attack.
 func move_2d(direction: Vector2, delta: float) -> void:
-	if config == null:
+	if config == null or _is_dead:
 		return
 	if is_attacking() or _is_blocking:
 		return
@@ -106,7 +118,7 @@ func move_2d(direction: Vector2, delta: float) -> void:
 
 
 func attack() -> void:
-	if _is_blocking:
+	if _is_blocking or _is_dead:
 		return
 	if combo != null:
 		combo.press()
@@ -115,6 +127,8 @@ func attack() -> void:
 ## Raise or lower the guard. While blocking, incoming damage is reduced and
 ## movement/attacks are ignored. Safe to call every frame while held.
 func block(on: bool = true) -> void:
+	if _is_dead:
+		return
 	if _is_blocking == on:
 		return
 	_is_blocking = on
@@ -134,7 +148,7 @@ func is_blocking() -> bool:
 
 ## Plays a looping clip ("idle", "walk" or "run") in place. Ignored mid-attack.
 func play_manual(anim_name: String) -> void:
-	if is_attacking():
+	if is_attacking() or _is_dead:
 		return
 	_manual_animation = anim_name
 	anim_player.play(anim_name)
@@ -169,6 +183,7 @@ func _build_sword_hitbox() -> void:
 	sword_hitbox = Hitbox.new()
 	sword_hitbox.name = "SwordHitbox"
 	sword_hitbox.damage = config.attack_damage
+	sword_hitbox.knockback_force = SWORD_KNOCKBACK
 	sword_hitbox.target_group = "enemies"
 	sword_hitbox.collision_layer = 8  # Player_Attacks
 	sword_hitbox.collision_mask = 4  # Enemies
@@ -215,24 +230,102 @@ func toggle_facing() -> void:
 	set_facing(not facing_right)
 
 
+## Applies damage through the shared Health component. Guard reduction stays here
+## because it is character-specific; i-frames and death live on Health.
 func take_damage(amount: int, _knockback: Vector2 = Vector2.ZERO) -> void:
-	if current_health <= 0:
+	if health == null or not health.is_alive() or health.is_invulnerable():
 		return
-	if _is_blocking:
+	if _is_blocking and config != null:
 		amount = maxi(0, int(float(amount) * (1.0 - config.block_damage_reduction)))
-		current_health = maxi(current_health - amount, 0)
-		health_changed.emit(current_health, max_health)
-		if current_health <= 0:
-			died.emit()
-		return
-	current_health = maxi(current_health - amount, 0)
-	health_changed.emit(current_health, max_health)
-	if current_health <= 0:
-		died.emit()
+	health.take_damage(amount)
+
+
+func heal(amount: int) -> int:
+	return health.heal(amount) if health != null else 0
 
 
 func is_alive() -> bool:
-	return current_health > 0
+	return health != null and health.is_alive()
+
+
+## True once the death sequence has started. Stays true until `revive()`.
+func is_dead() -> bool:
+	return _is_dead
+
+
+## Restores full health and clears the death visual. Areas call this on respawn.
+func revive() -> void:
+	if health == null:
+		return
+	health.reset()
+	_is_dead = false
+	_is_moving = false
+	_is_blocking = false
+	if _death_tween != null and _death_tween.is_valid():
+		_death_tween.kill()
+	if skeleton != null:
+		skeleton.modulate = Color.WHITE
+	_manual_animation = "idle"
+	if anim_player.has_animation("idle"):
+		anim_player.play("idle")
+
+
+func _ensure_health() -> void:
+	health = get_node_or_null("Health") as Health
+	if health == null:
+		health = Health.new()
+		health.name = "Health"
+		add_child(health)
+	health.configure(config.max_health)
+	health.health_changed.connect(_on_health_changed)
+	health.damaged.connect(_on_health_damaged)
+	health.died.connect(_on_health_died)
+
+
+func _on_health_changed(current: int, maximum: int) -> void:
+	health_changed.emit(current, maximum)
+
+
+func _on_health_damaged(amount: int, _remaining: int) -> void:
+	_flash_damage()
+	damaged.emit(amount)
+
+
+func _on_health_died() -> void:
+	if _is_dead:
+		return
+	_is_dead = true
+	_is_moving = false
+	_is_blocking = false
+	if combo != null:
+		combo.cancel()
+	if sword_hitbox != null:
+		sword_hitbox.deactivate()
+	if anim_player.has_animation("idle"):
+		anim_player.play("idle")
+	_play_death_fade()
+	died.emit()
+
+
+func _flash_damage() -> void:
+	if skeleton == null or _is_dead:
+		return
+	skeleton.modulate = Color(1.0, 0.35, 0.35, 1.0)
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(skeleton, "modulate", Color.WHITE, 0.18)
+
+
+func _play_death_fade() -> void:
+	if skeleton == null:
+		return
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+	if _death_tween != null and _death_tween.is_valid():
+		_death_tween.kill()
+	_death_tween = create_tween()
+	_death_tween.tween_property(skeleton, "modulate", Color(1.0, 1.0, 1.0, 0.25), 0.45)
 
 
 func _on_combo_ended() -> void:

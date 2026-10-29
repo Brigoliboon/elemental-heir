@@ -45,6 +45,15 @@ func _start(index: int) -> void:
 	_player.play(_config.attacks[index - 1].id, _config.attack_blend)
 
 
+## Stops the chain immediately (death, respawn, scene transitions).
+func cancel() -> void:
+	if _index == 0:
+		return
+	_index = 0
+	_queued = false
+	combo_ended.emit()
+
+
 func _on_animation_finished(anim_name: StringName) -> void:
 	if _index == 0 or anim_name != _config.attacks[_index - 1].id:
 		return

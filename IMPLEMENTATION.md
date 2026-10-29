@@ -68,6 +68,11 @@ fields are consumed where the current runtime already exposes them.
   - Headless import succeeds.
   - Test scene passes.
   - Existing scenes load headless.
+- [x] M4.5 - Shared health, death and combat feedback
+  - `Health` component configured from `CharacterData` / `EnemyData`.
+  - Player i-frames, death state, HUD health bar, death overlay and timed respawn.
+  - Mob damage flash, knockback, world health bar and death fade.
+  - Tests: `tests/test_health.gd`, `tests/test_death_respawn.gd`.
 
 ## Blocking (added after M4)
 
@@ -102,14 +107,38 @@ fields are consumed where the current runtime already exposes them.
   - `activate()` clears the per-swing hit set and turns monitoring on;
   - `deactivate()` turns it off;
   - each body in `target_group` is damaged at most once per activation;
-  - targets must expose `take_damage(amount)`.
+  - targets must expose `take_damage(amount, knockback)`.
 - Player sword:
   - `Character` builds `SwordHitbox` under the `sword` bone at runtime (`scripts/characters/character.gd`).
   - The box follows the animated blade, including the mirrored facing transform.
   - `AttackData.hit_start` / `hit_end` define the live fraction of each clip; `AttackData.damage` (0 = use `CharacterData.attack_damage`) sets per-hit damage.
+  - `Character.SWORD_KNOCKBACK` is pushed into enemies through `Hitbox.knockback_force`.
 - Enemy attack:
   - `mob.tscn` contains `AttackHitbox`; `mob.gd` sets its damage from `EnemyData.attack_damage`.
 - Physics layers now follow Godot bit values (see the corrected table below). `collision_layer` is a mask, not a layer number.
+
+## Shared health, death and feedback (current)
+
+- `scripts/combat/health.gd` (`Health`) is the single health pool for every damageable entity:
+  - `configure(max_health)` resets to full and is called from the entity's data resource;
+  - `take_damage(amount)` clamps at zero, ignores dead/invulnerable targets and emits `damaged`, `health_changed` and `died`;
+  - `heal`, `kill`, `reset`, `set_max_health(keep_ratio)` and `clear_invulnerability()` cover respawn, debug tools and future potions;
+  - `invulnerability_seconds` is opt-in i-frames. Damage is refused while the timer runs.
+- `warrior.tscn` and `mob.tscn` each own a `Health` child. `Character` and `Mob` delegate to it and keep their public API (`current_health`, `max_health`, `take_damage`, `is_alive`, `health_changed`, `died`) so existing HUD/tests do not need to know about the component. Both also expose `damaged` and `is_dead()`.
+- A runtime `Health` is created as a fallback if a hand-built scene forgets the child, so the entity never silently loses health.
+- Damage feedback:
+  - `Character` and `Mob` flash red on `Health.damaged`;
+  - the player's block reduction stays in `Character.take_damage` before forwarding to `Health`;
+  - `Hitbox.knockback_force` pushes mobs away from the hit; `mob.gd` decays that impulse (`knockback_decay`) and feeds it through `move_and_slide()`;
+  - `mob.tscn` owns a `WorldHealthBar` (`scripts/ui/world_health_bar.gd`) above the sprite. It binds to the sibling `Health` node, draws in world space, hides while full and fades with the corpse.
+- Player death/respawn:
+  - `Character` cancels the combo, deactivates the sword hitbox, locks movement/attack/block and fades the rig when `Health` reaches zero;
+  - `Area` binds the player's health, updates the HUD bar/label and shows the death overlay;
+  - after `respawn_delay` (2 s by default) the area calls `Character.revive()` and reuses `_place_player()` so the player returns to the area spawn point with full health and cleared i-frames.
+- Mob death: collision, aggro and attacks turn off immediately; the corpse fades over `death_fade_seconds` and frees itself.
+- HUD: `area_base.tscn` has `HUD/UI/PlayerHealth/{HealthLabel, HealthBar}` and a centered `DeathLabel`. The debug label moved down to make room.
+- `AttackCombo.cancel()` stops a chain without playing the normal recovery clip; death and respawn use it.
+- Tests: `tests/test_health.gd` and `tests/test_death_respawn.gd` cover damage/heal/death/i-frames/reset, player death/revive, mob fade, HUD binding and timed area respawn.
 
 ## Physics layers
 
@@ -194,4 +223,4 @@ Split the runtime `Character` into small components so classes stay data-driven:
 
 - Full skill/inventory UI and save files (planned in M7-M10).
 - Ranged projectiles; the current implementation covers melee hitbox timing.
-- Death animation and loot drops.
+- Loot drops and class-specific death animations (all classes currently share the fade-out).

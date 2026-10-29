@@ -5,6 +5,20 @@
 [ext_resource type="PackedScene" uid="uid://cxrrsyk55qqty" path="res://entities/characters/warrior.tscn" id="3_player"]
 [ext_resource type="Texture2D" uid="uid://cujvxnmo3axkt" path="res://assets/backgrounds/forest/forest_village_square.png" id="4_bg"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
+bg_color = Color(0.07, 0.06, 0.06, 0.88)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.74, 0.17, 0.17, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="Area" type="Node2D" unique_id=660581917]
 script = ExtResource("1_area")
 area_name = "Forest Village Square"
@@ -161,7 +175,51 @@ text = "Block"
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 48.0
-offset_top = 76.0
+offset_top = 160.0
 offset_right = 1400.0
-offset_bottom = 114.0
+offset_bottom = 198.0
 theme_override_font_sizes/font_size = 20
+
+[node name="PlayerHealth" type="VBoxContainer" parent="HUD/UI" unique_id=1763514042]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 88.0
+offset_right = 408.0
+offset_bottom = 152.0
+theme_override_constants/separation = 4
+
+[node name="HealthLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=1763514043]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "HP 100 / 100"
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/UI/PlayerHealth" unique_id=1763514044]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 24)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="DeathLabel" type="Label" parent="HUD/UI" unique_id=1763514045]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -90.0
+offset_right = 420.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.86, 0.33, 0.28, 1)
+theme_override_font_sizes/font_size = 56
+text = "You fell...\nRespawning"
+horizontal_alignment = 1
+vertical_alignment = 1

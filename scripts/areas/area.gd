@@ -46,6 +46,10 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @export_file("*.tscn") var exit_left_scene := ""
 @export_file("*.tscn") var exit_right_scene := ""
 
+@export_group("Death")
+## Seconds the player stays down before respawning at the area spawn point.
+@export var respawn_delay := 2.0
+
 @export_group("Debug")
 ## Draw the feet footprint (the circle tested against obstacles) while running.
 @export var show_feet_footprint := false
@@ -62,6 +66,9 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var attack_button: Button = $HUD/UI/AttackButton
 @onready var block_button: Button = $HUD/UI/BlockButton
 @onready var back_button: Button = $HUD/UI/BackButton
+@onready var health_bar: ProgressBar = $HUD/UI/PlayerHealth/HealthBar
+@onready var health_label: Label = $HUD/UI/PlayerHealth/HealthLabel
+@onready var death_label: Label = $HUD/UI/DeathLabel
 
 var world_width := 0.0
 ## Screen-space y of the far and near edges of the walkable band (where feet touch).
@@ -71,6 +78,7 @@ var ground_near_y := 0.0
 var _feet_y := 0.0
 var _held := {"left": false, "right": false, "up": false, "down": false}
 var _leaving := false
+var _player_dead := false
 ## Obstacle footprints in world space: [Shape2D, Transform2D] or a PackedVector2Array polygon.
 var _blockers: Array = []
 var _feet_shape := CircleShape2D.new()
@@ -82,6 +90,7 @@ func _ready() -> void:
 	_collect_blockers()
 	_place_player()
 	area_label.text = area_name
+	_bind_player_health()
 	_bind_hold(left_button, "left")
 	_bind_hold(right_button, "right")
 	_bind_hold(up_button, "up")
@@ -102,6 +111,41 @@ func _ready() -> void:
 func _bind_hold(button: Button, key: String) -> void:
 	button.button_down.connect(func() -> void: _held[key] = true)
 	button.button_up.connect(func() -> void: _held[key] = false)
+
+
+## Mirrors the player's shared Health into the HUD and reacts to death.
+func _bind_player_health() -> void:
+	_on_player_health_changed(player.current_health, player.max_health)
+	player.health_changed.connect(_on_player_health_changed)
+	player.died.connect(_on_player_died)
+
+
+func _on_player_health_changed(current: int, maximum: int) -> void:
+	health_bar.max_value = maximum
+	health_bar.value = current
+	health_label.text = "HP %d / %d" % [current, maximum]
+
+
+func _on_player_died() -> void:
+	if _player_dead:
+		return
+	_player_dead = true
+	for key in _held.keys():
+		_held[key] = false
+	death_label.visible = true
+	_respawn_after_delay()
+
+
+## Waits out the death pause, then restores the player at the area spawn point.
+func _respawn_after_delay() -> void:
+	if respawn_delay > 0.0:
+		await get_tree().create_timer(respawn_delay).timeout
+	if not is_inside_tree() or not is_instance_valid(player):
+		return
+	player.revive()
+	_place_player()
+	_player_dead = false
+	death_label.visible = false
 
 
 func _layout_background() -> void:
@@ -154,6 +198,9 @@ func _place_player() -> void:
 
 func _process(delta: float) -> void:
 	if _leaving:
+		return
+	if _player_dead:
+		camera.position = _camera_target()
 		return
 	var direction := Vector2.ZERO
 	if _held["left"] or Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):

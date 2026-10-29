@@ -9,6 +9,8 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_depth_sort.gd"),
 	preload("res://tests/test_scene_integrity.gd"),
 	preload("res://tests/test_combat.gd"),
+	preload("res://tests/test_health.gd"),
+	preload("res://tests/test_death_respawn.gd"),
 ]
 
 

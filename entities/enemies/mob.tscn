@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://bi4l1ygqstyus" path="res://assets/monsters/forest/sprite/wolf-idle(3).png" id="13_qwdig"]
 [ext_resource type="Texture2D" uid="uid://c5ncwpj3ojgq6" path="res://assets/monsters/forest/sprite/wolf-idle(2).png" id="14_nx841"]
 [ext_resource type="Texture2D" uid="uid://cv1ajjstvkisa" path="res://assets/monsters/forest/sprite/wolf-idle(1).png" id="15_8cfiu"]
+[ext_resource type="Script" path="res://scripts/combat/health.gd" id="16_health"]
+[ext_resource type="Script" path="res://scripts/ui/world_health_bar.gd" id="17_healthbar"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
 radius = 50.0
@@ -83,6 +85,15 @@ collision_layer = 4
 collision_mask = 1
 script = ExtResource("1_mob")
 config = ExtResource("2_goblin")
+
+[node name="Health" type="Node" parent="." unique_id=2104440011]
+script = ExtResource("16_health")
+max_health = 60
+
+[node name="HealthBar" type="Node2D" parent="." unique_id=2104440012]
+z_index = 1
+position = Vector2(0, -118)
+script = ExtResource("17_healthbar")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1303960305]
 position = Vector2(0, 5)

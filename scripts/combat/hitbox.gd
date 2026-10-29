@@ -11,6 +11,8 @@ signal hit_landed(target: Node2D)
 
 ## Damage dealt to targets that expose take_damage(amount).
 @export var damage := 10
+## Impulse (px/s) pushed into targets that accept take_damage(amount, knockback).
+@export var knockback_force := 0.0
 ## Only nodes in this group are damaged. Leave empty to accept any body on the mask.
 @export var target_group := "enemies"
 ## Draw the hitbox in the editor/debug runs.
@@ -90,5 +92,16 @@ func _try_hit(node: Node) -> void:
 		return
 	_hit_targets[id] = true
 	if node.has_method("take_damage"):
-		node.take_damage(damage)
+		node.take_damage(damage, _knockback_toward(node))
 		hit_landed.emit(node as Node2D)
+
+
+## Pushes the target away from the hitbox centre. Zero when no force is configured.
+func _knockback_toward(node: Node) -> Vector2:
+	if knockback_force <= 0.0 or not node is Node2D:
+		return Vector2.ZERO
+	var target := node as Node2D
+	var away := target.global_position - global_position
+	if away.length_squared() < 0.001:
+		away = Vector2.RIGHT
+	return away.normalized() * knockback_force
