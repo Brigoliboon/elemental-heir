@@ -9,8 +9,10 @@ extends Area2D
 
 signal hit_landed(target: Node2D)
 
-## Damage dealt to targets that expose take_damage(amount).
+## Fallback attack value when the attacker has no Stats component.
 @export var damage := 10
+## Multiplies the attacker's attack stat for this hit (skills, heavy attacks).
+@export var damage_multiplier := 1.0
 ## Impulse (px/s) pushed into targets that accept take_damage(amount, knockback).
 @export var knockback_force := 0.0
 ## Only nodes in this group are damaged. Leave empty to accept any body on the mask.
@@ -24,6 +26,8 @@ signal hit_landed(target: Node2D)
 
 var _active := false
 var _hit_targets: Dictionary = {}
+## Per-activation attack override; -1 means "use the attacker's Stats".
+var _damage_override := -1
 
 
 func _ready() -> void:
@@ -54,8 +58,7 @@ func is_active() -> bool:
 ## Starts a new hit window. Clears the per-swing hit list and detects anything
 ## already overlapping the area.
 func activate(damage_override: int = -1) -> void:
-	if damage_override >= 0:
-		damage = damage_override
+	_damage_override = damage_override
 	_active = true
 	_hit_targets.clear()
 	set_deferred("monitoring", true)
@@ -101,8 +104,27 @@ func _try_hit(node: Node) -> void:
 			return
 	_hit_targets[id] = true
 	if node.has_method("take_damage"):
-		node.take_damage(damage, _knockback_toward(node))
+		node.take_damage(_resolve_attack(), _knockback_toward(node))
 		hit_landed.emit(node as Node2D)
+
+
+## Resolves the outgoing attack from the attacker's Stats. The target applies its
+## own defence inside take_damage(), so mitigation happens exactly once.
+func _resolve_attack() -> int:
+	var attack := float(damage)
+	if _damage_override >= 0:
+		attack = float(_damage_override)
+	else:
+		var attacker_stats := _stats_of(_get_attacker())
+		if attacker_stats != null:
+			attack = attacker_stats.get_stat(Stats.ATTACK)
+	return maxi(1, roundi(Damage.raw_damage(attack, damage_multiplier)))
+
+
+func _stats_of(node: Node) -> Stats:
+	if node == null or not ("stats" in node):
+		return null
+	return node.get("stats") as Stats
 
 
 func _get_attacker() -> Node2D:

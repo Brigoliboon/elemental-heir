@@ -9,6 +9,8 @@ signal health_changed(current: int, maximum: int)
 signal damaged(amount: int)
 signal died
 signal blocking_changed(blocking: bool)
+signal experience_changed(experience: int, to_next: int)
+signal level_changed(level: int, experience: int, to_next: int)
 
 ## Horizontal center of the rig in source-art pixels. The skeleton is shifted by this so the
 ## body center sits on the Character origin; facing flips mirror `scale.x`, so without it
@@ -22,15 +24,23 @@ const SWORD_HITBOX_SIZE := Vector2(20.0, 58.0)
 const SWORD_HITBOX_CENTER := Vector2(0.0, 22.0)
 ## Impulse applied to enemies hit by the sword, in px/s.
 const SWORD_KNOCKBACK := 260.0
+const DEFAULT_PROGRESSION := preload("res://resources/progression/default_progression.tres")
 
 @export var config: CharacterData
+## XP curve. Falls back to the shared default resource when unset.
+@export var progression: ProgressionData
 
 var rig: CharacterRig
 var animations: WarriorSideAnimations
 var combo: AttackCombo
+## Shared stat block. Scene entities own a `Stats` child; a runtime one is created
+## when a scene (or test) does not provide it.
+var stats: Stats
 ## Shared health pool. Scene entities own a `Health` child; a runtime one is created
 ## when a scene (or test) does not provide it.
 var health: Health
+var level := 1
+var experience := 0
 ## Lives under the sword bone so it follows every swing automatically.
 var sword_hitbox: Hitbox
 var walk_speed := 230.0
@@ -64,6 +74,7 @@ func _ready() -> void:
 		push_error("%s has no CharacterData" % name)
 		return
 	add_to_group("player")
+	_ensure_stats()
 	_ensure_health()
 	rig = CharacterRig.new(config, skeleton)
 	rig.build()
@@ -188,7 +199,7 @@ func _build_sword_hitbox() -> void:
 	sword_hitbox = Hitbox.new()
 	sword_hitbox.name = "SwordHitbox"
 	sword_hitbox.attacker = self
-	sword_hitbox.damage = config.attack_damage
+	sword_hitbox.damage = int(stats.get_stat(Stats.ATTACK)) if stats != null else config.attack_damage
 	sword_hitbox.knockback_force = SWORD_KNOCKBACK
 	sword_hitbox.target_group = "enemies"
 	sword_hitbox.collision_layer = 8  # Player_Attacks
@@ -218,7 +229,7 @@ func _update_sword_hitbox() -> void:
 
 	if active:
 		if not sword_hitbox.is_active():
-			sword_hitbox.activate(data.damage if data.damage > 0 else config.attack_damage)
+			sword_hitbox.activate(data.damage if data.damage > 0 else -1)
 	elif sword_hitbox.is_active():
 		sword_hitbox.deactivate()
 
@@ -236,11 +247,14 @@ func toggle_facing() -> void:
 	set_facing(not facing_right)
 
 
-## Applies damage through the shared Health component. Guard reduction stays here
-## because it is character-specific; i-frames and death live on Health.
+## Applies damage through the shared Health component. Incoming damage is first
+## mitigated by this character's defence, then reduced by the guard; i-frames and
+## death live on Health.
 func take_damage(amount: int, _knockback: Vector2 = Vector2.ZERO) -> void:
-	if health == null or not health.is_alive() or health.is_invulnerable():
+	if amount <= 0 or health == null or not health.is_alive() or health.is_invulnerable():
 		return
+	if stats != null:
+		amount = Damage.final_damage(float(amount), stats.get_stat(Stats.DEFENCE))
 	if _is_blocking and config != null:
 		amount = maxi(0, int(float(amount) * (1.0 - config.block_damage_reduction)))
 	health.take_damage(amount)
@@ -276,16 +290,65 @@ func revive() -> void:
 		anim_player.play("idle")
 
 
+func _ensure_stats() -> void:
+	stats = get_node_or_null("Stats") as Stats
+	if stats == null:
+		stats = Stats.new()
+		stats.name = "Stats"
+		add_child(stats)
+	if progression == null:
+		progression = DEFAULT_PROGRESSION
+	level = clampi(config.starting_level, 1, progression.max_level)
+	experience = maxi(0, config.starting_exp)
+	stats.configure(config, level)
+
+
 func _ensure_health() -> void:
 	health = get_node_or_null("Health") as Health
 	if health == null:
 		health = Health.new()
 		health.name = "Health"
 		add_child(health)
-	health.configure(config.max_health)
+	var maximum := int(stats.get_stat(Stats.MAX_HEALTH)) if stats != null else config.max_health
+	health.configure(maximum)
 	health.health_changed.connect(_on_health_changed)
 	health.damaged.connect(_on_health_damaged)
 	health.died.connect(_on_health_died)
+
+
+## XP required to advance from the current level. 0 at the level cap.
+func experience_to_next_level() -> int:
+	return progression.xp_to_next(level) if progression != null else 0
+
+
+## Adds XP and applies every level-up the amount earns. Ignored at the cap.
+func add_experience(amount: int) -> void:
+	if amount <= 0 or progression == null or level >= progression.max_level:
+		return
+	experience += amount
+	var leveled := false
+	while level < progression.max_level:
+		var needed := progression.xp_to_next(level)
+		if needed <= 0 or experience < needed:
+			break
+		experience -= needed
+		level += 1
+		leveled = true
+	if leveled:
+		_apply_level_stats()
+		level_changed.emit(level, experience, experience_to_next_level())
+	experience_changed.emit(experience, experience_to_next_level())
+
+
+## Recomputes base stats and raises the health pool when a level is gained.
+func _apply_level_stats() -> void:
+	if stats == null or config == null:
+		return
+	stats.configure(config, level)
+	if health != null:
+		health.set_max_health(int(stats.get_stat(Stats.MAX_HEALTH)), true)
+	if sword_hitbox != null:
+		sword_hitbox.damage = int(stats.get_stat(Stats.ATTACK))
 
 
 func _on_health_changed(current: int, maximum: int) -> void:

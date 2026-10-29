@@ -68,6 +68,10 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var back_button: Button = $HUD/UI/BackButton
 @onready var health_bar: ProgressBar = $HUD/UI/PlayerHealth/HealthBar
 @onready var health_label: Label = $HUD/UI/PlayerHealth/HealthLabel
+@onready var xp_bar: ProgressBar = $HUD/UI/PlayerHealth/XPBar
+@onready var xp_label: Label = $HUD/UI/PlayerHealth/XPLabel
+@onready var stats_button: Button = $HUD/UI/StatsButton
+@onready var stats_panel: StatsPanel = $HUD/UI/StatsPanel
 @onready var death_label: Label = $HUD/UI/DeathLabel
 
 var world_width := 0.0
@@ -91,6 +95,8 @@ func _ready() -> void:
 	_place_player()
 	area_label.text = area_name
 	_bind_player_health()
+	_bind_player_progress()
+	stats_button.pressed.connect(_on_stats_button_pressed)
 	_bind_hold(left_button, "left")
 	_bind_hold(right_button, "right")
 	_bind_hold(up_button, "up")
@@ -120,10 +126,61 @@ func _bind_player_health() -> void:
 	player.died.connect(_on_player_died)
 
 
+func _bind_player_progress() -> void:
+	_update_player_progress()
+	player.experience_changed.connect(_on_player_experience_changed)
+	player.level_changed.connect(_on_player_level_changed)
+
+
 func _on_player_health_changed(current: int, maximum: int) -> void:
 	health_bar.max_value = maximum
 	health_bar.value = current
 	health_label.text = "HP %d / %d" % [current, maximum]
+	if stats_panel != null and stats_panel.is_showing_character():
+		stats_panel.refresh()
+
+
+func _on_player_experience_changed(_experience: int, _to_next: int) -> void:
+	_update_player_progress()
+	if stats_panel != null and stats_panel.is_showing_character():
+		stats_panel.refresh()
+
+
+func _on_player_level_changed(_level: int, _experience: int, _to_next: int) -> void:
+	_update_player_progress()
+	if stats_panel != null and stats_panel.is_showing_character():
+		stats_panel.refresh()
+
+
+func _update_player_progress() -> void:
+	var to_next := player.experience_to_next_level()
+	xp_bar.max_value = maxf(1.0, float(to_next))
+	xp_bar.value = float(player.experience) if to_next > 0 else 0.0
+	xp_label.text = "XP %d / %d" % [player.experience, to_next] if to_next > 0 else "XP MAX"
+
+
+func _on_stats_button_pressed() -> void:
+	if stats_panel.visible and stats_panel.is_showing_character():
+		stats_panel.hide_panel()
+	else:
+		stats_panel.show_character(player)
+
+
+## Turns a screen click/tap into a mob selection using the Enemies physics layer.
+func _try_show_mob_stats(screen_position: Vector2) -> void:
+	if stats_panel == null:
+		return
+	var world_position := get_canvas_transform().affine_inverse() * screen_position
+	var params := PhysicsPointQueryParameters2D.new()
+	params.position = world_position
+	params.collision_mask = 4  # Enemies
+	params.collide_with_bodies = true
+	params.collide_with_areas = false
+	for hit in get_world_2d().direct_space_state.intersect_point(params, 8):
+		var collider: Object = hit.get("collider")
+		if collider is Node2D and (collider as Node2D).is_in_group("enemies"):
+			stats_panel.show_mob(collider as Node2D)
+			return
 
 
 func _on_player_died() -> void:
@@ -319,8 +376,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			player.block(event.pressed)
 		if event.keycode == KEY_I and event.pressed:
 			_print_debug()
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
-		player.block(event.pressed)
+		return
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			player.block(event.pressed)
+		elif event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			_try_show_mob_stats(event.position)
+		return
+	if event is InputEventScreenTouch and event.pressed:
+		_try_show_mob_stats(event.position)
 
 
 func _check_exits(direction_x: float) -> void:

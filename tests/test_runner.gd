@@ -13,6 +13,10 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_death_respawn.gd"),
 	preload("res://tests/test_block.gd"),
 	preload("res://tests/test_block_damage.gd"),
+	preload("res://tests/test_stats.gd"),
+	preload("res://tests/test_damage.gd"),
+	preload("res://tests/test_leveling.gd"),
+	preload("res://tests/test_stats_panel.gd"),
 ]
 
 

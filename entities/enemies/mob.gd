@@ -41,6 +41,9 @@ var player_in_range: Node2D = null
 var attack_timer: float = 0.0
 var is_attacking: bool = false
 var attack_damage: int = 10
+var move_speed := 200.0
+## Shared stat block; initialized from EnemyData when the scene loads.
+var stats: Stats
 ## Shared health pool; initialized from EnemyData when the scene loads.
 var health: Health
 ## Impulse velocity applied by the player's sword and decayed each physics frame.
@@ -60,8 +63,7 @@ func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if config == null:
 		push_error("%s has no EnemyData" % name)
-	else:
-		attack_damage = config.attack_damage
+	_ensure_stats()
 	_ensure_health()
 
 	attack_radius.body_entered.connect(_on_attack_radius_body_entered)
@@ -75,13 +77,26 @@ func _ready() -> void:
 	_update_hitbox_position()
 
 
+func _ensure_stats() -> void:
+	stats = get_node_or_null("Stats") as Stats
+	if stats == null:
+		stats = Stats.new()
+		stats.name = "Stats"
+		add_child(stats)
+	if config != null:
+		stats.configure(config, config.level)
+		attack_damage = int(stats.get_stat(Stats.ATTACK))
+		move_speed = stats.get_stat(Stats.MOVE_SPEED)
+
+
 func _ensure_health() -> void:
 	health = get_node_or_null("Health") as Health
 	if health == null:
 		health = Health.new()
 		health.name = "Health"
 		add_child(health)
-	health.configure(config.max_health if config != null else 100)
+	var maximum := int(stats.get_stat(Stats.MAX_HEALTH)) if stats != null else 100
+	health.configure(maximum)
 	health.health_changed.connect(_on_health_changed)
 	health.damaged.connect(_on_health_damaged)
 	health.died.connect(_on_health_died)
@@ -121,14 +136,14 @@ func _physics_process(delta: float) -> void:
 		elif in_depth and dist_x < min_attack_space:
 			# Too close to the player: back up to maintain attack space
 			var back_dir := -facing_sign
-			velocity = Vector2(back_dir * config.move_speed * 0.6, 0.0) + knockback_velocity
+			velocity = Vector2(back_dir * move_speed * 0.6, 0.0) + knockback_velocity
 			_play_move_animation()
 		else:
 			# Navigate towards the attack space point in front of the target
 			var target_x := target.global_position.x - facing_sign * attack_space
 			var move_dx := target_x - global_position.x
 			var direction := Vector2(move_dx, delta_y).normalized()
-			velocity = direction * config.move_speed + knockback_velocity
+			velocity = direction * move_speed + knockback_velocity
 			_play_move_animation()
 	else:
 		velocity = knockback_velocity
@@ -226,7 +241,7 @@ func _update_attack_hit() -> void:
 
 	if should_hit:
 		if not attack_hitbox.is_active():
-			attack_hitbox.activate(attack_damage)
+			attack_hitbox.activate()
 	elif attack_hitbox.is_active():
 		attack_hitbox.deactivate()
 
@@ -250,8 +265,10 @@ func _on_animation_finished() -> void:
 
 
 func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
-	if health == null or not health.is_alive() or health.is_invulnerable():
+	if amount <= 0 or health == null or not health.is_alive() or health.is_invulnerable():
 		return
+	if stats != null:
+		amount = Damage.final_damage(float(amount), stats.get_stat(Stats.DEFENCE))
 	if health.take_damage(amount) and not _is_dead and knockback != Vector2.ZERO:
 		knockback_velocity += knockback
 
@@ -285,8 +302,18 @@ func _on_health_died() -> void:
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	set_physics_process(false)
+	_award_experience()
 	died.emit()
 	_play_death_fade()
+
+
+## Grants EnemyData.xp_reward to the player when this mob dies.
+func _award_experience() -> void:
+	if config == null or config.xp_reward <= 0 or get_tree() == null:
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and player.has_method("add_experience"):
+		player.add_experience(config.xp_reward)
 
 
 func _flash_damage() -> void:

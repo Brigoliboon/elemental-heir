@@ -21,6 +21,12 @@ func run(tree: SceneTree) -> Array[String]:
 		failures.append("warrior.tres part_dir is missing")
 	if data.attacks.size() != 3:
 		failures.append("warrior.tres should keep all 3 attacks")
+	if not CharacterData.CharacterRole.has("ASSASSIN"):
+		failures.append("CharacterRole must expose ASSASSIN (renamed from ARCHER)")
+	if CharacterData.CharacterRole.has("ARCHER"):
+		failures.append("CharacterRole must not keep the old ARCHER name")
+	if data.hp_per_level <= 0 or data.attack_per_level <= 0 or data.defence_per_level <= 0:
+		failures.append("CharacterData must define per-level stat growth")
 
 	if ResourceLoader.exists("res://scripts/characters/character_config.gd"):
 		failures.append("character_config.gd should be removed after the merge")

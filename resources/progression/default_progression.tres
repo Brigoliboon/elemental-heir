@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ProgressionData" format=3]
+
+[ext_resource type="Script" path="res://resources/progression/progression_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+base_xp = 100
+exponent = 1.5
+max_level = 15

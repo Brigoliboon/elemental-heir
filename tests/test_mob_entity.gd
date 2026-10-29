@@ -25,6 +25,8 @@ func run(tree: SceneTree) -> Array[String]:
 		failures.append("mob attack damage must come from EnemyData")
 	if mob.current_health != mob.config.max_health:
 		failures.append("mob health must initialize from EnemyData.max_health")
+	if mob.stats == null or mob.get_node_or_null("Stats") != mob.stats:
+		failures.append("mob must own its Stats node")
 	if mob.collision_layer != 4:
 		failures.append("mob must sit on the Enemies physics layer (bit value 4)")
 	if mob.collision_mask != 1:

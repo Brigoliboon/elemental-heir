@@ -40,10 +40,14 @@ func run(tree: SceneTree) -> Array[String]:
 			landed = true
 			break
 
+	var expected_sword := Damage.final_damage(
+		player.stats.get_stat(Stats.ATTACK),
+		mob.stats.get_stat(Stats.DEFENCE),
+	)
 	if not landed:
 		failures.append("a warrior attack did not damage a mob in front of the sword")
-	elif mob.current_health != before - player.config.attack_damage:
-		failures.append("sword hitbox must use CharacterData.attack_damage")
+	elif mob.current_health != before - expected_sword:
+		failures.append("sword damage must use the attacker's Stats and target defence")
 
 	# Test depth miss: mob is in front horizontally but 100px above in depth.
 	# The sword swing should miss because depth_tolerance rejects the hit.
@@ -68,10 +72,14 @@ func run(tree: SceneTree) -> Array[String]:
 			mob_landed = true
 			break
 
+	var expected_mob := Damage.final_damage(
+		mob.stats.get_stat(Stats.ATTACK),
+		player.stats.get_stat(Stats.DEFENCE),
+	)
 	if not mob_landed:
 		failures.append("a mob attack did not damage the player")
-	elif player.current_health != player_before - mob.attack_damage:
-		failures.append("mob hitbox must use EnemyData.attack_damage")
+	elif player.current_health != player_before - expected_mob:
+		failures.append("mob damage must use its Stats and the player's defence")
 
 	_cleanup(player, mob)
 	await tree.physics_frame
