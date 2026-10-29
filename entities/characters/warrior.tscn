@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cxrrsyk55qqty"]
+
+[ext_resource type="Script" uid="uid://cdvk47fqad5cp" path="res://scripts/characters/character.gd" id="1_character"]
+[ext_resource type="Resource" uid="uid://di2wxqv05g1vg" path="res://resources/characters/warrior.tres" id="2_config"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_awfs0"]
+radius = 24.0
+height = 130.0
+
+[node name="Warrior" type="CharacterBody2D" unique_id=1934801326 groups=["player"]]
+collision_layer = 2
+script = ExtResource("1_character")
+config = ExtResource("2_config")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=482147045]
+position = Vector2(0, 70)
+shape = SubResource("CapsuleShape2D_awfs0")
+
+[node name="Skeleton2D" type="Skeleton2D" parent="." unique_id=608695950]
+unique_name_in_owner = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=209699277]
+unique_name_in_owner = true

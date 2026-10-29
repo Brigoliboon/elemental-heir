@@ -16,6 +16,7 @@ const RIG_TEST_SCENE := "res://scenes/tests/warrior_rig_test.tscn"
 const ONLINE_SCENE := "res://scenes/online/online_placeholder.tscn"
 const SETTINGS_SCENE := "res://scenes/settings/settings_placeholder.tscn"
 const CREDITS_SCENE := "res://scenes/credits/credits_screen.tscn"
+const FOREST_SCENE := "res://scenes/areas/forest/forest_village_square.tscn"
 
 @onready var sound_button: TextureButton = %SoundButton
 @onready var credits_button: TextureButton = %CreditsButton

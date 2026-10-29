@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://bwbqko43u7pw0"]
+[gd_scene format=3 uid="uid://csgr01f6oqr4p"]
 
-[ext_resource type="Texture2D" uid="uid://cv1ajjstvkisa" path="res://assets/monsters/forest/sprite/wolf-idle(1).png" id="1_rnq8k"]
-[ext_resource type="Texture2D" uid="uid://d07oowghc3loy" path="res://assets/monsters/forest/sprite/wolf-idle(5).png" id="2_v0guw"]
-[ext_resource type="Texture2D" uid="uid://c5ncwpj3ojgq6" path="res://assets/monsters/forest/sprite/wolf-idle(2).png" id="3_gry0n"]
-[ext_resource type="Texture2D" uid="uid://bi4l1ygqstyus" path="res://assets/monsters/forest/sprite/wolf-idle(3).png" id="4_grlr0"]
-[ext_resource type="Texture2D" uid="uid://cq7pp4qhhwnu3" path="res://assets/monsters/forest/sprite/wolf-idle(4).png" id="5_i6blm"]
-[ext_resource type="Texture2D" uid="uid://bqdn7bskl46a8" path="res://assets/monsters/forest/sprite/wolf-idle.png" id="6_ucdmw"]
-[ext_resource type="Texture2D" uid="uid://8wms64bl4fy4" path="res://assets/monsters/forest/sprite/wolf-idle(6).png" id="7_qqyjf"]
+[ext_resource type="Texture2D" uid="uid://cv1ajjstvkisa" path="res://assets/monsters/forest/sprite/wolf-idle(1).png" id="2_rnq8k"]
+[ext_resource type="Texture2D" uid="uid://d07oowghc3loy" path="res://assets/monsters/forest/sprite/wolf-idle(5).png" id="3_v0guw"]
+[ext_resource type="Texture2D" uid="uid://c5ncwpj3ojgq6" path="res://assets/monsters/forest/sprite/wolf-idle(2).png" id="4_gry0n"]
+[ext_resource type="Texture2D" uid="uid://bi4l1ygqstyus" path="res://assets/monsters/forest/sprite/wolf-idle(3).png" id="5_grlr0"]
+[ext_resource type="Texture2D" uid="uid://cq7pp4qhhwnu3" path="res://assets/monsters/forest/sprite/wolf-idle(4).png" id="6_i6blm"]
+[ext_resource type="Texture2D" uid="uid://bqdn7bskl46a8" path="res://assets/monsters/forest/sprite/wolf-idle.png" id="7_ucdmw"]
+[ext_resource type="Texture2D" uid="uid://8wms64bl4fy4" path="res://assets/monsters/forest/sprite/wolf-idle(6).png" id="8_qqyjf"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vchhr"]
 animations = [{
@@ -17,32 +17,55 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.5,
-"texture": ExtResource("1_rnq8k")
+"texture": ExtResource("2_rnq8k")
 }, {
 "duration": 1.5,
-"texture": ExtResource("2_v0guw")
+"texture": ExtResource("3_v0guw")
 }, {
 "duration": 1.5,
-"texture": ExtResource("3_gry0n")
+"texture": ExtResource("4_gry0n")
 }, {
 "duration": 1.5,
-"texture": ExtResource("4_grlr0")
+"texture": ExtResource("5_grlr0")
 }, {
 "duration": 1.5,
-"texture": ExtResource("5_i6blm")
+"texture": ExtResource("6_i6blm")
 }, {
 "duration": 1.5,
-"texture": ExtResource("6_ucdmw")
+"texture": ExtResource("7_ucdmw")
 }, {
 "duration": 1.5,
-"texture": ExtResource("7_qqyjf")
+"texture": ExtResource("8_qqyjf")
 }],
 "loop": 1,
 "name": &"default",
 "speed": 4.0
 }]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" unique_id=240556379]
+[sub_resource type="CircleShape2D" id="DetectionShape"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="AttackShape"]
+radius = 50.0
+
+[node name="WolfMob" type="CharacterBody2D" unique_id=1718279213]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=240556379]
 scale = Vector2(1.9206897, 1.7068965)
 sprite_frames = SubResource("SpriteFrames_vchhr")
-animation = &"attack"
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1734535705]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1719237669]
+shape = SubResource("DetectionShape")
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=734370057]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1639203425]
+shape = SubResource("AttackShape")

@@ -11,6 +11,7 @@ const CHARACTER_MARGIN := 130.0
 @onready var left_button: Button = %LeftButton
 @onready var right_button: Button = %RightButton
 @onready var attack_button: Button = %AttackButton
+@onready var block_button: Button = %BlockButton
 
 var _left_held := false
 var _right_held := false
@@ -26,6 +27,8 @@ func _ready() -> void:
 	right_button.button_down.connect(func() -> void: _right_held = true)
 	right_button.button_up.connect(func() -> void: _right_held = false)
 	attack_button.pressed.connect(character.attack)
+	block_button.button_down.connect(func() -> void: character.block(true))
+	block_button.button_up.connect(func() -> void: character.block(false))
 	character.facing_changed.connect(_update_facing_label)
 	_update_facing_label(character.facing_right)
 
@@ -41,9 +44,12 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
+	if event is InputEventKey and not event.echo:
 		if event.keycode == KEY_J or event.keycode == KEY_Z:
-			character.attack()
+			if event.pressed:
+				character.attack()
+		if event.keycode == KEY_K:
+			character.block(event.pressed)
 
 
 func _clamp_character() -> void:

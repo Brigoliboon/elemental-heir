@@ -7,12 +7,12 @@ signal combo_started
 signal combo_ended
 
 var _player: AnimationPlayer
-var _config: CharacterConfig
+var _config: CharacterData
 var _index := 0
 var _queued := false
 
 
-func _init(player: AnimationPlayer, config: CharacterConfig) -> void:
+func _init(player: AnimationPlayer, config: CharacterData) -> void:
 	_player = player
 	_config = config
 	_player.animation_finished.connect(_on_animation_finished)

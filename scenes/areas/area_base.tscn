@@ -1,39 +1,51 @@
-[gd_scene format=3 uid="uid://bcpg4k0emh18g"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" uid="uid://cyquxwe1llfyr" path="res://scripts/areas/area.gd" id="1_area"]
-[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
-[ext_resource type="Script" uid="uid://cdvk47fqad5cp" path="res://scripts/characters/character.gd" id="3_character"]
-[ext_resource type="Resource" uid="uid://cvfsb062l2mfn" path="res://resources/characters/warrior_t1_side.tres" id="4_config"]
+[ext_resource type="Script" path="res://scripts/areas/area.gd" id="1_area"]
+[ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://entities/characters/warrior.tscn" id="3_player"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_village_square.png" id="4_bg"]
 
-[node name="Area" type="Node2D" unique_id=1298525957]
+[node name="Area" type="Node2D"]
 script = ExtResource("1_area")
+area_name = "Forest Village Square"
+background_texture = ExtResource("4_bg")
+ground_far_px = 560.0
+ground_near_px = 690.0
+spawn_depth = 0.6
+spawn_x_ratio = 0.2
+edge_margin = 110.0
+feet_radius = 16.0
+far_character_scale = 1.5
+near_character_scale = 2.0
+far_zoom = 1.25
+near_zoom = 1.0
+zoom_follow = 4.0
+show_feet_footprint = false
 
-[node name="Background" type="Sprite2D" parent="." unique_id=388695127]
-unique_name_in_owner = true
-z_index = -100
+[node name="Background" type="Sprite2D" parent="." index="0" unique_name_in_owner = true]
+position = Vector2(1, 0)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_bg")
 centered = false
+z_index = -100
 
-[node name="Player" type="Node2D" parent="." unique_id=1072421273]
-unique_name_in_owner = true
-script = ExtResource("3_character")
-config = ExtResource("4_config")
+[node name="Player" type="Node2D" parent="." index="1" instance=ExtResource("3_player") unique_name_in_owner = true]
+position = Vector2(960, 600)
+scale = Vector2(1, 1)
 
-[node name="Skeleton2D" type="Skeleton2D" parent="Player" unique_id=7598587]
-unique_name_in_owner = true
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Player" unique_id=2079592272]
-unique_name_in_owner = true
-
-[node name="Camera" type="Camera2D" parent="." unique_id=923882717]
-unique_name_in_owner = true
-position = Vector2(964, 539)
+[node name="Camera" type="Camera2D" parent="." index="2" unique_name_in_owner = true]
+position = Vector2(960, 540)
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
+limit_left = 0
+limit_right = 1920
+limit_top = 540
+limit_bottom = 1080
 
-[node name="HUD" type="CanvasLayer" parent="." unique_id=13059678]
+[node name="HUD" type="CanvasLayer" parent="." index="3"]
 layer = 10
 
-[node name="UI" type="Control" parent="HUD" unique_id=322130660]
+[node name="UI" type="Control" parent="HUD" index="0"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,17 +55,17 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("2_theme")
 
-[node name="AreaLabel" type="Label" parent="HUD/UI" unique_id=1580913267]
-unique_name_in_owner = true
+[node name="AreaLabel" type="Label" parent="HUD/UI" index="0"]
 layout_mode = 1
 offset_left = 48.0
 offset_top = 28.0
 offset_right = 900.0
 offset_bottom = 76.0
 theme_override_font_sizes/font_size = 32
-
-[node name="BackButton" type="Button" parent="HUD/UI" unique_id=29908890]
 unique_name_in_owner = true
+text = "Forest Village Square"
+
+[node name="BackButton" type="Button" parent="HUD/UI" index="1"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -64,8 +76,9 @@ offset_right = -48.0
 offset_bottom = 84.0
 grow_horizontal = 0
 text = "Back"
+unique_name_in_owner = true
 
-[node name="MoveControls" type="GridContainer" parent="HUD/UI" unique_id=631287921]
+[node name="MoveControls" type="GridContainer" parent="HUD/UI" index="2"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -79,52 +92,51 @@ theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
 columns = 3
 
-[node name="SpacerTL" type="Control" parent="HUD/UI/MoveControls" unique_id=10592727]
+[node name="SpacerTL" type="Control" parent="HUD/UI/MoveControls" index="0"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="UpButton" type="Button" parent="HUD/UI/MoveControls" unique_id=1976970630]
-unique_name_in_owner = true
+[node name="UpButton" type="Button" parent="HUD/UI/MoveControls" index="1"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 text = "▲"
+unique_name_in_owner = true
 
-[node name="SpacerTR" type="Control" parent="HUD/UI/MoveControls" unique_id=1406165394]
+[node name="SpacerTR" type="Control" parent="HUD/UI/MoveControls" index="3"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="LeftButton" type="Button" parent="HUD/UI/MoveControls" unique_id=175618653]
-unique_name_in_owner = true
+[node name="LeftButton" type="Button" parent="HUD/UI/MoveControls" index="2"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 text = "◀"
+unique_name_in_owner = true
 
-[node name="SpacerMid" type="Control" parent="HUD/UI/MoveControls" unique_id=932805639]
+[node name="SpacerMid" type="Control" parent="HUD/UI/MoveControls" index="4"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="RightButton" type="Button" parent="HUD/UI/MoveControls" unique_id=707905724]
-unique_name_in_owner = true
+[node name="RightButton" type="Button" parent="HUD/UI/MoveControls" index="5"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 text = "▶"
+unique_name_in_owner = true
 
-[node name="SpacerBL" type="Control" parent="HUD/UI/MoveControls" unique_id=1915790389]
+[node name="SpacerBL" type="Control" parent="HUD/UI/MoveControls" index="6"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="DownButton" type="Button" parent="HUD/UI/MoveControls" unique_id=1353106672]
-unique_name_in_owner = true
+[node name="DownButton" type="Button" parent="HUD/UI/MoveControls" index="7"]
 custom_minimum_size = Vector2(124, 100)
 layout_mode = 2
 text = "▼"
-
-[node name="AttackButton" type="Button" parent="HUD/UI" unique_id=2056788132]
 unique_name_in_owner = true
+
+[node name="AttackButton" type="Button" parent="HUD/UI" index="3"]
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 1
 anchors_preset = 3
@@ -139,3 +151,21 @@ offset_bottom = -36.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Attack"
+unique_name_in_owner = true
+
+[node name="BlockButton" type="Button" parent="HUD/UI" index="4"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -476.0
+offset_top = -136.0
+offset_right = -276.0
+offset_bottom = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Block"
+unique_name_in_owner = true

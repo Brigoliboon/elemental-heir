@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c2rgw3x6hsdbt"]
 
-[ext_resource type="Script" uid="uid://dnl4dc7oxawbp" path="res://resources/enemy_data.gd" id="1_tuyss"]
+[ext_resource type="Script" uid="uid://dnl4dc7oxawbp" path="res://resources/entities/enemy_data.gd" id="1_tuyss"]
 
 [resource]
 script = ExtResource("1_tuyss")
+max_health = 60
+move_speed = 220.0
 metadata/_custom_type_script = "uid://dnl4dc7oxawbp"

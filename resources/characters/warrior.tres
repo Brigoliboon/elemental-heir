@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="CharacterConfig" format=3 uid="uid://cvfsb062l2mfn"]
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://di2wxqv05g1vg"]
 
-[ext_resource type="Script" uid="uid://c04qrmx6o36ow" path="res://scripts/characters/character_config.gd" id="1_config"]
+[ext_resource type="Script" uid="uid://ckq0eoatxumfo" path="res://resources/characters/character_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://d2lff1a3um7x4" path="res://scripts/characters/attack_data.gd" id="2_attack"]
 
 [sub_resource type="Resource" id="Resource_attack_1"]
@@ -156,7 +156,8 @@ keys = Array[Dictionary]([{
 }])
 
 [resource]
-script = ExtResource("1_config")
+script = ExtResource("1_data")
+character_name = "Sol"
 pivots_path = "res://assets/characters/warrior/t1_side/warrior_t1_side/pivots.json"
 part_dir = "res://assets/characters/warrior/t1_side/warrior_t1_side/"
 thigh_length_scale = 1.25

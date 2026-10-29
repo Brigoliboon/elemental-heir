@@ -1,61 +1,64 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://dvwupj2pyw7ce"]
 
-[ext_resource type="Script" path="res://scenes/tests/warrior_rig_test.gd" id="1_script"]
-[ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
-[ext_resource type="Script" path="res://scripts/characters/character.gd" id="3_character"]
-[ext_resource type="Resource" path="res://resources/characters/warrior_t1_side.tres" id="4_config"]
+[ext_resource type="Script" uid="uid://dp6i1py2ulrj4" path="res://scenes/tests/warrior_rig_test.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cxrrsyk55qqty" path="res://entities/characters/warrior.tscn" id="3_character"]
+[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="24_theme"]
 
-[node name="WarriorRigTest" type="Node2D"]
+[node name="WarriorRigTest" type="Node2D" unique_id=1689178347]
 script = ExtResource("1_script")
 
-[node name="BackgroundLayer" type="CanvasLayer" parent="."]
-layer = -1
+[node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=782327992]
+unique_name_in_owner = true
+layer = 0
 
-[node name="Background" type="ColorRect" parent="BackgroundLayer"]
-layout_mode = 3
+[node name="Background" type="ColorRect" parent="BackgroundLayer" unique_id=1510642513]
+z_index = -100
+z_as_relative = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.025, 0.03, 0.045, 1)
 
-[node name="CharacterRoot" type="Node2D" parent="."]
+[node name="CharacterRoot" parent="." unique_id=465799902 instance=ExtResource("3_character")]
+unique_name_in_owner = true
+z_index = 100
 position = Vector2(960, 540)
-scale = Vector2(3, 3)
-script = ExtResource("3_character")
-config = ExtResource("4_config")
 
-[node name="Skeleton2D" type="Skeleton2D" parent="CharacterRoot"]
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=1575389690]
 unique_name_in_owner = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterRoot"]
-unique_name_in_owner = true
-root_node = NodePath("..")
-
-[node name="UILayer" type="CanvasLayer" parent="."]
-layer = 10
-
-[node name="UI" type="Control" parent="UILayer"]
+[node name="UI" type="Control" parent="UILayer" unique_id=1035467455]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_theme")
+mouse_filter = 2
+theme = ExtResource("24_theme")
 
-[node name="Title" type="Label" parent="UILayer/UI"]
+[node name="Title" type="Label" parent="UILayer/UI" unique_id=1239778583]
 layout_mode = 1
 offset_left = 48.0
 offset_top = 28.0
 offset_right = 780.0
 offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.72, 0.68, 0.6, 1)
 theme_override_font_sizes/font_size = 32
-text = "Warrior T1 - Side Rig Test"
+text = "Warrior Side Rig Test"
 
-[node name="Hint" type="Label" parent="UILayer/UI"]
+[node name="Hint" type="Label" parent="UILayer/UI" unique_id=109563316]
 layout_mode = 1
 offset_left = 48.0
 offset_top = 80.0
@@ -65,7 +68,7 @@ theme_override_colors/font_color = Color(0.72, 0.68, 0.6, 1)
 theme_override_font_sizes/font_size = 24
 text = "Runtime Skeleton2D built from pivots.json - 128 px source, shown at 3x - A/D or arrows to walk - J/Z or Attack: combo"
 
-[node name="Controls" type="HBoxContainer" parent="UILayer/UI"]
+[node name="Controls" type="HBoxContainer" parent="UILayer/UI" unique_id=1752998392]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -81,49 +84,56 @@ grow_vertical = 0
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="LeftButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="LeftButton" type="Button" parent="UILayer/UI/Controls" unique_id=413024700]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "◀ Left"
 
-[node name="RightButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="RightButton" type="Button" parent="UILayer/UI/Controls" unique_id=1864634735]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Right ▶"
 
-[node name="IdleButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="IdleButton" type="Button" parent="UILayer/UI/Controls" unique_id=583899116]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Idle"
 
-[node name="WalkButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="WalkButton" type="Button" parent="UILayer/UI/Controls" unique_id=91049472]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Walk"
 
-[node name="AttackButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="AttackButton" type="Button" parent="UILayer/UI/Controls" unique_id=349325031]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Attack"
 
-[node name="FacingButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="BlockButton" type="Button" parent="UILayer/UI/Controls" unique_id=1328244239]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Block"
+
+[node name="FacingButton" type="Button" parent="UILayer/UI/Controls" unique_id=1328244238]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Facing: Right"
 
-[node name="BackButton" type="Button" parent="UILayer/UI/Controls"]
+[node name="BackButton" type="Button" parent="UILayer/UI/Controls" unique_id=456563823]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 56)
 layout_mode = 2

@@ -1,28 +1,25 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene format=3 uid="uid://bvirn1ag6o8u7"]
 
-[ext_resource type="Script" path="res://scenes/title/title_screen.gd" id="1_script"]
-[ext_resource type="VideoStream" path="res://assets/ui/title/title_screen_no_buttons.ogv" id="2_bg"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_offline_normal.png" id="6_offline_normal"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_offline_pressed.png" id="7_offline_pressed"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_offline_disabled.png" id="8_offline_disabled"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_online_normal.png" id="9_online_normal"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_online_pressed.png" id="10_online_pressed"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_online_disabled.png" id="11_online_disabled"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_settings_normal.png" id="12_settings_normal"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_settings_pressed.png" id="13_settings_pressed"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_settings_disabled.png" id="14_settings_disabled"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_sound_on_normal.png" id="15_sound_on_normal"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_sound_on_pressed.png" id="16_sound_on_pressed"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_sound_on_disabled.png" id="17_sound_on_disabled"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_sound_off_normal.png" id="18_sound_off_normal"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_sound_off_pressed.png" id="19_sound_off_pressed"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_sound_off_disabled.png" id="20_sound_off_disabled"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_credits_normal.png" id="21_credits_normal"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_credits_pressed.png" id="22_credits_pressed"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/btn_credits_disabled.png" id="23_credits_disabled"]
-[ext_resource type="Theme" path="res://themes/cinzel_dark_theme.tres" id="24_theme"]
+[ext_resource type="Script" uid="uid://w15w4281g4fj" path="res://scenes/title/title_screen.gd" id="1_script"]
+[ext_resource type="VideoStream" uid="uid://mgexson7nt5t" path="res://assets/ui/title/title_screen_no_buttons.ogv" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://cx8qasxc50fh3" path="res://assets/ui/title/btn_offline_normal.png" id="6_offline_normal"]
+[ext_resource type="Texture2D" uid="uid://c3kd5by8mg4g" path="res://assets/ui/title/btn_offline_pressed.png" id="7_offline_pressed"]
+[ext_resource type="Texture2D" uid="uid://5en307vg2hkn" path="res://assets/ui/title/btn_offline_disabled.png" id="8_offline_disabled"]
+[ext_resource type="Texture2D" uid="uid://c7ob4dodn04bu" path="res://assets/ui/title/btn_online_normal.png" id="9_online_normal"]
+[ext_resource type="Texture2D" uid="uid://cbchldqnyr5gc" path="res://assets/ui/title/btn_online_pressed.png" id="10_online_pressed"]
+[ext_resource type="Texture2D" uid="uid://fedrof6crfoe" path="res://assets/ui/title/btn_online_disabled.png" id="11_online_disabled"]
+[ext_resource type="Texture2D" uid="uid://dqfvaaainwcsy" path="res://assets/ui/title/btn_settings_normal.png" id="12_settings_normal"]
+[ext_resource type="Texture2D" uid="uid://d2rkplapenvmo" path="res://assets/ui/title/btn_settings_pressed.png" id="13_settings_pressed"]
+[ext_resource type="Texture2D" uid="uid://jfgb5xwwh0ug" path="res://assets/ui/title/btn_settings_disabled.png" id="14_settings_disabled"]
+[ext_resource type="Texture2D" uid="uid://2f03xl16n316" path="res://assets/ui/title/btn_sound_on_normal.png" id="15_sound_on_normal"]
+[ext_resource type="Texture2D" uid="uid://dvrah0mghu6fs" path="res://assets/ui/title/btn_sound_on_pressed.png" id="16_sound_on_pressed"]
+[ext_resource type="Texture2D" uid="uid://m5ooiowi3coy" path="res://assets/ui/title/btn_sound_on_disabled.png" id="17_sound_on_disabled"]
+[ext_resource type="Texture2D" uid="uid://chgqn1yv5ut7f" path="res://assets/ui/title/btn_credits_normal.png" id="21_credits_normal"]
+[ext_resource type="Texture2D" uid="uid://bbiy1t33yslhg" path="res://assets/ui/title/btn_credits_pressed.png" id="22_credits_pressed"]
+[ext_resource type="Texture2D" uid="uid://bdag0ig4bt5aw" path="res://assets/ui/title/btn_credits_disabled.png" id="23_credits_disabled"]
+[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="24_theme"]
 
-[node name="TitleScreen" type="Control"]
+[node name="TitleScreen" type="Control" unique_id=1269821989]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,7 +29,7 @@ grow_vertical = 2
 theme = ExtResource("24_theme")
 script = ExtResource("1_script")
 
-[node name="Background" type="VideoStreamPlayer" parent="."]
+[node name="Background" type="VideoStreamPlayer" parent="." unique_id=1218888466]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,11 +39,11 @@ grow_vertical = 2
 mouse_filter = 2
 stream = ExtResource("2_bg")
 volume_db = -80.0
+autoplay = true
 expand = true
 loop = true
-autoplay = true
 
-[node name="SoundButton" type="TextureButton" parent="."]
+[node name="SoundButton" type="TextureButton" parent="." unique_id=1315054237]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1648.0
@@ -59,7 +56,7 @@ texture_disabled = ExtResource("17_sound_on_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CreditsButton" type="TextureButton" parent="."]
+[node name="CreditsButton" type="TextureButton" parent="." unique_id=1330530814]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1760.0
@@ -72,7 +69,7 @@ texture_disabled = ExtResource("23_credits_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="OfflineButton" type="TextureButton" parent="."]
+[node name="OfflineButton" type="TextureButton" parent="." unique_id=1962232108]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1596.0
@@ -85,7 +82,7 @@ texture_disabled = ExtResource("8_offline_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="OnlineButton" type="TextureButton" parent="."]
+[node name="OnlineButton" type="TextureButton" parent="." unique_id=400131798]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1596.0
@@ -98,7 +95,7 @@ texture_disabled = ExtResource("11_online_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="SettingsButton" type="TextureButton" parent="."]
+[node name="SettingsButton" type="TextureButton" parent="." unique_id=505848653]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 1596.0
@@ -111,7 +108,7 @@ texture_disabled = ExtResource("14_settings_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="NoConnectionLabel" type="Label" parent="."]
+[node name="NoConnectionLabel" type="Label" parent="." unique_id=238770631]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
@@ -125,5 +122,5 @@ text = "No connection"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="ConnectivityCheck" type="HTTPRequest" parent="."]
+[node name="ConnectivityCheck" type="HTTPRequest" parent="." unique_id=233375582]
 unique_name_in_owner = true

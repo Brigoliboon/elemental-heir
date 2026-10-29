@@ -50,16 +50,17 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 ## Draw the feet footprint (the circle tested against obstacles) while running.
 @export var show_feet_footprint := false
 
-@onready var background: Sprite2D = %Background
-@onready var player: Character = %Player
-@onready var camera: Camera2D = %Camera
-@onready var area_label: Label = %AreaLabel
-@onready var left_button: Button = %LeftButton
-@onready var right_button: Button = %RightButton
-@onready var up_button: Button = %UpButton
-@onready var down_button: Button = %DownButton
-@onready var attack_button: Button = %AttackButton
-@onready var back_button: Button = %BackButton
+@onready var background: Sprite2D = $Background
+@onready var player: Character = $Player
+@onready var camera: Camera2D = $Camera
+@onready var area_label: Label = $HUD/UI/AreaLabel
+@onready var left_button: Button = $HUD/UI/MoveControls/LeftButton
+@onready var right_button: Button = $HUD/UI/MoveControls/RightButton
+@onready var up_button: Button = $HUD/UI/MoveControls/UpButton
+@onready var down_button: Button = $HUD/UI/MoveControls/DownButton
+@onready var attack_button: Button = $HUD/UI/AttackButton
+@onready var block_button: Button = $HUD/UI/BlockButton
+@onready var back_button: Button = $HUD/UI/BackButton
 
 var world_width := 0.0
 ## Screen-space y of the far and near edges of the walkable band (where feet touch).
@@ -85,6 +86,8 @@ func _ready() -> void:
 	_bind_hold(up_button, "up")
 	_bind_hold(down_button, "down")
 	attack_button.pressed.connect(player.attack)
+	block_button.button_down.connect(func() -> void: player.block(true))
+	block_button.button_up.connect(func() -> void: player.block(false))
 	back_button.pressed.connect(_go_to.bind(TITLE_SCENE, ""))
 	if show_feet_footprint:
 		get_tree().debug_collisions_hint = true

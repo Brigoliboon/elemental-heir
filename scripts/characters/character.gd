@@ -1,10 +1,13 @@
 class_name Character
-extends Node2D
-## A rigged side-view character. Builds its skeleton and clips from a CharacterConfig and
-## exposes a small API (move, attack, facing) for whatever controls it. Later systems such
-## as status and inventory should be added here as their own components.
+extends CharacterBody2D
+## A rigged side-view character. Builds its skeleton and clips from a CharacterData and
+## exposes a small API (move, attack, facing, health) for whatever controls it. Later systems
+## such as status and inventory should be added here as their own components.
 
 signal facing_changed(facing_right: bool)
+signal health_changed(current: int, maximum: int)
+signal died
+signal blocking_changed(blocking: bool)
 
 ## Horizontal center of the rig in source-art pixels. The skeleton is shifted by this so the
 ## body center sits on the Character origin; facing flips mirror `scale.x`, so without it
@@ -13,7 +16,7 @@ const RIG_CENTER_X := 31.0
 ## Distance from the Character origin down to the soles, in rig units (scale 1).
 const FEET_OFFSET_LOCAL := 141.7
 
-@export var config: CharacterConfig
+@export var config: CharacterData
 
 var rig: CharacterRig
 var animations: WarriorSideAnimations
@@ -29,6 +32,9 @@ var depth_speed_ratio := 0.6
 
 var _manual_animation := "idle"
 var _is_moving := false
+var _is_blocking := false
+var max_health := 0
+var current_health := 0
 
 @onready var skeleton: Skeleton2D = $Skeleton2D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -36,8 +42,11 @@ var _is_moving := false
 
 func _ready() -> void:
 	if config == null:
-		push_error("%s has no CharacterConfig" % name)
+		push_error("%s has no CharacterData" % name)
 		return
+	add_to_group("player")
+	max_health = config.max_health
+	current_health = max_health
 	rig = CharacterRig.new(config, skeleton)
 	rig.build()
 	animations = WarriorSideAnimations.new(rig)
@@ -63,7 +72,7 @@ func move(direction: int, delta: float) -> void:
 ## Runs left/right (x) and up/down through the scene's depth (y); idle when zero.
 ## Ignored mid-attack.
 func move_2d(direction: Vector2, delta: float) -> void:
-	if is_attacking():
+	if is_attacking() or _is_blocking:
 		return
 	if direction != Vector2.ZERO:
 		_is_moving = true
@@ -84,8 +93,30 @@ func move_2d(direction: Vector2, delta: float) -> void:
 
 
 func attack() -> void:
+	if _is_blocking:
+		return
 	if combo != null:
 		combo.press()
+
+
+## Raise or lower the guard. While blocking, incoming damage is reduced and
+## movement/attacks are ignored. Safe to call every frame while held.
+func block(on: bool = true) -> void:
+	if _is_blocking == on:
+		return
+	_is_blocking = on
+	if on:
+		_manual_animation = "block"
+		anim_player.play("block", 0.0)
+	else:
+		_manual_animation = "idle"
+		anim_player.play("idle", 0.08)
+	blocking_changed.emit(_is_blocking)
+
+
+## Returns true while the guard is up.
+func is_blocking() -> bool:
+	return _is_blocking
 
 
 ## Plays a looping clip ("idle", "walk" or "run") in place. Ignored mid-attack.
@@ -116,6 +147,26 @@ func _apply_scale() -> void:
 
 func toggle_facing() -> void:
 	set_facing(not facing_right)
+
+
+func take_damage(amount: int, _knockback: Vector2 = Vector2.ZERO) -> void:
+	if current_health <= 0:
+		return
+	if _is_blocking:
+		amount = maxi(0, int(float(amount) * (1.0 - config.block_damage_reduction)))
+		current_health = maxi(current_health - amount, 0)
+		health_changed.emit(current_health, max_health)
+		if current_health <= 0:
+			died.emit()
+		return
+	current_health = maxi(current_health - amount, 0)
+	health_changed.emit(current_health, max_health)
+	if current_health <= 0:
+		died.emit()
+
+
+func is_alive() -> bool:
+	return current_health > 0
 
 
 func _on_combo_ended() -> void:

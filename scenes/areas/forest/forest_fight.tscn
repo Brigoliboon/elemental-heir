@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvirodepg3v3v"]
 
-[ext_resource type="PackedScene" uid="uid://bcpg4k0emh18g" path="res://scenes/areas/area_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://cxgvljscnbjb2" path="res://assets/backgrounds/forest/forest_fight.png" id="2_bg"]
 [ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="3_k40ib"]
 
@@ -21,8 +21,18 @@ area_name = "Forest - Deepwood Clearing"
 background_texture = ExtResource("2_bg")
 ground_far_px = 420.0
 ground_near_px = 680.0
+spawn_depth = null
 spawn_x_ratio = 0.1
+edge_margin = null
+feet_radius = null
+far_character_scale = null
+near_character_scale = null
+far_zoom = null
+near_zoom = null
+zoom_follow = null
 exit_left_scene = "res://scenes/areas/forest/forest_village_square.tscn"
+exit_right_scene = null
+show_feet_footprint = null
 
 [node name="Background" parent="." index="0" unique_id=388695127]
 position = Vector2(1, 0)
@@ -148,3 +158,4 @@ one_way_collision = true
 
 [node name="Mob" parent="." index="5" unique_id=1876476869 instance=ExtResource("3_k40ib")]
 position = Vector2(1252, 605)
+config = null

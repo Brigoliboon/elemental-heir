@@ -65,6 +65,7 @@ func build_library(attacks: Array[AttackData]) -> AnimationLibrary:
 	library.add_animation("idle", _make_idle_animation())
 	library.add_animation("walk", _make_walk_animation())
 	library.add_animation("run", _make_run_animation())
+	library.add_animation("block", _make_block_animation())
 	for attack in attacks:
 		library.add_animation(attack.id, _make_attack_animation(attack))
 	return library
@@ -350,6 +351,55 @@ func _make_run_animation() -> Animation:
 			torso_angle, pelvis_angle, guard_upper, guard_forearm, GUARD_HAND_R,
 			GUARD_SWORD_WORLD + RUN_SWORD_SWAY * swing
 		))
+
+	_add_rotation_track(animation, "torso", times, torso_rot)
+	_add_rotation_track(animation, "pelvis", times, pelvis_rot)
+	_add_rotation_track(animation, "head", times, head_rot)
+	_add_rotation_track(animation, "thigh_l", times, thigh_l_rot)
+	_add_rotation_track(animation, "thigh_r", times, thigh_r_rot)
+	_add_rotation_track(animation, "shin_l", times, shin_l_rot)
+	_add_rotation_track(animation, "shin_r", times, shin_r_rot)
+	_add_rotation_track(animation, "foot_l", times, foot_l_rot)
+	_add_rotation_track(animation, "foot_r", times, foot_r_rot)
+	_add_rotation_track(animation, "upper_arm_l", times, arm_l)
+	_add_rotation_track(animation, "upper_arm_r", times, arm_r)
+	_add_rotation_track(animation, "forearm_l", times, forearm_l)
+	_add_rotation_track(animation, "forearm_r", times, forearm_r)
+	_add_rotation_track(animation, "hand_r", times, hand_r)
+	_add_rotation_track(animation, "sword", times, sword_rot)
+	_add_position_track(animation, "pelvis", times, pelvis_pos)
+	_add_position_track(animation, "head", times, head_pos)
+	_add_scale_track(animation, "torso", times, ones)
+	_add_scale_track(animation, "thigh_l", times, ones)
+	_add_scale_track(animation, "thigh_r", times, ones)
+	return animation
+
+
+# Builds a static defensive hold (guard pose). Plays while the player blocks.
+func _make_block_animation() -> Animation:
+	var animation := Animation.new()
+	animation.length = 0.5
+	animation.loop_mode = Animation.LOOP_LINEAR
+
+	var times := [0.0, 0.5]
+	var torso_rot := [IDLE_LEAN, IDLE_LEAN]
+	var pelvis_rot := [0.0, 0.0]
+	var pelvis_pos := [_rig.rest_position["pelvis"], _rig.rest_position["pelvis"]]
+	var head_rot := [-IDLE_LEAN - HEAD_LOOK_UP, -IDLE_LEAN - HEAD_LOOK_UP]
+	var head_pos := [_rig.rest_position["head"], _rig.rest_position["head"]]
+	var thigh_l_rot := [0.0, 0.0]
+	var thigh_r_rot := [0.0, 0.0]
+	var shin_l_rot := [0.0, 0.0]
+	var shin_r_rot := [0.0, 0.0]
+	var foot_l_rot := [0.0, 0.0]
+	var foot_r_rot := [0.0, 0.0]
+	var arm_l := [0.0, 0.0]
+	var forearm_l := [-1.0, -1.0]
+	var arm_r := [GUARD_UPPER_ARM_R, GUARD_UPPER_ARM_R]
+	var forearm_r := [GUARD_FOREARM_R, GUARD_FOREARM_R]
+	var hand_r := [GUARD_HAND_R, GUARD_HAND_R]
+	var sword_rot := [GUARD_SWORD_WORLD, GUARD_SWORD_WORLD]
+	var ones := [Vector2.ONE, Vector2.ONE]
 
 	_add_rotation_track(animation, "torso", times, torso_rot)
 	_add_rotation_track(animation, "pelvis", times, pelvis_rot)

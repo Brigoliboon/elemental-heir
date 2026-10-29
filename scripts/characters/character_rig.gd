@@ -9,11 +9,11 @@ var rest_rotation_deg: Dictionary = {}
 var rest_position: Dictionary = {}
 var base_scale := 1.0
 
-var _config: CharacterConfig
+var _config: CharacterData
 var _skeleton: Skeleton2D
 
 
-func _init(config: CharacterConfig, skeleton: Skeleton2D) -> void:
+func _init(config: CharacterData, skeleton: Skeleton2D) -> void:
 	_config = config
 	_skeleton = skeleton
 	base_scale = config.base_scale
