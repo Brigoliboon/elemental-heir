@@ -36,6 +36,20 @@ func run(tree: SceneTree) -> Array[String]:
 	if skeleton.get_child_count() == 0:
 		failures.append("warrior rig did not build any bones")
 
+	if player.sword_hitbox == null:
+		failures.append("warrior must build a sword hitbox under the sword bone")
+	else:
+		if player.sword_hitbox.get_parent() != player.rig.bones.get("sword"):
+			failures.append("sword hitbox must be parented to the sword bone")
+		if player.sword_hitbox.collision_layer != 8:
+			failures.append("sword hitbox must sit on Player_Attacks (8)")
+		if player.sword_hitbox.collision_mask != 4:
+			failures.append("sword hitbox must mask the Enemies layer (4)")
+		if player.sword_hitbox.target_group != "enemies":
+			failures.append("sword hitbox must target the 'enemies' group")
+		if player.sword_hitbox.is_active():
+			failures.append("sword hitbox must start inactive")
+
 	var before: int = player.current_health
 	player.take_damage(7)
 	if player.current_health != before - 7:

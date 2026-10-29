@@ -233,7 +233,8 @@ func _apply_depth() -> void:
 	var s := lerpf(far_character_scale, near_character_scale, depth_ratio())
 	player.set_render_scale(s)
 	player.position.y = _feet_y - FEET_OFFSET_LOCAL * s
-	player.z_index = int(lerpf(-10, 10, depth_ratio()))
+	# One shared y -> z mapping for the whole game: farther up = lower index.
+	player.z_index = DepthSort.z_for_y(_feet_y)
 
 
 func _camera_target() -> Vector2:

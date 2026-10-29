@@ -15,12 +15,18 @@ signal blocking_changed(blocking: bool)
 const RIG_CENTER_X := 31.0
 ## Distance from the Character origin down to the soles, in rig units (scale 1).
 const FEET_OFFSET_LOCAL := 141.7
+## Blade hitbox in sword-bone space (source-art pixels). The sword art is 16x64 with
+## its grip pivot near the top, so the box is centred down the blade.
+const SWORD_HITBOX_SIZE := Vector2(20.0, 58.0)
+const SWORD_HITBOX_CENTER := Vector2(0.0, 22.0)
 
 @export var config: CharacterData
 
 var rig: CharacterRig
 var animations: WarriorSideAnimations
 var combo: AttackCombo
+## Lives under the sword bone so it follows every swing automatically.
+var sword_hitbox: Hitbox
 var walk_speed := 230.0
 var run_speed := 360
 var facing_right := true
@@ -56,8 +62,13 @@ func _ready() -> void:
 	combo = AttackCombo.new(anim_player, config)
 	combo.combo_ended.connect(_on_combo_ended)
 	render_scale = config.base_scale
+	_build_sword_hitbox()
 	_apply_scale()
 	anim_player.play("idle")
+
+
+func _process(_delta: float) -> void:
+	_update_sword_hitbox()
 
 
 func is_attacking() -> bool:
@@ -147,6 +158,59 @@ func _apply_scale() -> void:
 	scale = Vector2(render_scale if facing_right else -render_scale, render_scale)
 
 
+## Creates the blade's damage area under the sword bone. Because it is parented to the
+## animated bone it tracks the swing for free, including the mirrored facing transform.
+func _build_sword_hitbox() -> void:
+	var sword_bone := rig.bones.get("sword") as Bone2D
+	if sword_bone == null:
+		push_warning("%s rig has no 'sword' bone; attacks will not deal damage" % name)
+		return
+
+	sword_hitbox = Hitbox.new()
+	sword_hitbox.name = "SwordHitbox"
+	sword_hitbox.damage = config.attack_damage
+	sword_hitbox.target_group = "enemies"
+	sword_hitbox.collision_layer = 8  # Player_Attacks
+	sword_hitbox.collision_mask = 4  # Enemies
+
+	var shape := RectangleShape2D.new()
+	shape.size = SWORD_HITBOX_SIZE
+	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
+	collision.shape = shape
+	collision.position = SWORD_HITBOX_CENTER
+	sword_hitbox.add_child(collision)
+	sword_bone.add_child(sword_hitbox)
+
+
+## Turns the sword hitbox on only during the active window of the current attack clip.
+func _update_sword_hitbox() -> void:
+	if sword_hitbox == null or config == null:
+		return
+
+	var data := _current_attack_data()
+	var active := false
+	if data != null and anim_player.current_animation == data.id:
+		var length := anim_player.current_animation_length
+		var t := anim_player.current_animation_position
+		active = length > 0.0 and t >= data.hit_start * length and t <= data.hit_end * length
+
+	if active:
+		if not sword_hitbox.is_active():
+			sword_hitbox.activate(data.damage if data.damage > 0 else config.attack_damage)
+	elif sword_hitbox.is_active():
+		sword_hitbox.deactivate()
+
+
+func _current_attack_data() -> AttackData:
+	if combo == null or config == null:
+		return null
+	var hit := combo.current_hit()
+	if hit <= 0 or hit > config.attacks.size():
+		return null
+	return config.attacks[hit - 1]
+
+
 func toggle_facing() -> void:
 	set_facing(not facing_right)
 
@@ -174,3 +238,5 @@ func is_alive() -> bool:
 func _on_combo_ended() -> void:
 	_is_moving = false
 	_manual_animation = "idle"
+	if sword_hitbox != null:
+		sword_hitbox.deactivate()

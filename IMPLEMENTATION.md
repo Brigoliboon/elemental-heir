@@ -77,20 +77,121 @@ fields are consumed where the current runtime already exposes them.
 - `warrior_side_animations.gd` builds a static `block` clip (guard pose) added to the AnimationLibrary.
 - UI: `Block` button in `area_base.tscn` and `warrior_rig_test.tscn`, wired to `Character.block()` on press/release; `K` key also toggles block in the rig test.
 
-## Enemy chase (added after M4)
+## Enemy chase and attack (current)
 
-- `mob.gd` chases the player when within `attack_radius` (Area2D) using `config.move_speed`.
-- `attack_range` export (default `80`) sets the distance at which the mob stops moving to attack.
-- Mob faces the player direction (`flip_h`) while chasing and plays the `walk` animation; reverts to `default` when idle.
-- Uses `get_tree().get_first_group("player")` as a fallback if Area2D detection misses the player.
-- While attacking, movement pauses and resumes after the attack animation finishes.
-- Guards against `config == null` to avoid crashes when `EnemyData` is unassigned.
+- `mob.gd` chases the player while the player is inside `aggro_radius` (default `325`, matching the Attack Radius area) and stops at `attack_range` (default `80`).
+- Chase uses `CharacterBody2D.move_and_slide()` in `MOTION_MODE_FLOATING`, so the mob respects World collisions.
+- `attack_timer`/`attack_cooldown` gate swings. The mob faces the player with `flip_h` and mirrors its hitbox with `facing_sign`.
+- Damage is no longer applied from `animation_finished`. The mob owns an `AttackHitbox` (`Hitbox`, Enemy_Attackss layer 16, Player mask 2) that is live only between `attack_hit_start` and `attack_hit_end` of the attack clip.
+- Uses `get_tree().get_first_node_in_group("player")` as the aggro fallback.
+- `config == null` is guarded, but the real fix is that scenes must never null the data reference.
 
-## Player depth z-index (added after M4)
+## Depth indexing (current)
 
-- `area.gd:_apply_depth()` sets `player.z_index = int(lerpf(-10, 10, depth_ratio()))`, so the player renders behind objects when farther up (far edge, depth_ratio near 0) and in front when farther down (near edge, depth_ratio near 1). This gives proper sprite overlap in depth-based area scenes.
+- `scripts/world/depth_sort.gd` (`DepthSort`) is the single y -> z-index rule for the game:
+  `z_index = clamp(round(world_y), -4096, 4096)`.
+- Moving up the screen (smaller y) always produces a lower index; moving down (larger y) produces a higher index.
+- `area.gd:_apply_depth()` applies the rule to the player using the **feet line** (`_feet_y`), not the Character origin.
+- `mob.gd:_apply_depth()` applies it using `global_position.y + depth_foot_offset`.
+- `DepthOverlay` (`scripts/world/depth_overlay.gd`) derives the index from a sprite's bottom edge, so props such as the forest fountain let the player pass behind (when above the base) or in front (when below it).
+- Do not hand-author gameplay z-indices in scenes; they are overwritten every frame. Only backgrounds keep a fixed negative z-index.
 
-## Non-goals
+## Combat hitboxes (current)
 
-- Chase AI, death animation, inventory or status systems.
-- `move_speed` and `defence` are stored data; they are not wired into new gameplay formulas in this migration.
+- `scripts/combat/hitbox.gd` (`Hitbox`) is the shared damage area:
+  - `activate()` clears the per-swing hit set and turns monitoring on;
+  - `deactivate()` turns it off;
+  - each body in `target_group` is damaged at most once per activation;
+  - targets must expose `take_damage(amount)`.
+- Player sword:
+  - `Character` builds `SwordHitbox` under the `sword` bone at runtime (`scripts/characters/character.gd`).
+  - The box follows the animated blade, including the mirrored facing transform.
+  - `AttackData.hit_start` / `hit_end` define the live fraction of each clip; `AttackData.damage` (0 = use `CharacterData.attack_damage`) sets per-hit damage.
+- Enemy attack:
+  - `mob.tscn` contains `AttackHitbox`; `mob.gd` sets its damage from `EnemyData.attack_damage`.
+- Physics layers now follow Godot bit values (see the corrected table below). `collision_layer` is a mask, not a layer number.
+
+## Physics layers
+
+| Layer | Name | Bit value |
+| --- | --- | --- |
+| 1 | World | 1 |
+| 2 | Player | 2 |
+| 3 | Enemies | 4 |
+| 4 | Player_Attacks | 8 |
+| 5 | Enemy_Attackss | 16 |
+
+- Player body: layer 2, mask 1.
+- Mob body: layer 4, mask 1.
+- Player sword hitbox: layer 8, mask 4.
+- Mob attack hitbox: layer 16, mask 2.
+- Mob aggro area: layer 0, mask 2.
+
+## Fixed: character invisible / `base_scale` on Nil
+
+- Cause: `forest_village_square.tscn` and `forest_fight.tscn` still overrode `Player.config` with the deleted `warrior_t1_side.tres`, so `config` was `null`. `Character._ready()` returned early (no rig, invisible), and the next move attempt read `config.base_scale`.
+- `forest_fight.tscn` also explicitly set `Mob.config = null`.
+- Fix: removed the stale overrides, the duplicate `Skeleton2D2`/`AnimationPlayer2` nodes and the manual player `z_index`, so the inherited player entity keeps `warrior.tres`.
+- Regression test: `tests/test_scene_integrity.gd` instantiates both forest scenes and asserts the data is non-null and the rig builds.
+
+## Next milestones
+
+### M5 - Character roster (Warrior, Mage, Assassin)
+
+- One `.tres` per class (`warrior.tres`, `mage.tres`, `assassin.tres`) with distinct `part_dir`, `pivots_path`, `base_scale`, draw order, stat block and attack list.
+- One entity scene per class, all reusing `Character` + `CharacterRig`:
+  - `entities/characters/warrior.tscn`
+  - `entities/characters/mage.tscn`
+  - `entities/characters/assassin.tscn`
+- `CharacterData.character_role` selects class restrictions and the animation builder. Keep `WarriorSideAnimations` behind a small `CharacterAnimations` interface if the mage/assassin rigs need different clips.
+- Add `tests/test_character_roster.gd` that loads all three data resources and scenes, then builds each rig headlessly.
+
+### M6 - Shared character components
+
+Split the runtime `Character` into small components so classes stay data-driven:
+
+- `Inventory` (equipment, consumables, stacking rules).
+- `SkillLoadout` (unlocked skills + equipped slots).
+- `Stats` (base stats + equipment/skill modifiers).
+- `PotionBelt` (limited quick slots).
+- Keep `Character` as the orchestrator that forwards input and exposes `take_damage()`, `attack()` and `move_2d()`.
+
+### M7 - Skills
+
+- `SkillData` resource: id, display name, class restriction, unlock level/cost, cooldown, resource cost, animation clip id, hit window, damage/effect type, icon.
+- `SkillLoadout` stores unlocked ids and a fixed number of equipped slots (for example 3 active + 1 ultimate).
+- Unlock and equip APIs: `unlock_skill(id)`, `equip_skill(id, slot)`, `unequip_skill(slot)`.
+- Runtime casts reuse `Hitbox`; ranged/projectile skills add a projectile scene instead of a melee hitbox.
+- Save format stores ids + slot indices, never node paths.
+
+### M8 - Inventory and potions
+
+- `ItemData` resource: id, type, stack size, rarity, class restrictions, icon, stats/effects.
+- `InventoryData` resource on the character or a `CharacterInventory` node: fixed bag slots, add/remove/swap, stack splitting.
+- `PotionBelt` with a small fixed number of quick slots (for example 3). Potions are `ItemData` with a heal/buff effect and a cooldown.
+- UI: grid inventory, drag/drop or tap-to-move, potion belt HUD with counts.
+
+### M9 - Equipment
+
+- Slots: `head`, `chest`, `pants`, `foot`, `necklace`, `primary`, `secondary`.
+- `EquipmentData` extends `ItemData` with slot, class masks, stat modifiers and optional granted skill.
+- `EquipmentSet` validates `CharacterRole` before equipping; primary/secondary are also restricted by class (sword/buckler for Warrior, staff/orb for Mage, dagger/off-hand for Assassin).
+- Stats recompute from base + equipment + skills and emit `stats_changed` so health/damage UI updates immediately.
+
+### M10 - Persistence and authoring
+
+- Save/load character id, class, level/exp, unlocked skills, equipped skill slots, inventory stacks, equipment slots and potion belt counts.
+- Provide editor-facing `.tres` templates for every class/item/skill so balance changes do not require code edits.
+- Add a data validation pass (ids unique, slot/class restrictions valid, referenced scenes/textures exist).
+
+### M11 - Content and validation
+
+- Add enemies beyond the goblin using the same `EnemyData` + `mob.tscn` pattern; only data and sprite frames vary.
+- Add attack/death/hurt feedback, drop tables and loot pickup.
+- Keep headless tests for: data resources load, all class rigs build, scenes have non-null data, hitboxes use the correct layers, depth order is monotonic.
+
+## Non-goals for the current pass
+
+- Full skill/inventory UI and save files (planned in M7-M10).
+- Ranged projectiles; the current implementation covers melee hitbox timing.
+- Death animation and loot drops.

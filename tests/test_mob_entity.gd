@@ -25,8 +25,8 @@ func run(tree: SceneTree) -> Array[String]:
 		failures.append("mob attack damage must come from EnemyData")
 	if mob.current_health != mob.config.max_health:
 		failures.append("mob health must initialize from EnemyData.max_health")
-	if mob.collision_layer != 3:
-		failures.append("mob must sit on the Enemies physics layer (3)")
+	if mob.collision_layer != 4:
+		failures.append("mob must sit on the Enemies physics layer (bit value 4)")
 	if mob.collision_mask != 1:
 		failures.append("mob must mask the World physics layer (1)")
 
@@ -41,6 +41,21 @@ func run(tree: SceneTree) -> Array[String]:
 		failures.append("mob needs an Attack Radius Area2D")
 	elif (area.collision_mask & 2) == 0:
 		failures.append("mob attack area must detect the Player layer (2)")
+
+	var hitbox := mob.get_node_or_null("AttackHitbox") as Hitbox
+	if hitbox == null:
+		failures.append("mob needs an AttackHitbox")
+	else:
+		if hitbox.collision_layer != 16:
+			failures.append("mob hitbox must sit on Enemy_Attackss (16)")
+		if hitbox.collision_mask != 2:
+			failures.append("mob hitbox must mask the Player layer (2)")
+		if hitbox.target_group != "player":
+			failures.append("mob hitbox must target the 'player' group")
+		if hitbox.is_active():
+			failures.append("mob hitbox must start inactive")
+		if hitbox.damage != mob.attack_damage:
+			failures.append("mob hitbox damage must come from EnemyData")
 
 	var before: int = mob.current_health
 	mob.take_damage(4)
