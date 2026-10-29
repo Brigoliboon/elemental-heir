@@ -98,6 +98,8 @@ func _make_idle_animation() -> Animation:
 	var forearm_r_values: Array = []
 	var hand_r_values: Array = []
 	var sword_values: Array = []
+	# Buckler counter-rotates to stay upright (world rotation 0) despite forearm/hand motion.
+	var buckler_rot: Array = []
 
 	var square_l: Array = _leg_square_offsets("thigh_l", "shin_l")
 	var square_r: Array = _leg_square_offsets("thigh_r", "shin_r")
@@ -147,6 +149,12 @@ func _make_idle_animation() -> Animation:
 			lean, pelvis_angle, guard_upper, guard_forearm, GUARD_HAND_R, guard_sword
 		))
 
+		# Buckler world rotation = torso + upper_arm_l + forearm_l + hand_l + buckler_local.
+		# We want world rotation = 0, so buckler_local = -(torso + upper_arm_l + forearm_l + hand_l).
+		# upper_arm_l is 0 in idle; hand_l stays at rest (0 local offset).
+		var buckler_local := -(lean + float(arm_l_values[i]) + float(forearm_l_values[i]))
+		buckler_rot.append(buckler_local)
+
 		torso_rot.append(lean)
 		pelvis_rot.append(pelvis_angle)
 		pelvis_pos.append(pelvis_rest + Vector2(0.0, body_offset))
@@ -171,6 +179,7 @@ func _make_idle_animation() -> Animation:
 	_add_rotation_track(animation, "forearm_r", times, forearm_r_values)
 	_add_rotation_track(animation, "hand_r", times, hand_r_values)
 	_add_rotation_track(animation, "sword", times, sword_values)
+	_add_rotation_track(animation, "buckler", times, buckler_rot)
 	_add_position_track(animation, "pelvis", times, pelvis_pos)
 	_add_position_track(animation, "head", times, head_pos)
 	_add_scale_track(animation, "torso", times, torso_scale)
@@ -205,6 +214,8 @@ func _make_walk_animation() -> Animation:
 	var forearm_r: Array = []
 	var hand_r: Array = []
 	var sword_rot: Array = []
+	# Buckler counter-rotates to stay upright during walk.
+	var buckler_rot: Array = []
 
 	var square_l: Array = _leg_square_offsets("thigh_l", "shin_l")
 	var square_r: Array = _leg_square_offsets("thigh_r", "shin_r")
@@ -250,12 +261,16 @@ func _make_walk_animation() -> Animation:
 		var guard_sword := GUARD_SWORD_WORLD + 1.5 * cos(phase)
 		arm_l.append(-arm_swing)
 		arm_r.append(guard_upper)
-		forearm_l.append(-6.0 + 4.0 * sin(phase))
+		var fl := -6.0 + 4.0 * sin(phase)
+		forearm_l.append(fl)
 		forearm_r.append(guard_forearm)
 		hand_r.append(GUARD_HAND_R)
 		sword_rot.append(_guard_sword_offset(
 			torso_angle, pelvis_angle, guard_upper, guard_forearm, GUARD_HAND_R, guard_sword
 		))
+		# Buckler world rotation = torso + upper_arm_l + forearm_l + hand_l + buckler_local.
+		# upper_arm_l = -arm_swing, hand_l = 0 (rest). Target world = 0.
+		buckler_rot.append(-(torso_angle + (-arm_swing) + fl))
 
 	_add_rotation_track(animation, "torso", times, torso_rot)
 	_add_rotation_track(animation, "pelvis", times, pelvis_rot)
@@ -272,6 +287,7 @@ func _make_walk_animation() -> Animation:
 	_add_rotation_track(animation, "forearm_r", times, forearm_r)
 	_add_rotation_track(animation, "hand_r", times, hand_r)
 	_add_rotation_track(animation, "sword", times, sword_rot)
+	_add_rotation_track(animation, "buckler", times, buckler_rot)
 	_add_position_track(animation, "pelvis", times, pelvis_pos)
 	_add_position_track(animation, "head", times, head_pos)
 	_add_scale_track(animation, "torso", times, torso_scale)
@@ -304,6 +320,8 @@ func _make_run_animation() -> Animation:
 	var hand_r: Array = []
 	var sword_rot: Array = []
 	var ones: Array = []
+	# Buckler counter-rotates to stay upright during run.
+	var buckler_rot: Array = []
 
 	var square_l: Array = _leg_square_offsets("thigh_l", "shin_l")
 	var square_r: Array = _leg_square_offsets("thigh_r", "shin_r")
@@ -352,8 +370,10 @@ func _make_run_animation() -> Animation:
 		# Arms pump opposite to their own-side leg; the sword stays at the guard angle.
 		var guard_upper := GUARD_UPPER_ARM_R + RUN_SWORD_ARM_AMP * swing
 		var guard_forearm := GUARD_FOREARM_R - 0.5 * RUN_SWORD_ARM_AMP * swing
-		arm_l.append(-RUN_FAR_ARM_AMP * swing)
-		forearm_l.append(RUN_FAR_FOREARM + 4.0 * sin(phase))
+		var arm_l_val := -RUN_FAR_ARM_AMP * swing
+		var forearm_l_val := RUN_FAR_FOREARM + 4.0 * sin(phase)
+		arm_l.append(arm_l_val)
+		forearm_l.append(forearm_l_val)
 		arm_r.append(guard_upper)
 		forearm_r.append(guard_forearm)
 		hand_r.append(GUARD_HAND_R)
@@ -361,6 +381,9 @@ func _make_run_animation() -> Animation:
 			torso_angle, pelvis_angle, guard_upper, guard_forearm, GUARD_HAND_R,
 			GUARD_SWORD_WORLD + RUN_SWORD_SWAY * swing
 		))
+		# Buckler world rotation = torso + upper_arm_l + forearm_l + hand_l + buckler_local.
+		# hand_l = 0 (rest). Target world = 0.
+		buckler_rot.append(-(torso_angle + arm_l_val + forearm_l_val))
 
 	_add_rotation_track(animation, "torso", times, torso_rot)
 	_add_rotation_track(animation, "pelvis", times, pelvis_rot)
@@ -377,6 +400,7 @@ func _make_run_animation() -> Animation:
 	_add_rotation_track(animation, "forearm_r", times, forearm_r)
 	_add_rotation_track(animation, "hand_r", times, hand_r)
 	_add_rotation_track(animation, "sword", times, sword_rot)
+	_add_rotation_track(animation, "buckler", times, buckler_rot)
 	_add_position_track(animation, "pelvis", times, pelvis_pos)
 	_add_position_track(animation, "head", times, head_pos)
 	_add_scale_track(animation, "torso", times, ones)

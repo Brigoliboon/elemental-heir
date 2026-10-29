@@ -58,6 +58,13 @@ func run(tree: SceneTree) -> Array[String]:
 	if player.anim_player.current_animation != "idle":
 		failures.append("block(false) must return to idle")
 
+	# After returning to idle, buckler should be back to its rest rotation (upright).
+	var buckler := player.rig.bones.get("buckler") as Bone2D
+	if buckler != null:
+		var rot := absf(rad_to_deg(buckler.global_rotation))
+		if rot > 20.0:
+			failures.append("buckler should return to upright after block ends (%.1f° world rotation)" % rot)
+
 	player.queue_free()
 	await tree.process_frame
 	return failures
