@@ -162,3 +162,9 @@ one_way_collision = true
 
 [node name="Mob" parent="." index="5" unique_id=1876476869 instance=ExtResource("3_k40ib")]
 position = Vector2(1176, 642)
+
+[node name="Mob2" parent="." index="6" unique_id=2109792798 instance=ExtResource("3_k40ib")]
+position = Vector2(1553, 663)
+
+[node name="Mob3" parent="." index="7" unique_id=632704922 instance=ExtResource("3_k40ib")]
+position = Vector2(1354, 813)
