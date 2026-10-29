@@ -12,4 +12,9 @@ extends Resource
 @export var length := 0.36
 ## Lock the sword to the hand at its guard grip (ignores the "sword" key values).
 @export var rigid_sword := false
+## Fraction of the clip (0..1) where the sword hitbox is live.
+@export_range(0.0, 1.0) var hit_start := 0.3
+@export_range(0.0, 1.0) var hit_end := 0.65
+## Damage for this hit. 0 uses the character's attack_damage.
+@export var damage := 0
 @export var keys: Array[Dictionary] = []
