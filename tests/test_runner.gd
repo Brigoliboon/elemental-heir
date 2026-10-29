@@ -17,10 +17,16 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_damage.gd"),
 	preload("res://tests/test_leveling.gd"),
 	preload("res://tests/test_stats_panel.gd"),
+	preload("res://tests/test_player_progress.gd"),
 ]
 
 
 func _ready() -> void:
+	var progress := get_node_or_null("/root/PlayerProgress")
+	if progress != null:
+		progress.persistence_enabled = false
+		progress.reset(false)
+
 	var failures: Array[String] = []
 	for script in TEST_SCRIPTS:
 		var suite: RefCounted = script.new()

@@ -212,17 +212,32 @@ fields are consumed where the current runtime already exposes them.
 
 ## UI - Stats panel and XP bar (current)
 
-- [ ] U1 - Player XP bar
+- [x] U1 - Player XP bar
   - `Character` emits `experience_changed` whenever XP is gained.
   - `area_base.tscn` HUD gains `PlayerHealth/XPLabel` and `XPBar`; the area keeps
     them in sync with `experience` / `experience_to_next_level()`.
-- [ ] U2 - Player stats button
+- [x] U2 - Player stats button
   - HUD gains a `StatsButton` that toggles a reusable `StatsPanel`.
   - The panel lists level, HP, XP, attack, defence, move speed, crit and cooldown.
-- [ ] U3 - Monster stats on click
+- [x] U3 - Monster stats on click
   - Clicking/tapping a mob in the world shows its `EnemyData` stats in the same
     panel (name, level, HP, XP reward, combat stats).
   - Test: `tests/test_stats_panel.gd`.
+
+## Fix - Player progress persistence (current)
+
+- [x] P1 - Progress store
+  - Add a `PlayerProgress` autoload that keeps level/experience in memory and
+    saves them to `user://player_progress.cfg`.
+  - Test: `tests/test_player_progress.gd`.
+- [x] P2 - Restore and record in areas
+  - `Character.apply_progress()` applies saved level/experience and recomputes
+    stats/health.
+  - `Area` restores the store on load and records XP/level changes so switching
+    scenes (and restarting the app) keeps progress.
+- [x] P3 - Test isolation
+  - The headless runner disables persistence and clears in-memory progress so
+    tests are deterministic and never overwrite a real save.
 
 ## Next milestones
 
