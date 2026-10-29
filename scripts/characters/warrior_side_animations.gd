@@ -20,6 +20,16 @@ const GUARD_UPPER_ARM_R := -5
 const GUARD_FOREARM_R := 0.0
 const GUARD_HAND_R := 6.0
 const GUARD_SWORD_WORLD := -128.0
+# Shield block: the buckler sits on the far forearm. The upper arm pushes the elbow
+# forward while the forearm lifts the shield across the chest. The buckler bone is
+# counter-rotated so the shield face stays upright, and the sword arm drops to its
+# rest pose instead of guarding with the blade.
+# The block animation is built from the rest pose. The lean is small and the torso
+# doesn't crunch; the shield arm raises while the sword arm drops.
+const BLOCK_LEAN := 4.0
+const BLOCK_UPPER_ARM_L := -35.0
+const BLOCK_FOREARM_L := -55.0
+const BLOCK_HAND_L := -10.0
 const IDLE_LEAN := 6
 const IDLE_COMPRESSION := 0.0
 const IDLE_BOB := 0.0
@@ -375,17 +385,18 @@ func _make_run_animation() -> Animation:
 	return animation
 
 
-# Builds a static defensive hold (guard pose). Plays while the player blocks.
+# Static defensive hold: the buckler arm is raised across the chest while the sword
+# hangs in its rest pose. Plays while the player blocks.
 func _make_block_animation() -> Animation:
 	var animation := Animation.new()
 	animation.length = 0.5
 	animation.loop_mode = Animation.LOOP_LINEAR
 
 	var times := [0.0, 0.5]
-	var torso_rot := [IDLE_LEAN, IDLE_LEAN]
+	var torso_rot := [BLOCK_LEAN, BLOCK_LEAN]
 	var pelvis_rot := [0.0, 0.0]
 	var pelvis_pos := [_rig.rest_position["pelvis"], _rig.rest_position["pelvis"]]
-	var head_rot := [-IDLE_LEAN - HEAD_LOOK_UP, -IDLE_LEAN - HEAD_LOOK_UP]
+	var head_rot := [-BLOCK_LEAN - HEAD_LOOK_UP, -BLOCK_LEAN - HEAD_LOOK_UP]
 	var head_pos := [_rig.rest_position["head"], _rig.rest_position["head"]]
 	var thigh_l_rot := [0.0, 0.0]
 	var thigh_r_rot := [0.0, 0.0]
@@ -393,12 +404,18 @@ func _make_block_animation() -> Animation:
 	var shin_r_rot := [0.0, 0.0]
 	var foot_l_rot := [0.0, 0.0]
 	var foot_r_rot := [0.0, 0.0]
-	var arm_l := [0.0, 0.0]
-	var forearm_l := [-1.0, -1.0]
-	var arm_r := [GUARD_UPPER_ARM_R, GUARD_UPPER_ARM_R]
-	var forearm_r := [GUARD_FOREARM_R, GUARD_FOREARM_R]
-	var hand_r := [GUARD_HAND_R, GUARD_HAND_R]
-	var sword_rot := [GUARD_SWORD_WORLD, GUARD_SWORD_WORLD]
+	# Shield arm.
+	var arm_l := [BLOCK_UPPER_ARM_L, BLOCK_UPPER_ARM_L]
+	var forearm_l := [BLOCK_FOREARM_L, BLOCK_FOREARM_L]
+	var hand_l := [BLOCK_HAND_L, BLOCK_HAND_L]
+	# Keep the shield face vertical despite the arm rotations.
+	var buckler_offset := -(BLOCK_LEAN + BLOCK_UPPER_ARM_L + BLOCK_FOREARM_L + BLOCK_HAND_L)
+	var buckler_rot := [buckler_offset, buckler_offset]
+	# Sword arm rests low instead of mirroring the old sword guard.
+	var arm_r := [0.0, 0.0]
+	var forearm_r := [0.0, 0.0]
+	var hand_r := [0.0, 0.0]
+	var sword_rot := [0.0, 0.0]
 	var ones := [Vector2.ONE, Vector2.ONE]
 
 	_add_rotation_track(animation, "torso", times, torso_rot)
@@ -411,8 +428,10 @@ func _make_block_animation() -> Animation:
 	_add_rotation_track(animation, "foot_l", times, foot_l_rot)
 	_add_rotation_track(animation, "foot_r", times, foot_r_rot)
 	_add_rotation_track(animation, "upper_arm_l", times, arm_l)
-	_add_rotation_track(animation, "upper_arm_r", times, arm_r)
 	_add_rotation_track(animation, "forearm_l", times, forearm_l)
+	_add_rotation_track(animation, "hand_l", times, hand_l)
+	_add_rotation_track(animation, "buckler", times, buckler_rot)
+	_add_rotation_track(animation, "upper_arm_r", times, arm_r)
 	_add_rotation_track(animation, "forearm_r", times, forearm_r)
 	_add_rotation_track(animation, "hand_r", times, hand_r)
 	_add_rotation_track(animation, "sword", times, sword_rot)

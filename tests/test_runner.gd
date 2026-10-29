@@ -11,6 +11,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_combat.gd"),
 	preload("res://tests/test_health.gd"),
 	preload("res://tests/test_death_respawn.gd"),
+	preload("res://tests/test_block.gd"),
 ]
 
 

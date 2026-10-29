@@ -311,11 +311,16 @@ func _print_debug() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
+	if event is InputEventKey and not event.echo:
 		if event.keycode == KEY_J or event.keycode == KEY_Z:
-			player.attack()
-		if event.keycode == KEY_I:
+			if event.pressed:
+				player.attack()
+		if event.keycode == KEY_K:
+			player.block(event.pressed)
+		if event.keycode == KEY_I and event.pressed:
 			_print_debug()
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		player.block(event.pressed)
 
 
 func _check_exits(direction_x: float) -> void:
