@@ -175,7 +175,59 @@ fields are consumed where the current runtime already exposes them.
 - Fix: removed the stale overrides, the duplicate `Skeleton2D2`/`AnimationPlayer2` nodes and the manual player `z_index`, so the inherited player entity keeps `warrior.tres`.
 - Regression test: `tests/test_scene_integrity.gd` instantiates both forest scenes and asserts the data is non-null and the rig builds.
 
+## Phase 2 - Stats and Leveling (DESIGN_ROADMAP §2)
+
+> `docs/DESIGN_ROADMAP.md` is the source of truth for phases from here on. It
+> supersedes M5-M11 below.
+
+- [x] P2.1 - Stats component
+  - Add `scripts/combat/stats.gd` (`Stats`) with the `(base + flat) * (1 + pct)`
+    pipeline, modifier sources, and `stats_changed`.
+  - Extend `CharacterData` and `EnemyData` with the seven core stats and
+    per-level growth (`hp_per_level`, `attack_per_level`, `defence_per_level`).
+  - Test: `tests/test_stats.gd`.
+  - `Stats.get_stat()` is used instead of `Stats.get()` because `Object.get()`
+    already exists in GDScript.
+- [x] P2.2 - Damage formula
+  - Add `scripts/combat/damage.gd` (`Damage`) with
+    `raw = attack * skill_multiplier`, `mitigation = raw * defence / (defence + K)`,
+    `final = max(1, raw - mitigation)`, `K = 100`.
+  - `Hitbox` resolves the outgoing attack from the attacker's `Stats`;
+    `Character.take_damage()` and `Mob.take_damage()` mitigate it through the
+    target's `DEFENCE`, so the formula is applied exactly once.
+  - `Character` and `Mob` source attack/health from `Stats`.
+  - `Hitbox.damage` remains the fallback attack value; per-swing overrides are
+    stored separately so a combo hit cannot leak into the next swing.
+  - Test: `tests/test_damage.gd`.
+- [x] P2.3 - XP and leveling
+  - Add `resources/progression/progression_data.gd` (`ProgressionData`) and
+    `default_progression.tres` for the `base_xp * level ^ exponent` curve, cap 15.
+  - `Character` tracks level/experience, grants XP via `add_experience()`,
+    reconfigures `Stats`/`Health` on level-up, and emits `level_changed`.
+  - `EnemyData.xp_reward` is awarded to the player when a mob dies.
+  - Test: `tests/test_leveling.gd`.
+- [x] P2.4 - Role rename
+  - Rename `CharacterData.CharacterRole.ARCHER` to `ASSASSIN` (DESIGN_ROADMAP §8).
+  - Covered by `tests/test_character_data.gd`.
+
+## UI - Stats panel and XP bar (current)
+
+- [ ] U1 - Player XP bar
+  - `Character` emits `experience_changed` whenever XP is gained.
+  - `area_base.tscn` HUD gains `PlayerHealth/XPLabel` and `XPBar`; the area keeps
+    them in sync with `experience` / `experience_to_next_level()`.
+- [ ] U2 - Player stats button
+  - HUD gains a `StatsButton` that toggles a reusable `StatsPanel`.
+  - The panel lists level, HP, XP, attack, defence, move speed, crit and cooldown.
+- [ ] U3 - Monster stats on click
+  - Clicking/tapping a mob in the world shows its `EnemyData` stats in the same
+    panel (name, level, HP, XP reward, combat stats).
+  - Test: `tests/test_stats_panel.gd`.
+
 ## Next milestones
+
+> Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept
+> for historical context only.
 
 ### M5 - Character roster (Warrior, Mage, Assassin)
 

@@ -31,6 +31,8 @@ func run(tree: SceneTree) -> Array[String]:
 		failures.append("warrior entity needs an AnimationPlayer")
 	if player.current_health != player.config.max_health:
 		failures.append("health must initialize from CharacterData.max_health")
+	if player.stats == null or player.get_node_or_null("Stats") != player.stats:
+		failures.append("warrior entity must own its Stats node")
 
 	var skeleton := player.get_node("Skeleton2D")
 	if skeleton.get_child_count() == 0:
@@ -51,9 +53,10 @@ func run(tree: SceneTree) -> Array[String]:
 			failures.append("sword hitbox must start inactive")
 
 	var before: int = player.current_health
+	var expected := Damage.final_damage(7.0, player.stats.get_stat(Stats.DEFENCE))
 	player.take_damage(7)
-	if player.current_health != before - 7:
-		failures.append("take_damage must reduce current health")
+	if player.current_health != before - expected:
+		failures.append("take_damage must mitigate incoming damage through Stats.defence")
 
 	player.queue_free()
 	await tree.process_frame

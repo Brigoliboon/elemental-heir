@@ -4,7 +4,7 @@ class_name CharacterData
 enum CharacterRole {
 	WARRIOR,
 	MAGE,
-	ARCHER,
+	ASSASSIN,
 	ENEMY
 }
 
@@ -17,10 +17,16 @@ enum CharacterRole {
 @export var move_speed: float = 230.0
 @export var attack_damage: int = 15
 @export var defence: int = 10
+@export_range(0.0, 1.0) var crit_rate: float = 0.05
+@export var crit_damage: float = 1.5
+@export_range(0.0, 1.0) var cooldown_reduction: float = 0.0
 
 @export_group("Progression")
 @export var starting_level: int = 1
 @export var starting_exp: int = 0
+@export var hp_per_level: int = 10
+@export var attack_per_level: int = 2
+@export var defence_per_level: int = 1
 
 @export_group("Rig")
 @export_file("*.json") var pivots_path := ""

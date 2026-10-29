@@ -4,6 +4,7 @@
 [ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
 [ext_resource type="PackedScene" uid="uid://cxrrsyk55qqty" path="res://entities/characters/warrior.tscn" id="3_player"]
 [ext_resource type="Texture2D" uid="uid://cujvxnmo3axkt" path="res://assets/backgrounds/forest/forest_village_square.png" id="4_bg"]
+[ext_resource type="Script" path="res://scripts/ui/stats_panel.gd" id="5_stats_panel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
 bg_color = Color(0.07, 0.06, 0.06, 0.88)
@@ -18,6 +19,25 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
+bg_color = Color(0.78, 0.62, 0.24, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats_panel"]
+bg_color = Color(0.05, 0.05, 0.07, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.45, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="Area" type="Node2D" unique_id=660581917]
 script = ExtResource("1_area")
@@ -78,6 +98,19 @@ offset_right = -48.0
 offset_bottom = 84.0
 grow_horizontal = 0
 text = "Back"
+
+[node name="StatsButton" type="Button" parent="HUD/UI"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -456.0
+offset_top = 28.0
+offset_right = -252.0
+offset_bottom = 84.0
+grow_horizontal = 0
+text = "Stats"
 
 [node name="MoveControls" type="GridContainer" parent="HUD/UI" unique_id=1931883080]
 layout_mode = 1
@@ -175,9 +208,9 @@ text = "Block"
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 48.0
-offset_top = 160.0
+offset_top = 220.0
 offset_right = 1400.0
-offset_bottom = 198.0
+offset_bottom = 258.0
 theme_override_font_sizes/font_size = 20
 
 [node name="PlayerHealth" type="VBoxContainer" parent="HUD/UI" unique_id=1763514042]
@@ -185,7 +218,7 @@ layout_mode = 1
 offset_left = 48.0
 offset_top = 88.0
 offset_right = 408.0
-offset_bottom = 152.0
+offset_bottom = 210.0
 theme_override_constants/separation = 4
 
 [node name="HealthLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=1763514043]
@@ -201,6 +234,21 @@ theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
 max_value = 100.0
 value = 100.0
+show_percentage = false
+
+[node name="XPLabel" type="Label" parent="HUD/UI/PlayerHealth"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "XP 0 / 100"
+
+[node name="XPBar" type="ProgressBar" parent="HUD/UI/PlayerHealth"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 18)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
+max_value = 100.0
+value = 0.0
 show_percentage = false
 
 [node name="DeathLabel" type="Label" parent="HUD/UI" unique_id=1763514045]
@@ -223,3 +271,46 @@ theme_override_font_sizes/font_size = 56
 text = "You fell...\nRespawning"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="StatsPanel" type="PanelContainer" parent="HUD/UI"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -620.0
+offset_top = 120.0
+offset_right = -48.0
+offset_bottom = 680.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_stats_panel")
+script = ExtResource("5_stats_panel")
+
+[node name="Margin" type="MarginContainer" parent="HUD/UI/StatsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="HUD/UI/StatsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="HUD/UI/StatsPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_font_sizes/font_size = 32
+text = "Stats"
+
+[node name="Body" type="Label" parent="HUD/UI/StatsPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 2
+text = ""
+
+[node name="Close" type="Button" parent="HUD/UI/StatsPanel/Margin/VBox"]
+layout_mode = 2
+text = "Close"

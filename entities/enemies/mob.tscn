@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://cv1ajjstvkisa" path="res://assets/monsters/forest/sprite/wolf-idle(1).png" id="15_8cfiu"]
 [ext_resource type="Script" uid="uid://cflx0defitjua" path="res://scripts/combat/health.gd" id="16_health"]
 [ext_resource type="Script" uid="uid://2krryjgb84f2" path="res://scripts/ui/world_health_bar.gd" id="17_healthbar"]
+[ext_resource type="Script" uid="uid://dpm7uuok3hdmp" path="res://scripts/combat/stats.gd" id="18_stats"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
 radius = 50.0
@@ -88,6 +89,9 @@ config = ExtResource("2_goblin")
 [node name="Health" type="Node" parent="." unique_id=2104440011]
 script = ExtResource("16_health")
 max_health = 60
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("18_stats")
 
 [node name="HealthBar" type="Node2D" parent="." unique_id=2104440012]
 z_index = 1

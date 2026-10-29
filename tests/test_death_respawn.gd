@@ -38,7 +38,7 @@ func _check_player_death(tree: SceneTree) -> Array[String]:
 	var death_count := [0]
 	player.died.connect(func() -> void: death_count[0] += 1)
 
-	player.take_damage(player.max_health)
+	player.health.kill()
 	if death_count[0] != 1:
 		failures.append("lethal player damage must emit died once")
 	if player.is_alive():
@@ -150,9 +150,8 @@ func _check_area_respawn(tree: SceneTree) -> Array[String]:
 	if bar != null and bar.value != float(area.player.current_health):
 		failures.append("HUD health bar must update after damage")
 
-	# The first hit granted i-frames; clear them so the lethal hit lands.
-	area.player.health.clear_invulnerability()
-	area.player.take_damage(area.player.max_health)
+	# Kill directly; an attack equal to max health would be reduced by defence.
+	area.player.health.kill()
 	await tree.process_frame
 	if area.player.is_alive():
 		failures.append("lethal damage must kill the area player")
