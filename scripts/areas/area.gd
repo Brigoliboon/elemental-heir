@@ -54,6 +54,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var player: Character = $Player
 @onready var camera: Camera2D = $Camera
 @onready var area_label: Label = $HUD/UI/AreaLabel
+@onready var debug_label: Label = $HUD/UI/DebugLabel
 @onready var left_button: Button = $HUD/UI/MoveControls/LeftButton
 @onready var right_button: Button = $HUD/UI/MoveControls/RightButton
 @onready var up_button: Button = $HUD/UI/MoveControls/UpButton
@@ -226,10 +227,13 @@ func _resolve_obstacles(from: Vector2, to: Vector2) -> Vector2:
 
 
 ## Scales the character for its depth and stands it on the current feet line.
+## Also sets z_index so that characters farther up (farther back) render behind
+## those closer down (nearer to camera), giving proper sprite overlap.
 func _apply_depth() -> void:
 	var s := lerpf(far_character_scale, near_character_scale, depth_ratio())
 	player.set_render_scale(s)
 	player.position.y = _feet_y - FEET_OFFSET_LOCAL * s
+	player.z_index = int(lerpf(-10, 10, depth_ratio()))
 
 
 func _camera_target() -> Vector2:
@@ -238,10 +242,32 @@ func _camera_target() -> Vector2:
 	return Vector2(player.position.x, _feet_y - FEET_OFFSET_LOCAL * s * 0.5)
 
 
+func _print_debug() -> void:
+	var s := player.render_scale
+	var health_str := "%d/%d" % [player.current_health, player.max_health]
+	var blocking := player.is_blocking()
+	var blocking_str := "blocking" if blocking else "idle"
+	var debug_str := "[DEBUG] %s | pos=(%.0f, %.0f) | feet_y=%.0f | scale=%.2f | z_index=%d | depth_ratio=%.2f | render_scale=%.2f | %s | health=%s" % [
+		player.name,
+		player.position.x,
+		player.position.y,
+		_feet_y,
+		s,
+		player.z_index,
+		depth_ratio(),
+		s,
+		blocking_str,
+		health_str,
+	]
+	debug_label.text = debug_str
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_J or event.keycode == KEY_Z:
 			player.attack()
+		if event.keycode == KEY_I:
+			_print_debug()
 
 
 func _check_exits(direction_x: float) -> void:

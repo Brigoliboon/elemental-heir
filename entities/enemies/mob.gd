@@ -55,14 +55,16 @@ func _physics_process(delta: float) -> void:
 
 		if distance > attack_range:
 			position += direction * config.move_speed * delta
-			if animated_sprite.animation != "walk":
-				animated_sprite.play("walk")
+			if animated_sprite.animation != "default" and animated_sprite.sprite_frames.has_animation("default"):
+				animated_sprite.play("default")
 		else:
 			if attack_timer <= 0.0:
 				attack_player()
 	else:
 		if animated_sprite.animation != "default":
 			animated_sprite.play("default")
+	# Depth-based z-index: lower on screen (higher Y) renders in front
+	z_index = int(global_position.y)
 
 
 func _get_target_player() -> Node2D:

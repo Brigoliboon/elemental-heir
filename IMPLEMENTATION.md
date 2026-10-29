@@ -86,6 +86,10 @@ fields are consumed where the current runtime already exposes them.
 - While attacking, movement pauses and resumes after the attack animation finishes.
 - Guards against `config == null` to avoid crashes when `EnemyData` is unassigned.
 
+## Player depth z-index (added after M4)
+
+- `area.gd:_apply_depth()` sets `player.z_index = int(lerpf(-10, 10, depth_ratio()))`, so the player renders behind objects when farther up (far edge, depth_ratio near 0) and in front when farther down (near edge, depth_ratio near 1). This gives proper sprite overlap in depth-based area scenes.
+
 ## Non-goals
 
 - Chase AI, death animation, inventory or status systems.

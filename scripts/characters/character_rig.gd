@@ -80,7 +80,7 @@ func _ensure_bone(part_name: String) -> Bone2D:
 	sprite.name = "Sprite"
 	sprite.centered = false
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.z_as_relative = false
+	sprite.z_as_relative = true
 	sprite.z_index = int(_config.draw_order.get(part_name, int(data["z_index"])))
 	var pivot: Array = data["pivot"]
 	sprite.offset = Vector2(-float(pivot[0]), -float(pivot[1]))

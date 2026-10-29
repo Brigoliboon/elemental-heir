@@ -72,6 +72,8 @@ func move(direction: int, delta: float) -> void:
 ## Runs left/right (x) and up/down through the scene's depth (y); idle when zero.
 ## Ignored mid-attack.
 func move_2d(direction: Vector2, delta: float) -> void:
+	if config == null:
+		return
 	if is_attacking() or _is_blocking:
 		return
 	if direction != Vector2.ZERO:

@@ -69,11 +69,6 @@ animations = [{
 "loop": 1,
 "name": &"default",
 "speed": 4.0
-}, {
-"frames": [],
-"loop": 1,
-"name": &"walk",
-"speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vchhr"]
@@ -93,7 +88,6 @@ shape = SubResource("CapsuleShape2D_ws1ch")
 position = Vector2(1.5258789e-05, 0)
 scale = Vector2(1.3048555, 1.3142637)
 sprite_frames = SubResource("SpriteFrames_cx2d5")
-animation = &"walk"
 autoplay = "default"
 
 [node name="Attack Radius" type="Area2D" parent="." unique_id=52239922]

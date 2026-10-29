@@ -107,7 +107,7 @@ func _set_online(online: bool, known: bool) -> void:
 
 
 func _on_offline_pressed() -> void:
-	get_tree().change_scene_to_file(RIG_TEST_SCENE)
+	get_tree().change_scene_to_file(FOREST_SCENE)
 
 
 func _on_online_pressed() -> void:
