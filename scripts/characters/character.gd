@@ -167,6 +167,11 @@ func set_render_scale(value: float) -> void:
 	_apply_scale()
 
 
+## World-space y coordinate of the character's feet (depth anchor).
+func get_feet_y() -> float:
+	return global_position.y + FEET_OFFSET_LOCAL * render_scale
+
+
 func _apply_scale() -> void:
 	skeleton.position.x = -RIG_CENTER_X
 	scale = Vector2(render_scale if facing_right else -render_scale, render_scale)
@@ -182,6 +187,7 @@ func _build_sword_hitbox() -> void:
 
 	sword_hitbox = Hitbox.new()
 	sword_hitbox.name = "SwordHitbox"
+	sword_hitbox.attacker = self
 	sword_hitbox.damage = config.attack_damage
 	sword_hitbox.knockback_force = SWORD_KNOCKBACK
 	sword_hitbox.target_group = "enemies"

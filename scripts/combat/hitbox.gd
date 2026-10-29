@@ -15,6 +15,10 @@ signal hit_landed(target: Node2D)
 @export var knockback_force := 0.0
 ## Only nodes in this group are damaged. Leave empty to accept any body on the mask.
 @export var target_group := "enemies"
+## Maximum depth (feet y) difference for an attack to connect. Set to 0 to disable.
+@export var depth_tolerance: float = 40.0
+## The entity that owns this hitbox. If null, resolved by searching parents.
+@export var attacker: Node2D
 ## Draw the hitbox in the editor/debug runs.
 @export var debug_draw := false
 
@@ -90,10 +94,27 @@ func _try_hit(node: Node) -> void:
 	var id := node.get_instance_id()
 	if _hit_targets.has(id):
 		return
+	# Verify depth alignment so attacks don't connect across different depth planes.
+	if depth_tolerance > 0.0:
+		var att := _get_attacker()
+		if att != null and not DepthSort.is_in_depth(att, node, depth_tolerance):
+			return
 	_hit_targets[id] = true
 	if node.has_method("take_damage"):
 		node.take_damage(damage, _knockback_toward(node))
 		hit_landed.emit(node as Node2D)
+
+
+func _get_attacker() -> Node2D:
+	if attacker != null:
+		return attacker
+	var p: Node = get_parent()
+	while p != null:
+		if p is CharacterBody2D or p.has_method("take_damage") or p.has_method("get_feet_y"):
+			attacker = p as Node2D
+			return attacker
+		p = p.get_parent()
+	return null
 
 
 ## Pushes the target away from the hitbox centre. Zero when no force is configured.

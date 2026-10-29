@@ -11,6 +11,8 @@ signal died
 @export var attack_cooldown: float = 1.0
 ## Distance at which the mob stops chasing and starts swinging.
 @export var attack_range: float = 80.0
+## Maximum depth (feet y) difference to consider in attack range.
+@export var attack_depth_tolerance: float = 30.0
 ## Distance at which the mob notices the player (matches the Attack Radius area).
 @export var aggro_radius: float = 325.0
 ## Root-to-feet offset used as the mob's depth anchor.
@@ -64,6 +66,7 @@ func _ready() -> void:
 
 	attack_hitbox.damage = attack_damage
 	attack_hitbox.target_group = "player"
+	attack_hitbox.attacker = self
 	attack_hitbox.deactivate()
 	_update_hitbox_position()
 
@@ -99,24 +102,32 @@ func _physics_process(delta: float) -> void:
 
 	if target != null:
 		_face_target(target)
-		var to_player := target.global_position - global_position
-		var distance := to_player.length()
+		var delta_x := target.global_position.x - global_position.x
+		var delta_y := DepthSort.get_feet_y(target) - get_feet_y()
 
-		if distance > attack_range:
-			var direction := to_player.normalized()
-			velocity = direction * config.move_speed + knockback_velocity
-			_play_move_animation()
-		else:
+		var in_depth := absf(delta_y) <= attack_depth_tolerance
+		var in_range_x := absf(delta_x) <= attack_range
+
+		if in_depth and in_range_x:
 			velocity = knockback_velocity
 			_play_idle_animation()
 			if attack_timer <= 0.0:
 				attack_player()
+		else:
+			var direction := Vector2(delta_x, delta_y).normalized()
+			velocity = direction * config.move_speed + knockback_velocity
+			_play_move_animation()
 	else:
 		velocity = knockback_velocity
 		_play_idle_animation()
 
 	_move_with_knockback(delta)
 	_apply_depth()
+
+
+## World-space y coordinate of the mob's feet (depth anchor).
+func get_feet_y() -> float:
+	return global_position.y + depth_foot_offset * scale.y
 
 
 func _move_with_knockback(delta: float) -> void:
@@ -127,12 +138,12 @@ func _move_with_knockback(delta: float) -> void:
 
 ## Depth index: lower on screen (larger y) renders in front.
 func _apply_depth() -> void:
-	z_index = DepthSort.z_for_y(global_position.y + depth_foot_offset)
+	z_index = DepthSort.z_for_y(get_feet_y())
 
 
 func _get_target_player() -> Node2D:
 	if is_instance_valid(player_in_range):
-		if global_position.distance_to(player_in_range.global_position) <= aggro_radius:
+		if _ground_distance_to(player_in_range) <= aggro_radius:
 			return player_in_range
 		player_in_range = null
 
@@ -140,9 +151,15 @@ func _get_target_player() -> Node2D:
 	if tree == null:
 		return null
 	var player := tree.get_first_node_in_group("player") as Node2D
-	if player != null and global_position.distance_to(player.global_position) <= aggro_radius:
+	if player != null and _ground_distance_to(player) <= aggro_radius:
 		return player
 	return null
+
+
+func _ground_distance_to(target: Node2D) -> float:
+	var delta_x := target.global_position.x - global_position.x
+	var delta_y := DepthSort.get_feet_y(target) - get_feet_y()
+	return Vector2(delta_x, delta_y).length()
 
 
 func _face_target(target: Node2D) -> void:

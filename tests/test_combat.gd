@@ -45,7 +45,18 @@ func run(tree: SceneTree) -> Array[String]:
 	elif mob.current_health != before - player.config.attack_damage:
 		failures.append("sword hitbox must use CharacterData.attack_damage")
 
-	# Now let the mob swing back at the stationary player.
+	# Test depth miss: mob is in front horizontally but 100px above in depth.
+	# The sword swing should miss because depth_tolerance rejects the hit.
+	mob.position = Vector2(100.0, ground_y - 90.0 - 100.0)
+	await tree.physics_frame
+	var hp_before_depth_miss: int = mob.current_health
+	player.attack()
+	for _frame in range(40):
+		await tree.physics_frame
+	if mob.current_health != hp_before_depth_miss:
+		failures.append("sword should miss a mob that is on a different depth plane")
+
+	# Return mob to valid ground line for the return attack test.
 	var player_before: int = player.current_health
 	mob.position = Vector2(-60.0, 0.0)
 	mob.attack_timer = 0.0

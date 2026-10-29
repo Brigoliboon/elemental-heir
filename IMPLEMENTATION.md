@@ -84,20 +84,28 @@ fields are consumed where the current runtime already exposes them.
 
 ## Enemy chase and attack (current)
 
-- `mob.gd` chases the player while the player is inside `aggro_radius` (default `325`, matching the Attack Radius area) and stops at `attack_range` (default `80`).
+- `mob.gd` chases the player in 2.5D ground space (using feet-to-feet distance and depth anchors via `DepthSort.get_feet_y()`) while within `aggro_radius` (default `325`).
+- The mob stops chasing and attacks only when **both** conditions are met:
+  1. Horizontal range: `abs(delta_x) <= attack_range` (default `80`).
+  2. Depth alignment: `abs(delta_y_feet) <= attack_depth_tolerance` (default `30`).
+- If the player is above or below the mob on a different depth plane, the mob will navigate in Y to align with the player's depth lane rather than attacking the air above or below.
 - Chase uses `CharacterBody2D.move_and_slide()` in `MOTION_MODE_FLOATING`, so the mob respects World collisions.
 - `attack_timer`/`attack_cooldown` gate swings. The mob faces the player with `flip_h` and mirrors its hitbox with `facing_sign`.
 - Damage is no longer applied from `animation_finished`. The mob owns an `AttackHitbox` (`Hitbox`, Enemy_Attackss layer 16, Player mask 2) that is live only between `attack_hit_start` and `attack_hit_end` of the attack clip.
 - Uses `get_tree().get_first_node_in_group("player")` as the aggro fallback.
 - `config == null` is guarded, but the real fix is that scenes must never null the data reference.
 
-## Depth indexing (current)
+## Depth indexing and spatial anchors (current)
 
 - `scripts/world/depth_sort.gd` (`DepthSort`) is the single y -> z-index rule for the game:
   `z_index = clamp(round(world_y), -4096, 4096)`.
+- `DepthSort.get_feet_y(node)` resolves the world-space feet coordinate:
+  - `Character`: `global_position.y + FEET_OFFSET_LOCAL * render_scale`.
+  - `Mob`: `global_position.y + depth_foot_offset * scale.y`.
+- `DepthSort.is_in_depth(a, b, tolerance)` verifies whether two entities share roughly the same depth lane.
 - Moving up the screen (smaller y) always produces a lower index; moving down (larger y) produces a higher index.
 - `area.gd:_apply_depth()` applies the rule to the player using the **feet line** (`_feet_y`), not the Character origin.
-- `mob.gd:_apply_depth()` applies it using `global_position.y + depth_foot_offset`.
+- `mob.gd:_apply_depth()` applies it using `get_feet_y()`.
 - `DepthOverlay` (`scripts/world/depth_overlay.gd`) derives the index from a sprite's bottom edge, so props such as the forest fountain let the player pass behind (when above the base) or in front (when below it).
 - Do not hand-author gameplay z-indices in scenes; they are overwritten every frame. Only backgrounds keep a fixed negative z-index.
 
@@ -107,14 +115,15 @@ fields are consumed where the current runtime already exposes them.
   - `activate()` clears the per-swing hit set and turns monitoring on;
   - `deactivate()` turns it off;
   - each body in `target_group` is damaged at most once per activation;
+  - `depth_tolerance` (default `40.0` px): hits are rejected if `attacker` and target feet Y differ by more than `depth_tolerance`. Attacks only connect if both entities stand on the same depth lane;
   - targets must expose `take_damage(amount, knockback)`.
 - Player sword:
-  - `Character` builds `SwordHitbox` under the `sword` bone at runtime (`scripts/characters/character.gd`).
+  - `Character` builds `SwordHitbox` under the `sword` bone at runtime (`scripts/characters/character.gd`) with `attacker = self`.
   - The box follows the animated blade, including the mirrored facing transform.
   - `AttackData.hit_start` / `hit_end` define the live fraction of each clip; `AttackData.damage` (0 = use `CharacterData.attack_damage`) sets per-hit damage.
   - `Character.SWORD_KNOCKBACK` is pushed into enemies through `Hitbox.knockback_force`.
 - Enemy attack:
-  - `mob.tscn` contains `AttackHitbox`; `mob.gd` sets its damage from `EnemyData.attack_damage`.
+  - `mob.tscn` contains `AttackHitbox`; `mob.gd` sets its damage from `EnemyData.attack_damage` and assigns `attacker = self`.
 - Physics layers now follow Godot bit values (see the corrected table below). `collision_layer` is a mask, not a layer number.
 
 ## Shared health, death and feedback (current)
