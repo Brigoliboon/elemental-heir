@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://4yd5ihrgkhry" path="res://entities/enemies/mob.gd" id="1_mob"]
 [ext_resource type="Resource" uid="uid://c2rgw3x6hsdbt" path="res://resources/entities/goblin.tres" id="2_goblin"]
-[ext_resource type="Script" path="res://scripts/combat/hitbox.gd" id="3_hitbox"]
+[ext_resource type="Script" uid="uid://bojpu0hvd8w8c" path="res://scripts/combat/hitbox.gd" id="3_hitbox"]
 [ext_resource type="Texture2D" uid="uid://bctdikjsdpc73" path="res://assets/monsters/forest/sprite/attack/1.png" id="3_wkyq3"]
 [ext_resource type="Texture2D" uid="uid://8uygvwxy5ug4" path="res://assets/monsters/forest/sprite/attack/3.png" id="4_dgew0"]
 [ext_resource type="Texture2D" uid="uid://d016j87yo3o7a" path="res://assets/monsters/forest/sprite/attack/5.png" id="6_cgcak"]
@@ -15,8 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://bi4l1ygqstyus" path="res://assets/monsters/forest/sprite/wolf-idle(3).png" id="13_qwdig"]
 [ext_resource type="Texture2D" uid="uid://c5ncwpj3ojgq6" path="res://assets/monsters/forest/sprite/wolf-idle(2).png" id="14_nx841"]
 [ext_resource type="Texture2D" uid="uid://cv1ajjstvkisa" path="res://assets/monsters/forest/sprite/wolf-idle(1).png" id="15_8cfiu"]
-[ext_resource type="Script" path="res://scripts/combat/health.gd" id="16_health"]
-[ext_resource type="Script" path="res://scripts/ui/world_health_bar.gd" id="17_healthbar"]
+[ext_resource type="Script" uid="uid://cflx0defitjua" path="res://scripts/combat/health.gd" id="16_health"]
+[ext_resource type="Script" uid="uid://2krryjgb84f2" path="res://scripts/ui/world_health_bar.gd" id="17_healthbar"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
 radius = 50.0
@@ -75,14 +75,13 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vchhr"]
-radius = 325.04153
+radius = 367.00546
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
 size = Vector2(110, 120)
 
 [node name="Mob" type="CharacterBody2D" unique_id=1876476869 groups=["enemies"]]
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1_mob")
 config = ExtResource("2_goblin")
 
@@ -110,16 +109,14 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="attack_border" type="CollisionShape2D" parent="Attack Radius" unique_id=1991574255]
-visible = false
 shape = SubResource("CircleShape2D_vchhr")
 
-[node name="AttackHitbox" type="Area2D" parent="." groups=["enemy_hitbox"]]
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=1164382897 groups=["enemy_hitbox"]]
 collision_layer = 16
 collision_mask = 2
 monitoring = false
 script = ExtResource("3_hitbox")
-damage = 10
 target_group = "player"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=688636490]
 shape = SubResource("RectangleShape2D_attack")
