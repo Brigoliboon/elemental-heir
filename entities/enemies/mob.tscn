@@ -78,7 +78,7 @@ animations = [{
 radius = 325.04153
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
-size = Vector2(80, 120)
+size = Vector2(110, 120)
 
 [node name="Mob" type="CharacterBody2D" unique_id=1876476869 groups=["enemies"]]
 collision_layer = 4
@@ -111,7 +111,6 @@ collision_mask = 2
 
 [node name="attack_border" type="CollisionShape2D" parent="Attack Radius" unique_id=1991574255]
 visible = false
-position = Vector2(127, 18)
 shape = SubResource("CircleShape2D_vchhr")
 
 [node name="AttackHitbox" type="Area2D" parent="." groups=["enemy_hitbox"]]

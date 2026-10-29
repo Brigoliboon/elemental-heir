@@ -62,6 +62,26 @@ func run(tree: SceneTree) -> Array[String]:
 	if mob.current_health != before - 4:
 		failures.append("mob take_damage must reduce current health")
 
+	# Verify proper facing relative to target:
+	# Wolf source art faces left naturally.
+	# When target is to the left, flip_h must be false (facing left).
+	# When target is to the right, flip_h must be true (facing right).
+	var dummy := Node2D.new()
+	tree.root.add_child(dummy)
+	mob.position = Vector2(100.0, 100.0)
+
+	dummy.position = Vector2(50.0, 100.0)
+	mob._face_target(dummy)
+	if mob.animated_sprite.flip_h:
+		failures.append("mob facing target on left should have flip_h == false")
+
+	dummy.position = Vector2(150.0, 100.0)
+	mob._face_target(dummy)
+	if not mob.animated_sprite.flip_h:
+		failures.append("mob facing target on right should have flip_h == true")
+
+	dummy.queue_free()
+
 	if ResourceLoader.exists("res://scripts/entity/hostile-mob.gd"):
 		failures.append("unused hostile-mob.gd should be removed")
 

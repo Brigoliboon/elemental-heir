@@ -85,12 +85,15 @@ fields are consumed where the current runtime already exposes them.
 ## Enemy chase and attack (current)
 
 - `mob.gd` chases the player in 2.5D ground space (using feet-to-feet distance and depth anchors via `DepthSort.get_feet_y()`) while within `aggro_radius` (default `325`).
+- The mob maintains attack spacing (`attack_space = 110`, `attack_range = 135`, `min_attack_space = 85`), avoiding crowding or overlapping into the player's sprite body.
+- When too close (`dist_x < min_attack_space`), the mob backs up slightly to maintain attack spacing.
 - The mob stops chasing and attacks only when **both** conditions are met:
-  1. Horizontal range: `abs(delta_x) <= attack_range` (default `80`).
+  1. Horizontal range: `dist_x <= attack_range and dist_x >= min_attack_space`.
   2. Depth alignment: `abs(delta_y_feet) <= attack_depth_tolerance` (default `30`).
 - If the player is above or below the mob on a different depth plane, the mob will navigate in Y to align with the player's depth lane rather than attacking the air above or below.
 - Chase uses `CharacterBody2D.move_and_slide()` in `MOTION_MODE_FLOATING`, so the mob respects World collisions.
-- `attack_timer`/`attack_cooldown` gate swings. The mob faces the player with `flip_h` and mirrors its hitbox with `facing_sign`.
+- Facing: Source sprite art is drawn facing left. When the player is to the left (`facing_sign = -1`), `flip_h = false`. When the player is to the right (`facing_sign = 1`), `flip_h = true`. The attack hitbox mirrors across the facing direction.
+- `attack_timer`/`attack_cooldown` gate swings.
 - Damage is no longer applied from `animation_finished`. The mob owns an `AttackHitbox` (`Hitbox`, Enemy_Attackss layer 16, Player mask 2) that is live only between `attack_hit_start` and `attack_hit_end` of the attack clip.
 - Uses `get_tree().get_first_node_in_group("player")` as the aggro fallback.
 - `config == null` is guarded, but the real fix is that scenes must never null the data reference.

@@ -9,8 +9,12 @@ signal died
 
 @export var config: EnemyData
 @export var attack_cooldown: float = 1.0
-## Distance at which the mob stops chasing and starts swinging.
-@export var attack_range: float = 80.0
+## Distance at which the mob considers the player in attack range.
+@export var attack_range: float = 135.0
+## Minimum distance to maintain from the player (prevents crowding/overlapping).
+@export var min_attack_space: float = 85.0
+## Preferred spacing from the target when moving to attack.
+@export var attack_space: float = 110.0
 ## Maximum depth (feet y) difference to consider in attack range.
 @export var attack_depth_tolerance: float = 30.0
 ## Distance at which the mob notices the player (matches the Attack Radius area).
@@ -27,7 +31,7 @@ signal died
 @export_range(0.0, 1.0) var attack_hit_start := 0.35
 @export_range(0.0, 1.0) var attack_hit_end := 0.65
 ## Hitbox offset from the mob origin, mirrored with facing.
-@export var attack_hitbox_offset := Vector2(50.0, 15.0)
+@export var attack_hitbox_offset := Vector2(70.0, 15.0)
 
 @onready var attack_radius: Area2D = $"Attack Radius"
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -105,16 +109,25 @@ func _physics_process(delta: float) -> void:
 		var delta_x := target.global_position.x - global_position.x
 		var delta_y := DepthSort.get_feet_y(target) - get_feet_y()
 
+		var dist_x := absf(delta_x)
 		var in_depth := absf(delta_y) <= attack_depth_tolerance
-		var in_range_x := absf(delta_x) <= attack_range
+		var in_attack_range := dist_x <= attack_range and dist_x >= min_attack_space
 
-		if in_depth and in_range_x:
+		if in_depth and in_attack_range:
 			velocity = knockback_velocity
 			_play_idle_animation()
 			if attack_timer <= 0.0:
 				attack_player()
+		elif in_depth and dist_x < min_attack_space:
+			# Too close to the player: back up to maintain attack space
+			var back_dir := -facing_sign
+			velocity = Vector2(back_dir * config.move_speed * 0.6, 0.0) + knockback_velocity
+			_play_move_animation()
 		else:
-			var direction := Vector2(delta_x, delta_y).normalized()
+			# Navigate towards the attack space point in front of the target
+			var target_x := target.global_position.x - facing_sign * attack_space
+			var move_dx := target_x - global_position.x
+			var direction := Vector2(move_dx, delta_y).normalized()
 			velocity = direction * config.move_speed + knockback_velocity
 			_play_move_animation()
 	else:
@@ -164,7 +177,9 @@ func _ground_distance_to(target: Node2D) -> float:
 
 func _face_target(target: Node2D) -> void:
 	facing_sign = -1.0 if target.global_position.x < global_position.x else 1.0
-	animated_sprite.flip_h = facing_sign < 0.0
+	# Source monster art is drawn facing left. When facing left (facing_sign < 0),
+	# flip_h is false. When facing right (facing_sign > 0), flip_h is true.
+	animated_sprite.flip_h = facing_sign > 0.0
 	_update_hitbox_position()
 
 
