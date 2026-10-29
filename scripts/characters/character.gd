@@ -340,6 +340,17 @@ func add_experience(amount: int) -> void:
 	experience_changed.emit(experience, experience_to_next_level())
 
 
+## Restores level/experience from persistent progress and rebuilds derived stats.
+func apply_progress(saved_level: int, saved_experience: int) -> void:
+	if config == null or progression == null:
+		return
+	level = clampi(saved_level, 1, progression.max_level)
+	experience = maxi(0, saved_experience)
+	_apply_level_stats()
+	level_changed.emit(level, experience, experience_to_next_level())
+	experience_changed.emit(experience, experience_to_next_level())
+
+
 ## Recomputes base stats and raises the health pool when a level is gained.
 func _apply_level_stats() -> void:
 	if stats == null or config == null:

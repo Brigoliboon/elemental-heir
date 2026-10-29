@@ -93,6 +93,7 @@ func _ready() -> void:
 	_layout_background()
 	_collect_blockers()
 	_place_player()
+	_restore_player_progress()
 	area_label.text = area_name
 	_bind_player_health()
 	_bind_player_progress()
@@ -132,6 +133,11 @@ func _bind_player_progress() -> void:
 	player.level_changed.connect(_on_player_level_changed)
 
 
+func _restore_player_progress() -> void:
+	if PlayerProgress.has_state:
+		player.apply_progress(PlayerProgress.level, PlayerProgress.experience)
+
+
 func _on_player_health_changed(current: int, maximum: int) -> void:
 	health_bar.max_value = maximum
 	health_bar.value = current
@@ -141,12 +147,14 @@ func _on_player_health_changed(current: int, maximum: int) -> void:
 
 
 func _on_player_experience_changed(_experience: int, _to_next: int) -> void:
+	PlayerProgress.record(player.level, player.experience)
 	_update_player_progress()
 	if stats_panel != null and stats_panel.is_showing_character():
 		stats_panel.refresh()
 
 
 func _on_player_level_changed(_level: int, _experience: int, _to_next: int) -> void:
+	PlayerProgress.record(player.level, player.experience)
 	_update_player_progress()
 	if stats_panel != null and stats_panel.is_showing_character():
 		stats_panel.refresh()
