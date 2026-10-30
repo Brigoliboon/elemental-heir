@@ -144,6 +144,11 @@ func block(on: bool = true) -> void:
 		return
 	if _is_blocking == on:
 		return
+	# Raising the guard interrupts a swing: cancel the combo first so the guard
+	# never replaces the attack animation underneath it, which would strand the
+	# combo in "attacking" forever.
+	if on and combo != null:
+		combo.cancel()
 	_is_blocking = on
 	if on:
 		_manual_animation = "block"
