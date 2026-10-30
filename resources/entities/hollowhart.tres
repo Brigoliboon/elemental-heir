@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://resources/entities/enemy_data.gd" id="1_kgf7v"]
+
+[resource]
+script = ExtResource("1_kgf7v")
+enemy_name = "Hollowhart"
+max_health = 80
+move_speed = 180.0
+attack_damage = 12
+defence = 2
+xp_reward = 15
