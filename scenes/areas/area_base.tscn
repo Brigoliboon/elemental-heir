@@ -6,27 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://cujvxnmo3axkt" path="res://assets/backgrounds/forest/forest_village_square.png" id="4_bg"]
 [ext_resource type="Script" uid="uid://blhw1q86j7n4x" path="res://scripts/ui/stats_panel.gd" id="5_stats_panel"]
 [ext_resource type="Script" uid="uid://bap6cwhve1ff2" path="res://scripts/ui/inventory_panel.gd" id="6_inventory_panel"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
-bg_color = Color(0.07, 0.06, 0.06, 0.88)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
-bg_color = Color(0.74, 0.17, 0.17, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
-bg_color = Color(0.78, 0.62, 0.24, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[ext_resource type="Script" uid="uid://c6vu5yvbiavks" path="res://scripts/ui/virtual_joystick.gd" id="7_joystick"]
+[ext_resource type="Texture2D" uid="uid://o7whyoql47ea" path="res://assets/ui/hud/joystick_frame.png" id="8_joystick_frame"]
+[ext_resource type="Texture2D" uid="uid://dvnmweickwk2a" path="res://assets/ui/hud/joystick_btn.png" id="9_joystick_btn"]
+[ext_resource type="Texture2D" uid="uid://llylasbfxgjo" path="res://assets/ui/hud/bars/bar-container.png" id="10_bar_frame"]
+[ext_resource type="Texture2D" uid="uid://dnlou210sbo74" path="res://assets/ui/hud/player-profile.png" id="11_8r6ug"]
+[ext_resource type="Texture2D" uid="uid://c465rkgj8ynv5" path="res://assets/ui/hud/bars/health-bar.png" id="11_health_bar"]
+[ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="12_exp_bar"]
+[ext_resource type="Texture2D" uid="uid://551e72sjqgvn" path="res://assets/ui/hud/attack-btn.png" id="13_attack_btn"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/map-btn.png" id="14_map_btn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats_panel"]
 bg_color = Color(0.05, 0.05, 0.07, 0.96)
@@ -80,10 +68,10 @@ theme = ExtResource("2_theme")
 [node name="AreaLabel" type="Label" parent="HUD/UI" unique_id=421268983]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = 48.0
-offset_top = 28.0
-offset_right = 900.0
-offset_bottom = 76.0
+offset_left = 752.0
+offset_top = 62.0
+offset_right = 1274.0
+offset_bottom = 110.0
 theme_override_font_sizes/font_size = 32
 text = "Forest Village Square"
 
@@ -93,113 +81,59 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -228.0
-offset_top = 28.0
-offset_right = -48.0
-offset_bottom = 84.0
+offset_left = -517.0
+offset_top = 43.0
+offset_right = -337.0
+offset_bottom = 106.0
 grow_horizontal = 0
 text = "Back"
 
-[node name="StatsButton" type="Button" parent="HUD/UI" unique_id=1642454422]
+[node name="MapButton" type="TextureButton" parent="HUD/UI" unique_id=1642454422]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -456.0
-offset_top = 28.0
-offset_right = -252.0
-offset_bottom = 84.0
+offset_left = -245.0
+offset_top = 47.0
+offset_right = -53.0
+offset_bottom = 239.0
 grow_horizontal = 0
-text = "Stats"
+texture_normal = ExtResource("14_map_btn")
 
-[node name="InventoryButton" type="Button" parent="HUD/UI" unique_id=1176529310]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -244.0
-offset_top = 28.0
-offset_right = -40.0
-offset_bottom = 84.0
-grow_horizontal = 0
-text = "Inventory"
-
-[node name="MoveControls" type="GridContainer" parent="HUD/UI" unique_id=1931883080]
+[node name="MoveControls" type="Control" parent="HUD/UI" unique_id=1931883080]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 48.0
-offset_top = -360.0
-offset_right = 444.0
+offset_left = 36.0
+offset_top = -396.0
+offset_right = 396.0
 offset_bottom = -36.0
 grow_vertical = 0
-theme_override_constants/h_separation = 12
-theme_override_constants/v_separation = 12
-columns = 3
+script = ExtResource("7_joystick")
+frame_texture = ExtResource("8_joystick_frame")
+knob_texture = ExtResource("9_joystick_btn")
 
-[node name="SpacerTL" type="Control" parent="HUD/UI/MoveControls" unique_id=398177660]
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="UpButton" type="Button" parent="HUD/UI/MoveControls" unique_id=154137868]
+[node name="AttackButton" type="TextureButton" parent="HUD/UI" unique_id=1313772405]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-text = "▲"
-
-[node name="LeftButton" type="Button" parent="HUD/UI/MoveControls" unique_id=162765175]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-text = "◀"
-
-[node name="SpacerTR" type="Control" parent="HUD/UI/MoveControls" unique_id=1320613917]
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="SpacerMid" type="Control" parent="HUD/UI/MoveControls" unique_id=802852248]
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="RightButton" type="Button" parent="HUD/UI/MoveControls" unique_id=45843719]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-text = "▶"
-
-[node name="SpacerBL" type="Control" parent="HUD/UI/MoveControls" unique_id=1473919870]
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-mouse_filter = 2
-
-[node name="DownButton" type="Button" parent="HUD/UI/MoveControls" unique_id=410862465]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(124, 100)
-layout_mode = 2
-text = "▼"
-
-[node name="AttackButton" type="Button" parent="HUD/UI" unique_id=1313772405]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 100)
+custom_minimum_size = Vector2(160, 160)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -248.0
-offset_top = -136.0
-offset_right = -48.0
-offset_bottom = -36.0
+offset_left = -304.0
+offset_top = -347.0
+offset_right = -69.0
+offset_bottom = -126.0
 grow_horizontal = 0
 grow_vertical = 0
-text = "Attack"
+tooltip_text = "Attack"
+texture_normal = ExtResource("13_attack_btn")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="BlockButton" type="Button" parent="HUD/UI" unique_id=1161908045]
 unique_name_in_owner = true
@@ -210,10 +144,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -476.0
-offset_top = -136.0
-offset_right = -276.0
-offset_bottom = -36.0
+offset_left = -568.0
+offset_top = -129.0
+offset_right = -368.0
+offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Block"
@@ -222,45 +156,121 @@ text = "Block"
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 48.0
-offset_top = 220.0
+offset_top = 244.0
 offset_right = 1400.0
-offset_bottom = 258.0
+offset_bottom = 282.0
 theme_override_font_sizes/font_size = 20
 
-[node name="PlayerHealth" type="VBoxContainer" parent="HUD/UI" unique_id=1763514042]
+[node name="PlayerHealth" type="Control" parent="HUD/UI" unique_id=1763514042]
 layout_mode = 1
-offset_left = 48.0
+anchors_preset = 0
+offset_left = 36.0
 offset_top = 88.0
-offset_right = 408.0
-offset_bottom = 210.0
-theme_override_constants/separation = 4
+offset_right = 396.0
+offset_bottom = 228.0
+mouse_filter = 2
+
+[node name="HealthFrame" type="TextureRect" parent="HUD/UI/PlayerHealth" unique_id=1763514046]
+layout_mode = 0
+offset_left = 91.0
+offset_top = -10.0
+offset_right = 451.0
+offset_bottom = 54.0
+mouse_filter = 2
+texture = ExtResource("10_bar_frame")
+expand_mode = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="HUD/UI/PlayerHealth" unique_id=1763514044]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 3.0
+offset_right = 415.0
+offset_bottom = 38.0
+mouse_filter = 2
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+texture_progress = ExtResource("11_health_bar")
 
 [node name="HealthLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=1763514043]
-layout_mode = 2
+layout_mode = 0
+offset_left = 83.0
+offset_top = -11.0
+offset_right = 443.0
+offset_bottom = 53.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 22
 text = "HP 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="HealthBar" type="ProgressBar" parent="HUD/UI/PlayerHealth" unique_id=1763514044]
+[node name="XPFrame" type="TextureRect" parent="HUD/UI/PlayerHealth" unique_id=1763514047]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 41.0
+offset_right = 451.0
+offset_bottom = 105.0
+mouse_filter = 2
+texture = ExtResource("10_bar_frame")
+expand_mode = 1
+
+[node name="XPBar" type="TextureProgressBar" parent="HUD/UI/PlayerHealth" unique_id=213183900]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 24)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+layout_mode = 0
+offset_left = 127.0
+offset_top = 57.0
+offset_right = 412.0
+offset_bottom = 88.0
+mouse_filter = 2
 value = 100.0
-show_percentage = false
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+texture_progress = ExtResource("12_exp_bar")
 
 [node name="XPLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=2129840377]
-layout_mode = 2
+layout_mode = 0
+offset_left = 68.0
+offset_top = 41.0
+offset_right = 428.0
+offset_bottom = 105.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 20
 text = "XP 0 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="XPBar" type="ProgressBar" parent="HUD/UI/PlayerHealth" unique_id=213183900]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 18)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
-show_percentage = false
+[node name="Profile" type="TextureButton" parent="HUD/UI/PlayerHealth" unique_id=736960829]
+layout_mode = 0
+offset_left = -13.0
+offset_top = -33.0
+offset_right = 152.0
+offset_bottom = 149.0
+tooltip_text = "Inventory"
+texture_normal = ExtResource("11_8r6ug")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="LevelLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=1230690410]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 97.0
+offset_right = 91.0
+offset_bottom = 136.0
+theme_override_font_sizes/font_size = 25
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="DeathLabel" type="Label" parent="HUD/UI" unique_id=1763514045]
 unique_name_in_owner = true
@@ -327,6 +337,7 @@ layout_mode = 2
 text = "Close"
 
 [node name="InventoryPanel" type="PanelContainer" parent="HUD/UI" unique_id=779569506]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

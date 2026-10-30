@@ -12,11 +12,13 @@ extends Node2D
 static var _entry_side := ""
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
+const ATTACK_PRESSED_ALPHA := 0.55
 ## Distance from the Character origin down to its soles, in rig units (scale 1).
 const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 
 @export var area_name := ""
 @export var background_texture: Texture2D
+@export var background_music: AudioStream
 
 @export_group("Walkable ground")
 ## Top (far) edge of the walkable band, in background-image pixels.
@@ -59,19 +61,17 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var camera: Camera2D = $Camera
 @onready var area_label: Label = $HUD/UI/AreaLabel
 @onready var debug_label: Label = $HUD/UI/DebugLabel
-@onready var left_button: Button = $HUD/UI/MoveControls/LeftButton
-@onready var right_button: Button = $HUD/UI/MoveControls/RightButton
-@onready var up_button: Button = $HUD/UI/MoveControls/UpButton
-@onready var down_button: Button = $HUD/UI/MoveControls/DownButton
-@onready var attack_button: Button = $HUD/UI/AttackButton
+@onready var joystick: HudJoystick = $HUD/UI/MoveControls
+@onready var attack_button: TextureButton = $HUD/UI/AttackButton
 @onready var block_button: Button = $HUD/UI/BlockButton
 @onready var back_button: Button = $HUD/UI/BackButton
-@onready var health_bar: ProgressBar = $HUD/UI/PlayerHealth/HealthBar
+@onready var health_bar: TextureProgressBar = $HUD/UI/PlayerHealth/HealthBar
 @onready var health_label: Label = $HUD/UI/PlayerHealth/HealthLabel
-@onready var xp_bar: ProgressBar = $HUD/UI/PlayerHealth/XPBar
+@onready var xp_bar: TextureProgressBar = $HUD/UI/PlayerHealth/XPBar
 @onready var xp_label: Label = $HUD/UI/PlayerHealth/XPLabel
-@onready var stats_button: Button = $HUD/UI/StatsButton
-@onready var inventory_button: Button = $HUD/UI/InventoryButton
+@onready var profile_button: TextureButton = $HUD/UI/PlayerHealth/Profile
+@onready var level_label: Label = $HUD/UI/PlayerHealth/LevelLabel
+@onready var map_button: TextureButton = $HUD/UI/MapButton
 @onready var inventory_panel: InventoryPanel = $HUD/UI/InventoryPanel
 @onready var stats_panel: StatsPanel = $HUD/UI/StatsPanel
 @onready var death_label: Label = $HUD/UI/DeathLabel
@@ -82,7 +82,6 @@ var ground_far_y := 0.0
 var ground_near_y := 0.0
 
 var _feet_y := 0.0
-var _held := {"left": false, "right": false, "up": false, "down": false}
 var _leaving := false
 var _player_dead := false
 ## Obstacle footprints in world space: [Shape2D, Transform2D] or a PackedVector2Array polygon.
@@ -92,6 +91,8 @@ var _feet_debug: Node2D
 
 
 func _ready() -> void:
+	if background_music != null:
+		MusicPlayer.play_track(background_music)
 	_layout_background()
 	_collect_blockers()
 	_place_player()
@@ -101,13 +102,11 @@ func _ready() -> void:
 	area_label.text = area_name
 	_bind_player_health()
 	_bind_player_progress()
-	stats_button.pressed.connect(_on_stats_button_pressed)
-	inventory_button.pressed.connect(_on_inventory_button_pressed)
-	_bind_hold(left_button, "left")
-	_bind_hold(right_button, "right")
-	_bind_hold(up_button, "up")
-	_bind_hold(down_button, "down")
+	map_button.pressed.connect(_on_map_button_pressed)
+	profile_button.pressed.connect(_on_inventory_button_pressed)
 	attack_button.pressed.connect(player.attack)
+	attack_button.button_down.connect(_on_attack_button_down)
+	attack_button.button_up.connect(_on_attack_button_up)
 	block_button.button_down.connect(func() -> void: player.block(true))
 	block_button.button_up.connect(func() -> void: player.block(false))
 	back_button.pressed.connect(_go_to.bind(TITLE_SCENE, ""))
@@ -118,11 +117,6 @@ func _ready() -> void:
 		_feet_debug.z_index = 100
 		_feet_debug.draw.connect(_draw_feet_footprint)
 		add_child(_feet_debug)
-
-
-func _bind_hold(button: Button, key: String) -> void:
-	button.button_down.connect(func() -> void: _held[key] = true)
-	button.button_up.connect(func() -> void: _held[key] = false)
 
 
 ## Mirrors the player's shared Health into the HUD and reacts to death.
@@ -166,6 +160,7 @@ func _on_player_level_changed(_level: int, _experience: int, _to_next: int) -> v
 
 
 func _update_player_progress() -> void:
+	level_label.text = str(player.level)
 	var to_next := player.experience_to_next_level()
 	xp_bar.max_value = maxf(1.0, float(to_next))
 	xp_bar.value = float(player.experience) if to_next > 0 else 0.0
@@ -181,6 +176,18 @@ func _on_stats_button_pressed() -> void:
 func _on_inventory_button_pressed() -> void:
 	if inventory_panel != null:
 		inventory_panel.toggle()
+
+
+func _on_map_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/map/world_map.tscn")
+
+
+func _on_attack_button_down() -> void:
+	attack_button.modulate.a = ATTACK_PRESSED_ALPHA
+
+
+func _on_attack_button_up() -> void:
+	attack_button.modulate.a = 1.0
 
 
 ## Turns a screen click/tap into a mob selection using the Enemies physics layer.
@@ -204,8 +211,8 @@ func _on_player_died() -> void:
 	if _player_dead:
 		return
 	_player_dead = true
-	for key in _held.keys():
-		_held[key] = false
+	if joystick != null:
+		joystick.reset()
 	death_label.visible = true
 	_respawn_after_delay()
 
@@ -278,15 +285,16 @@ func _process(delta: float) -> void:
 	if _player_dead:
 		camera.position = _camera_target()
 		return
-	var direction := Vector2.ZERO
-	if _held["left"] or Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+	var direction: Vector2 = joystick.direction if joystick != null else Vector2.ZERO
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
 		direction.x -= 1.0
-	if _held["right"] or Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		direction.x += 1.0
-	if _held["up"] or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
 		direction.y -= 1.0
-	if _held["down"] or Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
 		direction.y += 1.0
+	direction = direction.limit_length(1.0)
 
 	# Character.move_2d moves its origin; track the feet so depth scaling stays grounded.
 	var before := player.position

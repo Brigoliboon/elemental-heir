@@ -30,22 +30,19 @@ theme = ExtResource("24_theme")
 script = ExtResource("1_script")
 
 [node name="Background" type="VideoStreamPlayer" parent="." unique_id=1218888466]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
 mouse_filter = 2
+theme = ExtResource("24_theme")
 stream = ExtResource("2_bg")
 volume_db = -80.0
 autoplay = true
 expand = true
 loop = true
 
-[node name="SoundButton" type="TextureButton" parent="." unique_id=1315054237]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1828764372]
+
+[node name="SoundButton" type="TextureButton" parent="CanvasLayer" unique_id=1315054237]
 unique_name_in_owner = true
-layout_mode = 0
 offset_left = 1648.0
 offset_top = 36.0
 offset_right = 1744.0
@@ -56,9 +53,8 @@ texture_disabled = ExtResource("17_sound_on_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CreditsButton" type="TextureButton" parent="." unique_id=1330530814]
+[node name="CreditsButton" type="TextureButton" parent="CanvasLayer" unique_id=1330530814]
 unique_name_in_owner = true
-layout_mode = 0
 offset_left = 1760.0
 offset_top = 36.0
 offset_right = 1856.0
@@ -69,9 +65,8 @@ texture_disabled = ExtResource("23_credits_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="OfflineButton" type="TextureButton" parent="." unique_id=1962232108]
+[node name="OfflineButton" type="TextureButton" parent="CanvasLayer" unique_id=1962232108]
 unique_name_in_owner = true
-layout_mode = 0
 offset_left = 1596.0
 offset_top = 762.0
 offset_right = 1856.0
@@ -82,9 +77,8 @@ texture_disabled = ExtResource("8_offline_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="OnlineButton" type="TextureButton" parent="." unique_id=400131798]
+[node name="OnlineButton" type="TextureButton" parent="CanvasLayer" unique_id=400131798]
 unique_name_in_owner = true
-layout_mode = 0
 offset_left = 1596.0
 offset_top = 852.0
 offset_right = 1856.0
@@ -95,9 +89,8 @@ texture_disabled = ExtResource("11_online_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="SettingsButton" type="TextureButton" parent="." unique_id=505848653]
+[node name="SettingsButton" type="TextureButton" parent="CanvasLayer" unique_id=505848653]
 unique_name_in_owner = true
-layout_mode = 0
 offset_left = 1596.0
 offset_top = 942.0
 offset_right = 1856.0

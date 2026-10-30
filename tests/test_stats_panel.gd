@@ -14,12 +14,9 @@ func run(tree: SceneTree) -> Array[String]:
 	tree.root.add_child(area)
 	await tree.process_frame
 
-	var stats_button := area.get_node_or_null("HUD/UI/StatsButton") as Button
 	var panel := area.get_node_or_null("HUD/UI/StatsPanel") as StatsPanel
-	var xp_bar := area.get_node_or_null("HUD/UI/PlayerHealth/XPBar") as ProgressBar
+	var xp_bar := area.get_node_or_null("HUD/UI/PlayerHealth/XPBar") as TextureProgressBar
 	var xp_label := area.get_node_or_null("HUD/UI/PlayerHealth/XPLabel") as Label
-	if stats_button == null:
-		failures.append("HUD needs a StatsButton")
 	if panel == null:
 		failures.append("HUD needs a StatsPanel")
 	if xp_bar == null or xp_label == null:
@@ -37,11 +34,11 @@ func run(tree: SceneTree) -> Array[String]:
 	if xp_label != null and not xp_label.text.contains("XP"):
 		failures.append("XP label must show XP progress")
 
-	if stats_button != null and panel != null:
-		stats_button.pressed.emit()
+	if panel != null:
+		area._on_stats_button_pressed()
 		await tree.process_frame
 		if not panel.visible:
-			failures.append("pressing Stats must show the panel")
+			failures.append("opening stats must show the panel")
 
 		var title := panel.get_node_or_null("Margin/VBox/Title") as Label
 		var body := panel.get_node_or_null("Margin/VBox/Body") as Label
@@ -55,10 +52,10 @@ func run(tree: SceneTree) -> Array[String]:
 			if not body.text.contains("XP"):
 				failures.append("player stats body must list XP")
 
-		stats_button.pressed.emit()
+		area._on_stats_button_pressed()
 		await tree.process_frame
 		if panel.visible:
-			failures.append("pressing Stats again must hide the panel")
+			failures.append("opening stats again must hide the panel")
 
 	# Partial XP must refresh the bar through experience_changed.
 	area.player.add_experience(10)

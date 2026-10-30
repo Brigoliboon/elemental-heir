@@ -130,7 +130,7 @@ func _check_area_respawn(tree: SceneTree) -> Array[String]:
 	tree.root.add_child(area)
 	await tree.process_frame
 
-	var bar := area.get_node_or_null("HUD/UI/PlayerHealth/HealthBar") as ProgressBar
+	var bar := area.get_node_or_null("HUD/UI/PlayerHealth/HealthBar") as TextureProgressBar
 	var label := area.get_node_or_null("HUD/UI/PlayerHealth/HealthLabel") as Label
 	var death_label := area.get_node_or_null("HUD/UI/DeathLabel") as Label
 	if bar == null or label == null or death_label == null:

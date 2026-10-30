@@ -260,6 +260,53 @@ fields are consumed where the current runtime already exposes them.
   - Equip both on the warrior entity and keep `Health`/sword damage in sync
     with equipment stat changes.
 
+## UI - HUD virtual joystick
+
+- [x] J1 - Replace the D-pad with the joystick art
+  - Use `assets/ui/hud/joystick_frame.png` and `joystick_btn.png` in
+    `HUD/UI/MoveControls`.
+  - Support touch/mouse drag, deadzone, analog direction and reset on release
+    or death; keep keyboard movement working.
+  - Test: `tests/test_virtual_joystick.gd`.
+
+## UI - HUD health/XP bars
+
+- [x] J2 - Replace the top-left bars with the bar art
+  - Use `bar-container.png` with `health-bar.png` and `exp-bar.png` for the
+    player health and XP bars; keep labels overlaid and values live.
+  - Test: `tests/test_hud_bars.gd`.
+
+## UI - HUD attack button
+
+- [x] J3 - Use the attack button art
+  - Replace the text `AttackButton` with a `TextureButton` using
+    `assets/ui/hud/attack-btn.png`, while keeping the existing attack signal.
+  - Test: `tests/test_hud_buttons.gd`.
+
+## UI - HUD player profile
+
+- [x] J4 - Show the real player level and open inventory from the profile
+  - `HUD/UI/PlayerHealth/LevelLabel` displays `player.level` and updates on
+    level changes.
+  - Clicking `HUD/UI/PlayerHealth/Profile` toggles the inventory panel.
+  - Test: `tests/test_hud_profile.gd`.
+
+## UI - HUD attack press feedback
+
+- [x] J5 - Dim the attack button while pressed
+  - Reduce the `AttackButton` opacity on press and restore it on release
+    without changing its art.
+  - Test: `tests/test_hud_attack_state.gd`.
+
+## UI - World map
+
+- [x] J6 - Replace the top-right HUD buttons with the world map
+  - Remove `StatsButton` and `InventoryButton`; add a `TextureButton` using
+    `assets/ui/hud/map-btn.png` that opens the world map scene.
+  - Add `scenes/map/world_map.tscn`, filled by
+    `assets/backgrounds/world-map.jpg`, with back navigation and zoom in/out.
+  - Test: `tests/test_world_map.gd`.
+
 ## Next milestones
 
 > Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept
