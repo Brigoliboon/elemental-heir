@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://pedwfw3oqrh3"]
+
+[ext_resource type="Script" uid="uid://4yd5ihrgkhry" path="res://entities/enemies/mob.gd" id="1_mob"]
+[ext_resource type="Resource" path="res://resources/entities/hollowhart.tres" id="2_hollowhart"]
+[ext_resource type="Script" uid="uid://bojpu0hvd8w8c" path="res://scripts/combat/hitbox.gd" id="3_hitbox"]
+[ext_resource type="Texture2D" uid="uid://bctdikjsdpc73" path="res://assets/monsters/forest/sprite/attack/1.png" id="3_wkyq3"]
+[ext_resource type="Texture2D" uid="uid://8uygvwxy5ug4" path="res://assets/monsters/forest/sprite/attack/3.png" id="4_dgew0"]
+[ext_resource type="Texture2D" uid="uid://d016j87yo3o7a" path="res://assets/monsters/forest/sprite/attack/5.png" id="6_cgcak"]
+[ext_resource type="Texture2D" uid="uid://b5jeytkuiasg7" path="res://assets/monsters/forest/sprite/attack/6.png" id="7_blnaa"]
+[ext_resource type="Texture2D" uid="uid://ctq084g1nv4jv" path="res://assets/monsters/forest/sprite/attack/7.png" id="8_cqxp7"]
+[ext_resource type="Texture2D" uid="uid://n7ylgn4qm0rx" path="res://assets/monsters/forest/sprite/attack/8.png" id="9_0tsax"]
+[ext_resource type="Texture2D" uid="uid://dhn4ljvyl0dfo" path="res://assets/monsters/forest/sprite/attack/9.png" id="10_4yhmh"]
+[ext_resource type="Texture2D" uid="uid://bi4l1ygqstyus" path="res://assets/monsters/forest/sprite/wolf-idle(3).png" id="13_qwdig"]
+[ext_resource type="Texture2D" uid="uid://cwtdyu4macq1" path="res://assets/monsters/forest/general/idle/1.png" id="14_krpok"]
+[ext_resource type="Texture2D" uid="uid://cack52oueks4k" path="res://assets/monsters/forest/general/idle/4.png" id="15_mlsdl"]
+[ext_resource type="Texture2D" uid="uid://cexsfnnl52j4j" path="res://assets/monsters/forest/general/idle/3.png" id="16_a40oc"]
+[ext_resource type="Script" uid="uid://cflx0defitjua" path="res://scripts/combat/health.gd" id="16_health"]
+[ext_resource type="Texture2D" uid="uid://b3pjevpgv34ou" path="res://assets/monsters/forest/general/idle/2.png" id="17_3c1ut"]
+[ext_resource type="Script" uid="uid://2krryjgb84f2" path="res://scripts/ui/world_health_bar.gd" id="17_healthbar"]
+[ext_resource type="Script" uid="uid://dpm7uuok3hdmp" path="res://scripts/combat/stats.gd" id="18_stats"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cx2d5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_wkyq3")
+}, {
+"duration": 1.5,
+"texture": ExtResource("4_dgew0")
+}, {
+"duration": 3.0,
+"texture": ExtResource("13_qwdig")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_cgcak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_blnaa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_cqxp7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_0tsax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_4yhmh")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.5,
+"texture": ExtResource("14_krpok")
+}, {
+"duration": 1.5,
+"texture": ExtResource("15_mlsdl")
+}, {
+"duration": 1.5,
+"texture": ExtResource("16_a40oc")
+}, {
+"duration": 1.5,
+"texture": ExtResource("17_3c1ut")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vchhr"]
+radius = 367.00546
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(176, 154)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
+radius = 50.0
+height = 282.0
+
+[node name="Mob" type="CharacterBody2D" unique_id=1876476869 groups=["enemies"]]
+collision_layer = 4
+script = ExtResource("1_mob")
+config = ExtResource("2_hollowhart")
+
+[node name="Health" type="Node" parent="." unique_id=2104440011]
+script = ExtResource("16_health")
+max_health = 60
+
+[node name="Stats" type="Node" parent="." unique_id=768300790]
+script = ExtResource("18_stats")
+
+[node name="HealthBar" type="Node2D" parent="." unique_id=2104440012]
+z_index = 1
+position = Vector2(0, -118)
+script = ExtResource("17_healthbar")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=457954062]
+position = Vector2(0.9999981, 0)
+scale = Vector2(1.7908891, 1.787901)
+sprite_frames = SubResource("SpriteFrames_cx2d5")
+animation = &"attack"
+autoplay = "default"
+
+[node name="Attack Radius" type="Area2D" parent="." unique_id=52239922]
+visible = false
+collision_layer = 0
+collision_mask = 2
+
+[node name="attack_border" type="CollisionShape2D" parent="Attack Radius" unique_id=1991574255]
+shape = SubResource("CircleShape2D_vchhr")
+
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=1164382897 groups=["enemy_hitbox"]]
+visible = false
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+script = ExtResource("3_hitbox")
+target_group = "player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=688636490]
+position = Vector2(3, -2)
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1303960305]
+visible = false
+position = Vector2(4, -63)
+shape = SubResource("CapsuleShape2D_ws1ch")
