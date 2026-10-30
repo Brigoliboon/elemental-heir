@@ -25,6 +25,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_hud_profile.gd"),
 	preload("res://tests/test_hud_attack_state.gd"),
 	preload("res://tests/test_world_map.gd"),
+	preload("res://tests/test_title_layout.gd"),
 ]
 
 
