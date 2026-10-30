@@ -65,7 +65,7 @@ func _check_area_transition(tree: SceneTree) -> Array[String]:
 	await tree.process_frame
 	if first.player.level != 4 or first.player.experience != 60:
 		failures.append("an area must restore the saved level and experience")
-	var xp_bar := first.get_node_or_null("HUD/UI/PlayerHealth/XPBar") as ProgressBar
+	var xp_bar := first.get_node_or_null("HUD/UI/PlayerHealth/XPBar") as TextureProgressBar
 	if xp_bar == null or not is_equal_approx(xp_bar.value, 60.0):
 		failures.append("the HUD XP bar must show the restored experience")
 	first.queue_free()

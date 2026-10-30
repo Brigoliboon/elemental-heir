@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="3_04y1k"]
+[ext_resource type="AudioStreamWAV" path="res://assets/audio/music/forest-bg_loop.wav" id="6_music"]
 [ext_resource type="Texture2D" uid="uid://422o6r364r0n" path="res://assets/backgrounds/forest/fountain_overlay.png" id="4_i6ujb"]
 [ext_resource type="Script" path="res://scripts/world/depth_overlay.gd" id="5_depth"]
 
@@ -17,6 +18,7 @@ fill_from = Vector2(0.49565217, 0.526087)
 [node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
 area_name = "Forest - Village Square"
 spawn_x_ratio = 0.3
+background_music = ExtResource("6_music")
 exit_right_scene = "res://scenes/areas/forest/forest_fight.tscn"
 
 [node name="Background" parent="." index="0" unique_id=1944799289]

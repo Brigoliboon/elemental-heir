@@ -33,6 +33,7 @@ var _check_in_flight := false
 
 func _ready() -> void:
 	_load_audio_settings()
+	MusicPlayer.play_track(MusicPlayer.INTRO_STREAM)
 
 	sound_button.pressed.connect(_on_sound_pressed)
 	credits_button.pressed.connect(_on_credits_pressed)
