@@ -148,6 +148,12 @@ energy = 0.16
 blend_mode = 2
 max_distance = 0.0
 
+[node name="InventoryPanel" parent="HUD/UI" parent_id_path=PackedInt32Array(1048333084) index="12" unique_id=779569506]
+visible = false
+
+[node name="RightSlots" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" parent_id_path=PackedInt32Array(452098965) index="2" unique_id=373649609]
+visible = true
+
 [node name="Obstacles" type="StaticBody2D" parent="." index="4" unique_id=1361663244]
 
 [node name="Boulder" type="CollisionShape2D" parent="Obstacles" index="0" unique_id=1111918413]

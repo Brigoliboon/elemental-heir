@@ -239,6 +239,27 @@ fields are consumed where the current runtime already exposes them.
   - The headless runner disables persistence and clears in-memory progress so
     tests are deterministic and never overwrite a real save.
 
+## Phase 3 - Item System (DESIGN_ROADMAP §3)
+
+- [ ] I3.1 - Item and equipment data
+  - Add `ItemData`, `EquipmentData` and `StatModifier` resources with item
+    type/group, rarity, icon, stacking, class restriction, equip slot and stat
+    modifiers.
+  - Test: `tests/test_item_data.gd`.
+- [ ] I3.2 - Inventory
+  - Add a fixed-capacity `Inventory` component with stacking, add/remove,
+    slot swap, stack split and type sorting.
+  - Test: `tests/test_inventory.gd`.
+- [ ] I3.3 - Equipment manager
+  - Add an `EquipmentManager` that validates slots/class rules, applies and
+    removes `Stats` modifiers, and returns unequipped items to the inventory.
+  - Test: `tests/test_equipment.gd`.
+- [ ] I3.4 - Default warrior gear
+  - Create `default_sword.tres` and `default_buckler.tres` from the warrior
+    sprites, with names, descriptions, icons and stat modifiers.
+  - Equip both on the warrior entity and keep `Health`/sword damage in sync
+    with equipment stat changes.
+
 ## Next milestones
 
 > Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept

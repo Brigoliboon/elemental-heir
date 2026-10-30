@@ -71,6 +71,8 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var xp_bar: ProgressBar = $HUD/UI/PlayerHealth/XPBar
 @onready var xp_label: Label = $HUD/UI/PlayerHealth/XPLabel
 @onready var stats_button: Button = $HUD/UI/StatsButton
+@onready var inventory_button: Button = $HUD/UI/InventoryButton
+@onready var inventory_panel: InventoryPanel = $HUD/UI/InventoryPanel
 @onready var stats_panel: StatsPanel = $HUD/UI/StatsPanel
 @onready var death_label: Label = $HUD/UI/DeathLabel
 
@@ -93,11 +95,14 @@ func _ready() -> void:
 	_layout_background()
 	_collect_blockers()
 	_place_player()
+	if inventory_panel != null and player != null and player.inventory != null:
+		inventory_panel.bind(player.inventory, player.stats)
 	_restore_player_progress()
 	area_label.text = area_name
 	_bind_player_health()
 	_bind_player_progress()
 	stats_button.pressed.connect(_on_stats_button_pressed)
+	inventory_button.pressed.connect(_on_inventory_button_pressed)
 	_bind_hold(left_button, "left")
 	_bind_hold(right_button, "right")
 	_bind_hold(up_button, "up")
@@ -173,6 +178,10 @@ func _on_stats_button_pressed() -> void:
 	else:
 		stats_panel.show_character(player)
 
+func _on_inventory_button_pressed() -> void:
+	if inventory_panel != null:
+		inventory_panel.toggle()
+
 
 ## Turns a screen click/tap into a mob selection using the Enemies physics layer.
 func _try_show_mob_stats(screen_position: Vector2) -> void:
@@ -209,6 +218,8 @@ func _respawn_after_delay() -> void:
 		return
 	player.revive()
 	_place_player()
+	if inventory_panel != null and player != null and player.inventory != null:
+		inventory_panel.bind(player.inventory, player.stats)
 	_player_dead = false
 	death_label.visible = false
 

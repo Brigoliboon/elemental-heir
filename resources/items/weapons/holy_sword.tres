@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/weapon/sword/holy-sword.png" id="1_62k0x"]
+[ext_resource type="Script" path="res://resources/items/equipment_data.gd" id="2_06p6u"]
+[ext_resource type="Script" path="res://resources/items/stat_modifier.gd" id="3_tu2ol"]
+
+[sub_resource type="Resource" id="Resource_bu5ng"]
+script = ExtResource("3_tu2ol")
+stat = &"attack"
+flat = 20.0
+
+[resource]
+script = ExtResource("2_06p6u")
+equip_slot = &"primary"
+stat_modifiers = Array[ExtResource("3_tu2ol")]([SubResource("Resource_bu5ng")])
+weapon_anim_set = &"sword"
+id = &"holy_sword"
+display_name = "Holy Sword"
+item_group = &"sword"
+rarity = 4
+icon = ExtResource("1_62k0x")
+class_restriction = Array[int]([0])
+description = "A legendary holy blade."

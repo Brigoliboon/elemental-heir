@@ -19,10 +19,6 @@
 [ext_resource type="Script" uid="uid://2krryjgb84f2" path="res://scripts/ui/world_health_bar.gd" id="17_healthbar"]
 [ext_resource type="Script" uid="uid://dpm7uuok3hdmp" path="res://scripts/combat/stats.gd" id="18_stats"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
-radius = 50.0
-height = 180.0
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_cx2d5"]
 animations = [{
 "frames": [{
@@ -79,7 +75,11 @@ animations = [{
 radius = 367.00546
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
-size = Vector2(110, 120)
+size = Vector2(176, 154)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ws1ch"]
+radius = 50.0
+height = 282.0
 
 [node name="Mob" type="CharacterBody2D" unique_id=1876476869 groups=["enemies"]]
 collision_layer = 4
@@ -90,17 +90,13 @@ config = ExtResource("2_goblin")
 script = ExtResource("16_health")
 max_health = 60
 
-[node name="Stats" type="Node" parent="."]
+[node name="Stats" type="Node" parent="." unique_id=768300790]
 script = ExtResource("18_stats")
 
 [node name="HealthBar" type="Node2D" parent="." unique_id=2104440012]
 z_index = 1
 position = Vector2(0, -118)
 script = ExtResource("17_healthbar")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1303960305]
-position = Vector2(0, 5)
-shape = SubResource("CapsuleShape2D_ws1ch")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=457954062]
 position = Vector2(1.5258789e-05, 0)
@@ -123,4 +119,9 @@ script = ExtResource("3_hitbox")
 target_group = "player"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=688636490]
+position = Vector2(3, -2)
 shape = SubResource("RectangleShape2D_attack")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1303960305]
+position = Vector2(4, -63)
+shape = SubResource("CapsuleShape2D_ws1ch")

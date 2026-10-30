@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/warrior/t1_side/warrior_t1_side/warrior_t1_side_buckler.png" id="1_v2uhu"]
+[ext_resource type="Script" path="res://resources/items/equipment_data.gd" id="2_8g0hq"]
+[ext_resource type="Script" path="res://resources/items/stat_modifier.gd" id="3_fi3cn"]
+
+[sub_resource type="Resource" id="Resource_65q7u"]
+script = ExtResource("3_fi3cn")
+stat = &"defence"
+flat = 4.0
+
+[sub_resource type="Resource" id="Resource_61afg"]
+script = ExtResource("3_fi3cn")
+stat = &"max_health"
+flat = 10.0
+
+[resource]
+script = ExtResource("2_8g0hq")
+equip_slot = &"secondary"
+stat_modifiers = Array[ExtResource("3_fi3cn")]([SubResource("Resource_65q7u"), SubResource("Resource_61afg")])
+id = &"default_buckler"
+display_name = "Wooden Buckler"
+item_group = &"shield"
+icon = ExtResource("1_v2uhu")
+class_restriction = Array[int]([0])
+description = "A light wooden buckler."
