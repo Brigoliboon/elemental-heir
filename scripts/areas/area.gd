@@ -13,6 +13,10 @@ static var _entry_side := ""
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
 const ATTACK_PRESSED_ALPHA := 0.55
+## Backgrounds are authored against the 1920x1080 design viewport, where the
+## art is drawn at 1.5x. Props and obstacle polygons use those same world
+## coordinates and are rescaled with the background when the viewport changes.
+const DESIGN_BACKGROUND_SCALE := 1.5
 ## Distance from the Character origin down to its soles, in rig units (scale 1).
 const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 
@@ -57,6 +61,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @export var show_feet_footprint := false
 
 @onready var background: Sprite2D = $Background
+@onready var background_props: Node2D = get_node_or_null("BackgroundProps")
 @onready var player: Character = $Player
 @onready var camera: Camera2D = $Camera
 @onready var area_label: Label = $HUD/UI/AreaLabel
@@ -93,6 +98,7 @@ var _feet_debug: Node2D
 func _ready() -> void:
 	if background_music != null:
 		MusicPlayer.play_track(background_music)
+	get_viewport().size_changed.connect(_on_viewport_resized)
 	_layout_background()
 	_collect_blockers()
 	_place_player()
@@ -249,10 +255,24 @@ func _layout_background() -> void:
 	world_width = tex_size.x * bg_scale
 	ground_far_y = background.position.y + ground_far_px * bg_scale
 	ground_near_y = background.position.y + ground_near_px * bg_scale
+	if background_props != null:
+		# Props and obstacle footprints are authored in design-world pixels.
+		# Keep them locked to the same scale and bottom anchor as the background.
+		background_props.position = background.position
+		background_props.scale = Vector2.ONE * (bg_scale / DESIGN_BACKGROUND_SCALE)
 	camera.limit_left = 0
 	camera.limit_right = int(world_width)
 	camera.limit_top = int(background.position.y)
 	camera.limit_bottom = int(view.y)
+
+
+func _on_viewport_resized() -> void:
+	if not is_inside_tree() or player == null:
+		return
+	_layout_background()
+	_collect_blockers()
+	_feet_y = clampf(_feet_y, ground_far_y, ground_near_y)
+	_apply_depth()
 
 
 ## 0 at the far edge of the band, 1 at the near edge.

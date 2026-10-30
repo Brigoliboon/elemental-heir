@@ -154,14 +154,14 @@ visible = false
 [node name="RightSlots" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" parent_id_path=PackedInt32Array(452098965) index="2" unique_id=373649609]
 visible = true
 
-[node name="Obstacles" type="StaticBody2D" parent="." index="4" unique_id=1361663244]
+[node name="Obstacles" type="StaticBody2D" parent="BackgroundProps" index="0" unique_id=1361663244]
 
-[node name="Boulder" type="CollisionShape2D" parent="Obstacles" index="0" unique_id=1111918413]
+[node name="Boulder" type="CollisionShape2D" parent="BackgroundProps/Obstacles" index="0" unique_id=1111918413]
 position = Vector2(2231, 887)
 shape = SubResource("CircleShape2D_ei6kh")
 one_way_collision = true
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Obstacles" index="1" unique_id=225373476]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BackgroundProps/Obstacles" index="1" unique_id=225373476]
 position = Vector2(-47, 64)
 polygon = PackedVector2Array(1693, 854, 1640, 876, 1580, 949, 1561, 874, 1495, 927, 1464, 971, 1448, 994, 1461, 1072, 1587, 1076)
 one_way_collision = true

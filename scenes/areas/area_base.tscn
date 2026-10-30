@@ -40,6 +40,8 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_bg")
 centered = false
 
+[node name="BackgroundProps" type="Node2D" parent="."]
+
 [node name="Player" parent="." unique_id=198134559 instance=ExtResource("3_player")]
 position = Vector2(960, 600)
 

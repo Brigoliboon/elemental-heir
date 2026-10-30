@@ -69,8 +69,13 @@ func run(tree: SceneTree) -> Array[String]:
 		failures.append("the bottom-right buttons must keep a 64 px bottom margin")
 	if not is_equal_approx(top_right_margin, 176.0):
 		failures.append("the top-right buttons must keep a 176 px right margin")
-	if not is_equal_approx(label_right_margin, 332.0):
+	if not is_equal_approx(label_right_margin, 440.0):
 		failures.append("the no-connection label must stay left of the online button")
+
+	if sound.get_global_rect().size.x < 120.0 or sound.get_global_rect().size.y < 120.0:
+		failures.append("the top-right buttons must be at least 120 px for touch input")
+	if settings.get_global_rect().size.x < 320.0 or settings.get_global_rect().size.y < 96.0:
+		failures.append("the navigation buttons must be at least 320x96 px for touch input")
 
 	if not _inside(settings.get_global_rect(), viewport):
 		failures.append("settings must stay inside the viewport")
