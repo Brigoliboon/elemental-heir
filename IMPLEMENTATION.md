@@ -347,6 +347,12 @@ fields are consumed where the current runtime already exposes them.
   - `AreaLabel` is anchored to the horizontal centre with centre alignment, so
     it no longer sits at 1920-px offsets on wider or narrower screens.
   - Test: `tests/test_hud_layout.gd`.
+- [x] H3 - Anchor the Back button to the left edge
+  - The village square placed `BackButton` at a right-anchored -1818 px offset,
+    which only lands on the left at 1.0x HUD scale; at mobile scale it rendered
+    off-screen at x = -625. It is left-anchored now, keeping the authored
+    position at every scale and resolution.
+  - `tests/test_hud_layout.gd` now also checks every control at mobile scale.
 
 ## Fix - Character frozen after switching attack and block
 
