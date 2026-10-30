@@ -317,6 +317,20 @@ fields are consumed where the current runtime already exposes them.
     of being pinned to 1920x1080 offsets.
   - Make the background video fill the root Control.
   - Test: `tests/test_title_layout.gd`.
+- [x] T2 - Enlarge title touch targets for mobile
+  - Top-right icons are 128x120 design px; navigation buttons are 360x104.
+  - Images keep their aspect instead of stretching into the new touch rects.
+
+## Fix - Background props and obstacle alignment
+
+- [x] B1 - Lock props and collisions to the background
+  - Add `BackgroundProps` under the area root. Fountain overlay, village
+    lamps and static obstacle bodies live under it.
+  - `Area._layout_background()` maps `BackgroundProps` to the same position and
+    scale ratio as the background, so overlay art and collision footprints no
+    longer drift when the viewport or DPI changes.
+  - `Area` relayouts and re-collects blockers on viewport resize.
+  - Test: `tests/test_background_props.gd`.
 
 ## Next milestones
 
