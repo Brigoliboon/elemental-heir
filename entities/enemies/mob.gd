@@ -46,6 +46,8 @@ var move_speed := 200.0
 var stats: Stats
 ## Shared health pool; initialized from EnemyData when the scene loads.
 var health: Health
+## Positional voice built from EnemyData.sfx; silent when no set is assigned.
+var sfx: SfxComponent
 ## Impulse velocity applied by the player's sword and decayed each physics frame.
 var knockback_velocity := Vector2.ZERO
 ## +1 facing right, -1 facing left.
@@ -65,6 +67,7 @@ func _ready() -> void:
 		push_error("%s has no EnemyData" % name)
 	_ensure_stats()
 	_ensure_health()
+	_ensure_sfx()
 
 	attack_radius.body_entered.connect(_on_attack_radius_body_entered)
 	attack_radius.body_exited.connect(_on_attack_radius_body_exited)
@@ -100,6 +103,17 @@ func _ensure_health() -> void:
 	health.health_changed.connect(_on_health_changed)
 	health.damaged.connect(_on_health_damaged)
 	health.died.connect(_on_health_died)
+
+
+## Builds the positional voice from EnemyData.sfx. A missing set stays silent.
+func _ensure_sfx() -> void:
+	sfx = get_node_or_null("Sfx") as SfxComponent
+	if sfx == null:
+		sfx = SfxComponent.new()
+		sfx.name = "Sfx"
+		add_child(sfx)
+	if config != null:
+		sfx.bind(config.sfx)
 
 
 func _physics_process(delta: float) -> void:
@@ -205,6 +219,8 @@ func _update_hitbox_position() -> void:
 func _play_move_animation() -> void:
 	if animated_sprite.sprite_frames == null:
 		return
+	if sfx != null:
+		sfx.idle_enabled = false
 	var anim := "walk" if animated_sprite.sprite_frames.has_animation("walk") else "default"
 	if animated_sprite.animation != anim:
 		animated_sprite.play(anim)
@@ -213,6 +229,8 @@ func _play_move_animation() -> void:
 func _play_idle_animation() -> void:
 	if animated_sprite.sprite_frames == null:
 		return
+	if sfx != null:
+		sfx.idle_enabled = true
 	if animated_sprite.animation != "default":
 		animated_sprite.play("default")
 
@@ -229,6 +247,9 @@ func attack_player() -> void:
 	attack_timer = attack_cooldown
 	attack_hitbox.deactivate()
 	animated_sprite.play("attack")
+	if sfx != null:
+		sfx.idle_enabled = false
+		sfx.play_attack()
 
 
 ## Enables the damage area only while the attack clip is between hit_start and hit_end.
@@ -262,6 +283,8 @@ func _on_animation_finished() -> void:
 		is_attacking = false
 		attack_hitbox.deactivate()
 		animated_sprite.play("default")
+		if sfx != null:
+			sfx.idle_enabled = true
 
 
 func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
@@ -288,6 +311,8 @@ func _on_health_changed(current: int, maximum: int) -> void:
 func _on_health_damaged(amount: int, _remaining: int) -> void:
 	_flash_damage()
 	damaged.emit(amount)
+	if sfx != null:
+		sfx.play_hurt()
 
 
 func _on_health_died() -> void:
@@ -303,6 +328,8 @@ func _on_health_died() -> void:
 	set_deferred("collision_mask", 0)
 	set_physics_process(false)
 	_award_experience()
+	if sfx != null:
+		sfx.play_death()
 	died.emit()
 	_play_death_fade()
 

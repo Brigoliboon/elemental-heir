@@ -16,3 +16,8 @@ class_name EnemyData
 
 @export_group("Rewards")
 @export var xp_reward: int = 10
+
+@export_group("Audio")
+## Optional voice: attack, hurt, idle and death sounds. Leave unset for a silent
+## enemy; the SFX component skips missing streams.
+@export var sfx: SfxSet
