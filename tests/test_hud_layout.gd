@@ -34,6 +34,17 @@ func run(tree: SceneTree) -> Array[String]:
 
 		failures.append_array(_check_area(area, tree.root.get_visible_rect().size))
 
+		# Phone pass: force the mobile scale through the desktop knob so corner
+		# anchoring is exercised the way a phone sees it.
+		var desktop_scale := area.hud_scale_desktop
+		area.hud_scale_desktop = area.hud_scale_mobile
+		area._layout_hud()
+		await tree.process_frame
+		failures.append_array(_check_controls(area, tree.root.get_visible_rect().size, "at mobile scale"))
+		area.hud_scale_desktop = desktop_scale
+		area._layout_hud()
+		await tree.process_frame
+
 		area.queue_free()
 		await tree.process_frame
 
@@ -78,6 +89,18 @@ func _check_area(area: Area, view: Vector2) -> Array[String]:
 		if not _inside(label_rect, view):
 			failures.append("the area title must stay inside the viewport at %s" % view)
 
+	failures.append_array(_check_controls(area, view, "at desktop scale"))
+
+	var profile := area.get_node_or_null("HUD/UI/PlayerHealth/Profile") as Control
+	if profile != null and profile.get_global_rect().size.x < 150.0:
+		failures.append("the profile button must stay large enough for touch input")
+
+	return failures
+
+
+## Every HUD control must stay on screen whatever the layer scale is.
+func _check_controls(area: Area, view: Vector2, context: String) -> Array[String]:
+	var failures: Array[String] = []
 	for path in CONTROLS:
 		var control := area.get_node_or_null(path) as Control
 		if control == null:
@@ -86,16 +109,12 @@ func _check_area(area: Area, view: Vector2) -> Array[String]:
 		if not control.is_visible_in_tree():
 			continue
 		if not _inside(control.get_global_rect(), view):
-			failures.append("%s must stay inside the viewport at %s (rect %s)" % [
+			failures.append("%s must stay inside the viewport %s %s (rect %s)" % [
 				path,
+				context,
 				view,
 				control.get_global_rect(),
 			])
-
-	var profile := area.get_node_or_null("HUD/UI/PlayerHealth/Profile") as Control
-	if profile != null and profile.get_global_rect().size.x < 150.0:
-		failures.append("the profile button must stay large enough for touch input")
-
 	return failures
 
 

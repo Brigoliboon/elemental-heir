@@ -37,6 +37,8 @@ var combo: AttackCombo
 ## when a scene (or test) does not provide it.
 var stats: Stats
 var inventory: Inventory
+## Positional voice built from CharacterData.sfx; silent when no set is assigned.
+var sfx: SfxComponent
 ## Shared health pool. Scene entities own a `Health` child; a runtime one is created
 ## when a scene (or test) does not provide it.
 var health: Health
@@ -78,6 +80,7 @@ func _ready() -> void:
 	_ensure_stats()
 	_ensure_health()
 	_ensure_inventory()
+	_ensure_sfx()
 	rig = CharacterRig.new(config, skeleton)
 	rig.build()
 	animations = WarriorSideAnimations.new(rig)
@@ -86,6 +89,8 @@ func _ready() -> void:
 	anim_player.add_animation_library("", animations.build_library(config.attacks))
 	combo = AttackCombo.new(anim_player, config)
 	combo.combo_ended.connect(_on_combo_ended)
+	if sfx != null:
+		combo.combo_started.connect(sfx.play_attack)
 	render_scale = config.base_scale
 	_build_sword_hitbox()
 	_apply_scale()
@@ -94,6 +99,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_sword_hitbox()
+	if sfx != null:
+		# Vocalize only while genuinely idle, not mid-swing, guard or run.
+		sfx.idle_enabled = not _is_dead and not _is_moving and not _is_blocking and not is_attacking()
 
 
 func is_attacking() -> bool:
@@ -297,6 +305,17 @@ func revive() -> void:
 		anim_player.play("idle")
 
 
+## Builds the positional voice from CharacterData.sfx. A missing set stays silent.
+func _ensure_sfx() -> void:
+	sfx = get_node_or_null("Sfx") as SfxComponent
+	if sfx == null:
+		sfx = SfxComponent.new()
+		sfx.name = "Sfx"
+		add_child(sfx)
+	if config != null:
+		sfx.bind(config.sfx)
+
+
 func _ensure_inventory() -> void:
 	inventory = get_node_or_null("Inventory") as Inventory
 	if inventory == null:
@@ -393,6 +412,8 @@ func _on_health_changed(current: int, maximum: int) -> void:
 func _on_health_damaged(amount: int, _remaining: int) -> void:
 	_flash_damage()
 	damaged.emit(amount)
+	if sfx != null:
+		sfx.play_hurt()
 
 
 func _on_health_died() -> void:
@@ -408,6 +429,8 @@ func _on_health_died() -> void:
 	if anim_player.has_animation("idle"):
 		anim_player.play("idle")
 	_play_death_fade()
+	if sfx != null:
+		sfx.play_death()
 	died.emit()
 
 
