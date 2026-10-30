@@ -30,7 +30,12 @@ theme = ExtResource("24_theme")
 script = ExtResource("1_script")
 
 [node name="Background" type="VideoStreamPlayer" parent="." unique_id=1218888466]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("24_theme")
 stream = ExtResource("2_bg")
@@ -41,74 +46,124 @@ loop = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1828764372]
 
-[node name="SoundButton" type="TextureButton" parent="CanvasLayer" unique_id=1315054237]
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=1048333085]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SoundButton" type="TextureButton" parent="CanvasLayer/UI" unique_id=1315054237]
 unique_name_in_owner = true
-offset_left = 1648.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -272.0
 offset_top = 36.0
-offset_right = 1744.0
+offset_right = -176.0
 offset_bottom = 126.0
+grow_horizontal = 0
 texture_normal = ExtResource("15_sound_on_normal")
 texture_pressed = ExtResource("16_sound_on_pressed")
 texture_disabled = ExtResource("17_sound_on_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CreditsButton" type="TextureButton" parent="CanvasLayer" unique_id=1330530814]
+[node name="CreditsButton" type="TextureButton" parent="CanvasLayer/UI" unique_id=1330530814]
 unique_name_in_owner = true
-offset_left = 1760.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
 offset_top = 36.0
-offset_right = 1856.0
+offset_right = -64.0
 offset_bottom = 126.0
+grow_horizontal = 0
 texture_normal = ExtResource("21_credits_normal")
 texture_pressed = ExtResource("22_credits_pressed")
 texture_disabled = ExtResource("23_credits_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="OfflineButton" type="TextureButton" parent="CanvasLayer" unique_id=1962232108]
+[node name="OfflineButton" type="TextureButton" parent="CanvasLayer/UI" unique_id=1962232108]
 unique_name_in_owner = true
-offset_left = 1596.0
-offset_top = 762.0
-offset_right = 1856.0
-offset_bottom = 836.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -324.0
+offset_top = -318.0
+offset_right = -64.0
+offset_bottom = -244.0
+grow_horizontal = 0
+grow_vertical = 0
 texture_normal = ExtResource("6_offline_normal")
 texture_pressed = ExtResource("7_offline_pressed")
 texture_disabled = ExtResource("8_offline_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="OnlineButton" type="TextureButton" parent="CanvasLayer" unique_id=400131798]
+[node name="OnlineButton" type="TextureButton" parent="CanvasLayer/UI" unique_id=400131798]
 unique_name_in_owner = true
-offset_left = 1596.0
-offset_top = 852.0
-offset_right = 1856.0
-offset_bottom = 926.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -324.0
+offset_top = -228.0
+offset_right = -64.0
+offset_bottom = -154.0
+grow_horizontal = 0
+grow_vertical = 0
 texture_normal = ExtResource("9_online_normal")
 texture_pressed = ExtResource("10_online_pressed")
 texture_disabled = ExtResource("11_online_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="SettingsButton" type="TextureButton" parent="CanvasLayer" unique_id=505848653]
+[node name="SettingsButton" type="TextureButton" parent="CanvasLayer/UI" unique_id=505848653]
 unique_name_in_owner = true
-offset_left = 1596.0
-offset_top = 942.0
-offset_right = 1856.0
-offset_bottom = 1016.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -324.0
+offset_top = -138.0
+offset_right = -64.0
+offset_bottom = -64.0
+grow_horizontal = 0
+grow_vertical = 0
 texture_normal = ExtResource("12_settings_normal")
 texture_pressed = ExtResource("13_settings_pressed")
 texture_disabled = ExtResource("14_settings_disabled")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="NoConnectionLabel" type="Label" parent="." unique_id=238770631]
+[node name="NoConnectionLabel" type="Label" parent="CanvasLayer/UI" unique_id=238770631]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 1300.0
-offset_top = 870.0
-offset_right = 1588.0
-offset_bottom = 908.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -210.0
+offset_right = -332.0
+offset_bottom = -172.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
 theme_override_font_sizes/font_size = 28
 text = "No connection"

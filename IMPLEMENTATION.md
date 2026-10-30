@@ -307,6 +307,17 @@ fields are consumed where the current runtime already exposes them.
     `assets/backgrounds/world-map.jpg`, with back navigation and zoom in/out.
   - Test: `tests/test_world_map.gd`.
 
+## Fix - Title screen responsive layout
+
+- [x] T1 - Anchor title controls to the viewport
+  - Add a full-rect `CanvasLayer/UI` Control and move the sound, credits,
+    offline, online, settings and no-connection controls under it.
+  - Anchor the top icons to the top-right and the navigation buttons to the
+    bottom-right, so their margins stay fixed when the viewport grows instead
+    of being pinned to 1920x1080 offsets.
+  - Make the background video fill the root Control.
+  - Test: `tests/test_title_layout.gd`.
+
 ## Next milestones
 
 > Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept
