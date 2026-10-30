@@ -44,3 +44,8 @@ enum CharacterRole {
 
 @export_group("Block")
 @export var block_damage_reduction: float = 0.5
+
+@export_group("Audio")
+## Optional voice: attack, hurt, idle and death sounds. Shared with enemies so the
+## same data-driven playback path drives both.
+@export var sfx: SfxSet
