@@ -17,6 +17,9 @@ const ATTACK_PRESSED_ALPHA := 0.55
 ## art is drawn at 1.5x. Props and obstacle polygons use those same world
 ## coordinates and are rescaled with the background when the viewport changes.
 const DESIGN_BACKGROUND_SCALE := 1.5
+## Viewport the HUD art is authored against, in design pixels.
+const DESIGN_WIDTH := 1920.0
+const DESIGN_HEIGHT := 1080.0
 ## Distance from the Character origin down to its soles, in rig units (scale 1).
 const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 
@@ -48,6 +51,14 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 ## How quickly the camera zoom catches up (higher is snappier).
 @export var zoom_follow := 4.0
 
+@export_group("HUD")
+## The HUD is authored in 1920x1080 design pixels. Phones squeeze that canvas
+## into a much smaller screen, so the whole HUD layer is grown there to keep the
+## profile, bars and labels readable and the buttons tappable.
+@export var hud_scale_mobile := 1.4
+## HUD scale on desktop, where design pixels already read well.
+@export var hud_scale_desktop := 1.0
+
 @export_group("Exits")
 @export_file("*.tscn") var exit_left_scene := ""
 @export_file("*.tscn") var exit_right_scene := ""
@@ -64,6 +75,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var background_props: Node2D = get_node_or_null("BackgroundProps")
 @onready var player: Character = $Player
 @onready var camera: Camera2D = $Camera
+@onready var hud_ui: Control = $HUD/UI
 @onready var area_label: Label = $HUD/UI/AreaLabel
 @onready var debug_label: Label = $HUD/UI/DebugLabel
 @onready var joystick: HudJoystick = $HUD/UI/MoveControls
@@ -89,6 +101,9 @@ var ground_near_y := 0.0
 var _feet_y := 0.0
 var _leaving := false
 var _player_dead := false
+## True while the guard is held by the on-screen block button (keyboard block is
+## not tracked here, so it is never cleared by the button reconcile).
+var _guard_from_button := false
 ## Obstacle footprints in world space: [Shape2D, Transform2D] or a PackedVector2Array polygon.
 var _blockers: Array = []
 var _feet_shape := CircleShape2D.new()
@@ -100,6 +115,7 @@ func _ready() -> void:
 		MusicPlayer.play_track(background_music)
 	get_viewport().size_changed.connect(_on_viewport_resized)
 	_layout_background()
+	_layout_hud()
 	_collect_blockers()
 	_place_player()
 	if inventory_panel != null and player != null and player.inventory != null:
@@ -113,8 +129,8 @@ func _ready() -> void:
 	attack_button.pressed.connect(player.attack)
 	attack_button.button_down.connect(_on_attack_button_down)
 	attack_button.button_up.connect(_on_attack_button_up)
-	block_button.button_down.connect(func() -> void: player.block(true))
-	block_button.button_up.connect(func() -> void: player.block(false))
+	block_button.button_down.connect(_on_block_button_down)
+	block_button.button_up.connect(_on_block_button_up)
 	back_button.pressed.connect(_go_to.bind(TITLE_SCENE, ""))
 	if show_feet_footprint:
 		get_tree().debug_collisions_hint = true
@@ -270,9 +286,53 @@ func _on_viewport_resized() -> void:
 	if not is_inside_tree() or player == null:
 		return
 	_layout_background()
+	_layout_hud()
 	_collect_blockers()
 	_feet_y = clampf(_feet_y, ground_far_y, ground_near_y)
 	_apply_depth()
+
+
+## Scale applied to the whole HUD layer for a canvas-unit viewport size. The HUD
+## is authored for the 1920x1080 design canvas; phones shrink that canvas onto a
+## small screen, so the layer is grown to keep text readable and targets tappable.
+func hud_scale_for(view: Vector2, mobile: bool) -> float:
+	var base := hud_scale_mobile if mobile else hud_scale_desktop
+	var fit := minf(view.x / DESIGN_WIDTH, view.y / DESIGN_HEIGHT)
+	return clampf(maxf(fit, 1.0) * base, 0.5, 4.0)
+
+
+## Scales the HUD layer and shrinks its layout rect by the same factor, so
+## children anchored to the screen edges still land on the real edges while
+## everything inside grows with the scale.
+func _layout_hud() -> void:
+	if hud_ui == null:
+		return
+	var view := get_viewport_rect().size
+	var factor := hud_scale_for(view, OS.has_feature("mobile"))
+	hud_ui.pivot_offset = Vector2.ZERO
+	hud_ui.scale = Vector2.ONE * factor
+	hud_ui.size = view / factor
+
+
+func _on_block_button_down() -> void:
+	_guard_from_button = true
+	player.block(true)
+
+
+func _on_block_button_up() -> void:
+	_guard_from_button = false
+	player.block(false)
+
+
+## Touch input can drop a button_up when several fingers tap the HUD at once, and
+## a stale guard locks the character out of moving. Reconcile against the button's
+## real held state every frame.
+func _sync_guard_button() -> void:
+	if not _guard_from_button or block_button == null:
+		return
+	if not block_button.button_pressed:
+		_guard_from_button = false
+		player.block(false)
 
 
 ## 0 at the far edge of the band, 1 at the near edge.
@@ -302,6 +362,7 @@ func _place_player() -> void:
 func _process(delta: float) -> void:
 	if _leaving:
 		return
+	_sync_guard_button()
 	if _player_dead:
 		camera.position = _camera_target()
 		return

@@ -19,6 +19,7 @@ func _init(player: AnimationPlayer, config: CharacterData) -> void:
 
 
 func is_attacking() -> bool:
+	_abort_if_interrupted()
 	return _index != 0
 
 
@@ -28,6 +29,7 @@ func current_hit() -> int:
 
 
 func press() -> void:
+	_abort_if_interrupted()
 	if _config.attacks.is_empty():
 		return
 	if _index == 0:
@@ -52,6 +54,19 @@ func cancel() -> void:
 	_index = 0
 	_queued = false
 	combo_ended.emit()
+
+
+## Clears the swing if another animation (guard, idle, death) replaced it. Without
+## this the aborted attack never reports animation_finished, so the combo stays
+## latched at hit 1 and the character refuses to move forever.
+func _abort_if_interrupted() -> void:
+	if _index == 0 or _player == null:
+		return
+	if _config.attacks.is_empty():
+		cancel()
+		return
+	if _player.current_animation != _config.attacks[_index - 1].id:
+		cancel()
 
 
 func _on_animation_finished(anim_name: StringName) -> void:

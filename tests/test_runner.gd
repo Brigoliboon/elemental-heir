@@ -24,8 +24,10 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_hud_buttons.gd"),
 	preload("res://tests/test_hud_profile.gd"),
 	preload("res://tests/test_hud_attack_state.gd"),
+	preload("res://tests/test_attack_block_lock.gd"),
 	preload("res://tests/test_world_map.gd"),
 	preload("res://tests/test_background_props.gd"),
+	preload("res://tests/test_hud_layout.gd"),
 	preload("res://tests/test_title_layout.gd"),
 ]
 

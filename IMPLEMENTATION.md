@@ -332,6 +332,36 @@ fields are consumed where the current runtime already exposes them.
   - `Area` relayouts and re-collects blockers on viewport resize.
   - Test: `tests/test_background_props.gd`.
 
+## Fix - HUD scale and centred area title
+
+- [x] H1 - Scale the HUD layer for mobile
+  - `Area._layout_hud()` scales `HUD/UI` by `hud_scale_for(view, mobile)` and
+    shrinks its layout rect by the same factor, so the profile, bars, labels and
+    touch targets grow while children anchored to the screen edges still land on
+    the real edges.
+  - `hud_scale_mobile = 1.4` / `hud_scale_desktop = 1.0` are exported so the
+    amount can be tuned per area without touching code.
+  - `HUD/UI` is now an explicit-size root laid out by the area, instead of a
+    full-rect anchored control whose size the layout engine would override.
+- [x] H2 - Centre the area title
+  - `AreaLabel` is anchored to the horizontal centre with centre alignment, so
+    it no longer sits at 1920-px offsets on wider or narrower screens.
+  - Test: `tests/test_hud_layout.gd`.
+
+## Fix - Character frozen after switching attack and block
+
+- [x] C1 - Stop the combo latching when the guard interrupts a swing
+  - Raising the guard mid-attack replaced the attack animation with `block`, so
+    the combo never received `animation_finished`. `is_attacking()` stayed true
+    forever and `Character.move_2d()` ignored all input, freezing the character.
+  - `Character.block(true)` now cancels the active swing before raising the
+    guard.
+  - `AttackCombo` also clears itself whenever its attack animation is no longer
+    the one playing, so any other interruption heals instead of latching.
+  - `Area` reconciles the guard against the block button's real held state each
+    frame, so a dropped `button_up` on touch input cannot keep the guard stuck.
+  - Test: `tests/test_attack_block_lock.gd`.
+
 ## Next milestones
 
 > Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept
