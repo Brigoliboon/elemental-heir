@@ -137,9 +137,13 @@ anchors_preset = 0
 text = ""
 
 [node name="BackButton" parent="HUD/UI" index="1" unique_id=1609870667]
-offset_left = -1818.0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+grow_horizontal = 1
+offset_left = 102.0
 offset_top = 214.0
-offset_right = -1638.0
+offset_right = 282.0
 offset_bottom = 277.0
 
 [node name="MoveControls" parent="HUD/UI" index="3" unique_id=1931883080]
