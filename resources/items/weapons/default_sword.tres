@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentData" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/warrior/t1_side/warrior_t1_side/warrior_t1_side_sword.png" id="1_gxfeb"]
+[ext_resource type="Script" path="res://resources/items/equipment_data.gd" id="2_fkmm2"]
+[ext_resource type="Script" path="res://resources/items/stat_modifier.gd" id="3_vt8v3"]
+
+[sub_resource type="Resource" id="Resource_jv3rl"]
+script = ExtResource("3_vt8v3")
+stat = &"attack"
+flat = 6.0
+
+[sub_resource type="Resource" id="Resource_ia7cd"]
+script = ExtResource("3_vt8v3")
+stat = &"crit_rate"
+flat = 0.02
+
+[resource]
+script = ExtResource("2_fkmm2")
+equip_slot = &"primary"
+stat_modifiers = Array[ExtResource("3_vt8v3")]([SubResource("Resource_jv3rl"), SubResource("Resource_ia7cd")])
+weapon_anim_set = &"sword"
+id = &"default_sword"
+display_name = "Iron Sword"
+item_group = &"sword"
+icon = ExtResource("1_gxfeb")
+class_restriction = Array[int]([0])
+description = "A sturdy iron sword."

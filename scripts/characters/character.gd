@@ -36,6 +36,7 @@ var combo: AttackCombo
 ## Shared stat block. Scene entities own a `Stats` child; a runtime one is created
 ## when a scene (or test) does not provide it.
 var stats: Stats
+var inventory: Inventory
 ## Shared health pool. Scene entities own a `Health` child; a runtime one is created
 ## when a scene (or test) does not provide it.
 var health: Health
@@ -76,6 +77,7 @@ func _ready() -> void:
 	add_to_group("player")
 	_ensure_stats()
 	_ensure_health()
+	_ensure_inventory()
 	rig = CharacterRig.new(config, skeleton)
 	rig.build()
 	animations = WarriorSideAnimations.new(rig)
@@ -288,6 +290,23 @@ func revive() -> void:
 	_manual_animation = "idle"
 	if anim_player.has_animation("idle"):
 		anim_player.play("idle")
+
+
+func _ensure_inventory() -> void:
+	inventory = get_node_or_null("Inventory") as Inventory
+	if inventory == null:
+		inventory = Inventory.new()
+		inventory.name = "Inventory"
+		add_child(inventory)
+	var sword = load("res://resources/items/weapons/default_sword.tres")
+	var buckler = load("res://resources/items/weapons/default_buckler.tres")
+	if sword != null:
+		inventory.add_item(sword, 1)
+	if buckler != null:
+		inventory.add_item(buckler, 1)
+	var holy = load("res://resources/items/weapons/holy_sword.tres")
+	if holy != null:
+		inventory.add_item(holy, 1)
 
 
 func _ensure_stats() -> void:

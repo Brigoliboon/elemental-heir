@@ -11,6 +11,7 @@ var persistence_enabled := true
 var has_state := false
 var level := 1
 var experience := 0
+var equipped: Array[String] = ["", "", "", "", "", "", "", ""]
 
 
 func _ready() -> void:
@@ -25,6 +26,13 @@ func load_progress() -> bool:
 		return false
 	level = maxi(1, int(config.get_value(SECTION, "level", 1)))
 	experience = maxi(0, int(config.get_value(SECTION, "experience", 0)))
+	var eq = config.get_value(SECTION, "equipped", equipped)
+	if eq is Array:
+		equipped = []
+		for v in eq:
+			equipped.append(str(v))
+	while equipped.size() < 8:
+		equipped.append("")
 	has_state = true
 	return true
 
@@ -46,6 +54,7 @@ func save_progress() -> void:
 	var config := ConfigFile.new()
 	config.set_value(SECTION, "level", level)
 	config.set_value(SECTION, "experience", experience)
+	config.set_value(SECTION, "equipped", equipped)
 	var err := config.save(save_path)
 	if err != OK:
 		push_warning("PlayerProgress could not save to %s (error %d)" % [save_path, err])
@@ -55,5 +64,6 @@ func reset(delete_save: bool = true) -> void:
 	level = 1
 	experience = 0
 	has_state = false
+	equipped = ["", "", "", "", "", "", "", ""]
 	if delete_save and persistence_enabled and FileAccess.file_exists(save_path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))

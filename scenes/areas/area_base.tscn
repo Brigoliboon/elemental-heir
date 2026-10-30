@@ -4,7 +4,8 @@
 [ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="2_theme"]
 [ext_resource type="PackedScene" uid="uid://cxrrsyk55qqty" path="res://entities/characters/warrior.tscn" id="3_player"]
 [ext_resource type="Texture2D" uid="uid://cujvxnmo3axkt" path="res://assets/backgrounds/forest/forest_village_square.png" id="4_bg"]
-[ext_resource type="Script" path="res://scripts/ui/stats_panel.gd" id="5_stats_panel"]
+[ext_resource type="Script" uid="uid://blhw1q86j7n4x" path="res://scripts/ui/stats_panel.gd" id="5_stats_panel"]
+[ext_resource type="Script" uid="uid://bap6cwhve1ff2" path="res://scripts/ui/inventory_panel.gd" id="6_inventory_panel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
 bg_color = Color(0.07, 0.06, 0.06, 0.88)
@@ -99,7 +100,7 @@ offset_bottom = 84.0
 grow_horizontal = 0
 text = "Back"
 
-[node name="StatsButton" type="Button" parent="HUD/UI"]
+[node name="StatsButton" type="Button" parent="HUD/UI" unique_id=1642454422]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
@@ -111,6 +112,19 @@ offset_right = -252.0
 offset_bottom = 84.0
 grow_horizontal = 0
 text = "Stats"
+
+[node name="InventoryButton" type="Button" parent="HUD/UI" unique_id=1176529310]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 28.0
+offset_right = -40.0
+offset_bottom = 84.0
+grow_horizontal = 0
+text = "Inventory"
 
 [node name="MoveControls" type="GridContainer" parent="HUD/UI" unique_id=1931883080]
 layout_mode = 1
@@ -232,23 +246,20 @@ custom_minimum_size = Vector2(360, 24)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
-max_value = 100.0
 value = 100.0
 show_percentage = false
 
-[node name="XPLabel" type="Label" parent="HUD/UI/PlayerHealth"]
+[node name="XPLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=2129840377]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "XP 0 / 100"
 
-[node name="XPBar" type="ProgressBar" parent="HUD/UI/PlayerHealth"]
+[node name="XPBar" type="ProgressBar" parent="HUD/UI/PlayerHealth" unique_id=213183900]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 18)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
-max_value = 100.0
-value = 0.0
 show_percentage = false
 
 [node name="DeathLabel" type="Label" parent="HUD/UI" unique_id=1763514045]
@@ -268,11 +279,12 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.86, 0.33, 0.28, 1)
 theme_override_font_sizes/font_size = 56
-text = "You fell...\nRespawning"
+text = "You fell...
+Respawning"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StatsPanel" type="PanelContainer" parent="HUD/UI"]
+[node name="StatsPanel" type="PanelContainer" parent="HUD/UI" unique_id=1825087052]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -287,30 +299,127 @@ grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_stats_panel")
 script = ExtResource("5_stats_panel")
 
-[node name="Margin" type="MarginContainer" parent="HUD/UI/StatsPanel"]
+[node name="Margin" type="MarginContainer" parent="HUD/UI/StatsPanel" unique_id=1387631284]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="HUD/UI/StatsPanel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="HUD/UI/StatsPanel/Margin" unique_id=558773597]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="HUD/UI/StatsPanel/Margin/VBox"]
+[node name="Title" type="Label" parent="HUD/UI/StatsPanel/Margin/VBox" unique_id=138761036]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
 theme_override_font_sizes/font_size = 32
 text = "Stats"
 
-[node name="Body" type="Label" parent="HUD/UI/StatsPanel/Margin/VBox"]
+[node name="Body" type="Label" parent="HUD/UI/StatsPanel/Margin/VBox" unique_id=1270652716]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 22
 autowrap_mode = 2
-text = ""
 
-[node name="Close" type="Button" parent="HUD/UI/StatsPanel/Margin/VBox"]
+[node name="Close" type="Button" parent="HUD/UI/StatsPanel/Margin/VBox" unique_id=857616472]
+layout_mode = 2
+text = "Close"
+
+[node name="InventoryPanel" type="PanelContainer" parent="HUD/UI" unique_id=779569506]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -250.0
+offset_right = 420.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_inventory_panel")
+
+[node name="Margin" type="MarginContainer" parent="HUD/UI/InventoryPanel" unique_id=2023275181]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin" unique_id=1893012240]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=1853052117]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_font_sizes/font_size = 32
+text = "Inventory"
+
+[node name="TopRow" type="HBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=452098965]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="LeftSlots" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=362529294]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CharacterPreview" type="TextureRect" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=59623880]
+layout_mode = 2
+size_flags_horizontal = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RightSlots" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=373649609]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DescriptionPanel" type="PanelContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=2045061198]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DescMargin" type="MarginContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel" unique_id=296686748]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="DescVBox" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel/DescMargin" unique_id=1915618098]
+layout_mode = 2
+
+[node name="DescTitle" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel/DescMargin/DescVBox" unique_id=1685948905]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Item"
+
+[node name="DescBody" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel/DescMargin/DescVBox" unique_id=855256850]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Select an item."
+autowrap_mode = 2
+
+[node name="PotionsRow" type="HBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=1369632023]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ItemsHeader" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=100575230]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_font_sizes/font_size = 24
+text = "Items"
+
+[node name="GeneralInventory" type="GridContainer" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=1593550769]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 7
+
+[node name="Close" type="Button" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=200197597]
 layout_mode = 2
 text = "Close"
