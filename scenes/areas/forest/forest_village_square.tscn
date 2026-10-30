@@ -2,9 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="3_04y1k"]
-[ext_resource type="AudioStreamWAV" path="res://assets/audio/music/forest-bg_loop.wav" id="6_music"]
 [ext_resource type="Texture2D" uid="uid://422o6r364r0n" path="res://assets/backgrounds/forest/fountain_overlay.png" id="4_i6ujb"]
-[ext_resource type="Script" path="res://scripts/world/depth_overlay.gd" id="5_depth"]
+[ext_resource type="Script" uid="uid://dkoyd83om8vgr" path="res://scripts/world/depth_overlay.gd" id="5_depth"]
+[ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="6_music"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -17,8 +17,8 @@ fill_from = Vector2(0.49565217, 0.526087)
 
 [node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
 area_name = "Forest - Village Square"
-spawn_x_ratio = 0.3
 background_music = ExtResource("6_music")
+spawn_x_ratio = 0.3
 exit_right_scene = "res://scenes/areas/forest/forest_fight.tscn"
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
@@ -32,21 +32,6 @@ texture = ExtResource("4_i6ujb")
 script = ExtResource("5_depth")
 follow_position = true
 
-[node name="Player" parent="." index="2" unique_id=198134559]
-unique_name_in_owner = true
-position = Vector2(0, 0)
-
-[node name="Camera" parent="." index="3" unique_id=2026197166]
-unique_name_in_owner = true
-position = Vector2(964, 539)
-limit_left = -10000000
-limit_top = -10000000
-limit_right = 10000000
-limit_bottom = 10000000
-
-[node name="AreaLabel" parent="HUD/UI" parent_id_path=PackedInt32Array(1048333084) index="0" unique_id=421268983]
-text = ""
-
 [node name="StaticBody2D" type="StaticBody2D" parent="BackgroundProps" index="1" unique_id=2039500424]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BackgroundProps/StaticBody2D" index="0" unique_id=1876472919]
@@ -57,13 +42,6 @@ polygon = PackedVector2Array(1215, 881, 1159, 903, 1054, 908, 982, 902, 945, 889
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="BackgroundProps/StaticBody2D" index="1" unique_id=796688289]
 visible = false
 polygon = PackedVector2Array(1909, 858, 1711, 905, 1669, 905, 1618, 910, 1590, 895, 1594, 850, 1499, 819, 1603, 794, 1613, 708, 1605, 681, 1581, 666, 1539, 673, 1529, 684, 1513, 708, 1502, 737, 1497, 763, 1492, 777, 1484, 795, 1455, 844, 1437, 873, 1359, 861, 1346, 852, 1360, 779, 1407, 763, 1415, 720, 1415, 554, 1412, 301, 1731, 286, 1919, 299)
-
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." index="6" unique_id=699851553]
-position = Vector2(1782, 163)
-color = Color(0.57856774, 0.41206244, 0.24016002, 1)
-energy = 0.3
-blend_mode = 1
-max_distance = 3343.0
 
 [node name="lamp" type="PointLight2D" parent="BackgroundProps" index="2" unique_id=1280955663]
 z_index = -100
@@ -138,3 +116,59 @@ position = Vector2(1862, 581)
 color = Color(0.6666667, 0.46666667, 0.18431373, 1)
 energy = 2.0
 texture = SubResource("GradientTexture2D_jx5d0")
+
+[node name="Player" parent="." index="2" unique_id=198134559]
+unique_name_in_owner = true
+position = Vector2(0, 0)
+
+[node name="Camera" parent="." index="3" unique_id=2026197166]
+unique_name_in_owner = true
+position = Vector2(964, 539)
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+
+[node name="UI" parent="HUD" parent_id_path=PackedInt32Array(1894165697) index="0" unique_id=1048333084]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="AreaLabel" parent="HUD/UI" index="0" unique_id=421268983]
+text = ""
+
+[node name="BackButton" parent="HUD/UI" index="1" unique_id=1609870667]
+offset_left = -1818.0
+offset_top = 214.0
+offset_right = -1638.0
+offset_bottom = 277.0
+
+[node name="MoveControls" parent="HUD/UI" index="3" unique_id=1931883080]
+offset_left = 186.0
+offset_top = -354.0
+offset_right = 449.0
+offset_bottom = -98.0
+
+[node name="AttackButton" parent="HUD/UI" index="4" unique_id=1313772405]
+offset_left = -278.0
+offset_top = -256.0
+offset_right = -57.0
+offset_bottom = -49.0
+
+[node name="BlockButton" parent="HUD/UI" index="5" unique_id=1161908045]
+offset_left = -555.0
+offset_top = -157.0
+offset_right = -355.0
+offset_bottom = -57.0
+
+[node name="PlayerHealth" parent="HUD/UI" index="7" unique_id=1763514042]
+offset_left = 90.0
+offset_top = 57.0
+offset_right = 450.0
+offset_bottom = 197.0
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." index="5" unique_id=699851553]
+position = Vector2(1782, 163)
+color = Color(0.57856774, 0.41206244, 0.24016002, 1)
+energy = 0.3
+blend_mode = 1
+max_distance = 3343.0
