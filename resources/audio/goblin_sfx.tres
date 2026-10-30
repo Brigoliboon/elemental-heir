@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SfxSet" format=3]
+
+[ext_resource type="Script" path="res://resources/audio/sfx_set.gd" id="1_sfxset"]
+[ext_resource type="AudioStream" path="res://assets/audio/btn-click.wav" id="2_click"]
+
+[resource]
+script = ExtResource("1_sfxset")
+attack = ExtResource("2_click")
+hurt = ExtResource("2_click")
+death = ExtResource("2_click")
