@@ -17,6 +17,7 @@ func run(tree: SceneTree) -> Array[String]:
 	await _check_mob_triggers(tree, failures)
 	await _check_player_triggers(tree, failures)
 	await _check_combo_spam(tree, failures)
+	await _check_footsteps(tree, failures)
 	return failures
 
 
@@ -208,6 +209,83 @@ func _check_combo_spam(tree: SceneTree, failures: Array[String]) -> void:
 
 	_cleanup(player)
 	await tree.physics_frame
+
+
+## Footsteps are per-surface and sequential: 1, 2, 1, 2. Random picking would
+## repeat a foot and expose the two-sample loop.
+func _check_footsteps(tree: SceneTree, failures: Array[String]) -> void:
+	var first := AudioStreamWAV.new()
+	var second := AudioStreamWAV.new()
+	var set := FootstepSet.new()
+	set.streams = [first, second]
+	set.stride_pixels = 90.0
+
+	if set.variant_count() != 2:
+		failures.append("footstep set should count 2 variants")
+	if set.stream_at(0) != first or set.stream_at(1) != second:
+		failures.append("footstep set must start at the first stream")
+	if set.stream_at(2) != first or set.stream_at(3) != second:
+		failures.append("footstep set must loop back to the first stream")
+
+	var scene := load(WARRIOR_SCENE) as PackedScene
+	if scene == null:
+		failures.append("warrior scene did not load")
+		return
+	var player := scene.instantiate()
+	tree.root.add_child(player)
+	await tree.physics_frame
+
+	player.set_footsteps(set)
+	if player.sfx.footsteps != set:
+		failures.append("character did not hand its footstep set to the voice")
+
+	var played_streams: Array[AudioStream] = []
+	player.sfx.played.connect(func(kind: StringName) -> void:
+		if kind == &"footstep":
+			played_streams.append(_last_started_stream(player)))
+
+	for _i in 3:
+		player.sfx.play_footstep()
+		await tree.physics_frame
+
+	if played_streams.size() != 3:
+		failures.append("only %d of 3 footsteps played" % played_streams.size())
+	elif played_streams != [first, second, first]:
+		failures.append("footsteps must alternate 1, 2, 1 instead of randomizing")
+
+	# Steps are tied to ground covered, so standing still stays quiet.
+	var standing := await _count_steps(player, tree, 0)
+	if standing != 0:
+		failures.append("standing still produced %d footsteps" % standing)
+
+	# 3 seconds of running at the forest speed must produce several steps.
+	var running := await _count_steps(player, tree, 180)
+	if running < 6:
+		failures.append("3 s of running produced only %d footsteps" % running)
+
+	_cleanup(player)
+	await tree.physics_frame
+
+
+## Stream that the most recent `_play` handed to a pooled player.
+func _last_started_stream(player: Node) -> AudioStream:
+	var sfx = player.sfx
+	var players: Array = sfx._players
+	if players.is_empty():
+		return null
+	var index: int = (sfx._next_player - 1 + players.size()) % players.size()
+	return players[index].stream
+
+
+func _count_steps(player: Node, tree: SceneTree, frames: int) -> int:
+	var counter: Array[StringName] = []
+	player.sfx.played.connect(func(kind: StringName) -> void:
+		if kind == &"footstep":
+			counter.append(kind))
+	for _frame in frames:
+		player.move_2d(Vector2(1, 0), 1.0 / 60.0)
+		await tree.physics_frame
+	return counter.size()
 
 
 func _tres_files(dir_path: String) -> Array[String]:

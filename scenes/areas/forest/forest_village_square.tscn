@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://422o6r364r0n" path="res://assets/backgrounds/forest/fountain_overlay.png" id="4_i6ujb"]
 [ext_resource type="Script" uid="uid://dkoyd83om8vgr" path="res://scripts/world/depth_overlay.gd" id="5_depth"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="6_music"]
+[ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="7_footsteps"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -18,6 +19,7 @@ fill_from = Vector2(0.49565217, 0.526087)
 [node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
 area_name = "Forest - Village Square"
 background_music = ExtResource("6_music")
+footsteps = ExtResource("7_footsteps")
 spawn_x_ratio = 0.3
 exit_right_scene = "res://scenes/areas/forest/forest_fight.tscn"
 
