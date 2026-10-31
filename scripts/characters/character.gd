@@ -66,6 +66,8 @@ var _is_moving := false
 var _is_blocking := false
 ## Timestamp of the last shield clang, so one frame of multiple hits clangs once.
 var _block_sfx_msec := -1000
+## Ground covered since the last footstep, in world pixels.
+var _step_distance := 0.0
 var _is_dead := false
 var _flash_tween: Tween
 var _death_tween: Tween
@@ -130,6 +132,7 @@ func move_2d(direction: Vector2, delta: float) -> void:
 		var step := direction.normalized() * speed * delta
 		step.y *= depth_speed_ratio
 		position += step
+		_advance_footsteps(step.length())
 		if anim_player.current_animation != "run":
 			anim_player.play("run", 0.08)
 	elif _is_moving:
@@ -472,6 +475,26 @@ func _play_death_fade() -> void:
 		_death_tween.kill()
 	_death_tween = create_tween()
 	_death_tween.tween_property(skeleton, "modulate", Color(1.0, 1.0, 1.0, 0.25), 0.45)
+
+
+## Hands the surface over from the scene. Steps stay silent until a set arrives.
+func set_footsteps(set: FootstepSet) -> void:
+	_step_distance = 0.0
+	if sfx != null:
+		sfx.footsteps = set
+
+
+## Plays the next step once the character has covered a stride of ground. Distance
+## rather than time keeps the cadence honest at any speed.
+func _advance_footsteps(distance: float) -> void:
+	if sfx == null or sfx.footsteps == null:
+		return
+	var stride := maxf(1.0, sfx.footsteps.stride_pixels)
+	_step_distance += distance
+	if _step_distance < stride:
+		return
+	_step_distance -= stride
+	sfx.play_footstep()
 
 
 ## Every swing in a chain gets its own voice, so a fast three-hit combo is not

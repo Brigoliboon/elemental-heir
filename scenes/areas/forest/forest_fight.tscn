@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cxgvljscnbjb2" path="res://assets/backgrounds/forest/forest_fight.png" id="2_bg"]
 [ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="3_k40ib"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="4_music"]
+[ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="5_footsteps"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -20,6 +21,7 @@ radius = 97.89024
 [node name="ForestFight" unique_id=1225424177 instance=ExtResource("1_base")]
 area_name = "Forest - Deepwood Clearing"
 background_music = ExtResource("4_music")
+footsteps = ExtResource("5_footsteps")
 background_texture = ExtResource("2_bg")
 ground_far_px = 420.0
 ground_near_px = 680.0

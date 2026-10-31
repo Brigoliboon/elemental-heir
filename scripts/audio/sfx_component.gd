@@ -19,12 +19,16 @@ const POOL_SIZE := 4
 static var _last_idle_msec := -1_000_000
 
 var sfx_set: SfxSet
+## Surface the owner walks on. Set by the scene; null keeps footsteps silent.
+var footsteps: FootstepSet
 ## Idle vocalizations pause while the owner is moving, attacking or dead.
 var idle_enabled := true
 
 var _players: Array[AudioStreamPlayer2D] = []
 var _next_player := 0
 var _idle_timer := 0.0
+## Next index in the footstep sequence, so steps alternate 1, 2, 1, 2 ...
+var _footstep_index := 0
 ## Last stream played per kind, so a variant does not repeat back to back.
 var _last_picked: Dictionary = {}
 ## Kinds already reported as missing, so a mob that attacks every second does not
@@ -60,6 +64,18 @@ func play_death() -> void:
 	# A corpse does not keep vocalizing.
 	idle_enabled = false
 	_play_variant(&"death")
+
+
+## Plays the next step in the surface's sequence, wrapping. Steps are sequential
+## rather than random so a two-sample gait does not repeat the same foot.
+func play_footstep() -> void:
+	if footsteps == null:
+		return
+	var stream := footsteps.stream_at(_footstep_index)
+	_footstep_index = (_footstep_index + 1) % maxi(1, footsteps.variant_count())
+	if stream == null:
+		return
+	_play(&"footstep", stream, footsteps.volume_db, footsteps.pitch_jitter)
 
 
 func _process(delta: float) -> void:
@@ -98,10 +114,10 @@ func _play_variant(kind: StringName) -> void:
 	var stream := sfx_set.pick(kind, _last_picked.get(kind))
 	if stream != null:
 		_last_picked[kind] = stream
-	_play(kind, stream)
+	_play(kind, stream, sfx_set.volume_db, sfx_set.pitch_jitter)
 
 
-func _play(kind: StringName, stream: AudioStream) -> void:
+func _play(kind: StringName, stream: AudioStream, volume_db: float, jitter: float) -> void:
 	if stream == null:
 		_warn_missing(kind)
 		return
@@ -113,8 +129,7 @@ func _play(kind: StringName, stream: AudioStream) -> void:
 	var player := _players[_next_player]
 	_next_player = (_next_player + 1) % _players.size()
 	player.stream = stream
-	player.volume_db = sfx_set.volume_db if sfx_set != null else 0.0
-	var jitter := sfx_set.pitch_jitter if sfx_set != null else 0.0
+	player.volume_db = volume_db
 	player.pitch_scale = randf_range(1.0 - jitter, 1.0 + jitter)
 	player.play()
 	played.emit(kind)

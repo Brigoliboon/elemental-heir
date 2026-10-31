@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FootstepSet" format=3]
+
+[ext_resource type="Script" path="res://resources/audio/footstep_set.gd" id="1_footsteps"]
+[ext_resource type="AudioStream" path="res://assets/audio/entities/footstep-stone-1.mp3" id="2_stone1"]
+[ext_resource type="AudioStream" path="res://assets/audio/entities/footstep-stone-2.mp3" id="3_stone2"]
+
+[resource]
+script = ExtResource("1_footsteps")
+streams = Array[AudioStream]([ExtResource("2_stone1"), ExtResource("3_stone2")])
