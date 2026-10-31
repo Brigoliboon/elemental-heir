@@ -19,8 +19,8 @@ func run(tree: SceneTree) -> Array[String]:
 		await tree.process_frame
 		return failures
 
-	if mob.config.enemy_name != "Goblin":
-		failures.append("goblin.tres enemy_name should be 'Goblin'")
+	if mob.config.enemy_name != "Wolf":
+		failures.append("wolf.tres enemy_name should be 'Wolf'")
 	if mob.attack_damage != mob.config.attack_damage:
 		failures.append("mob attack damage must come from EnemyData")
 	if mob.current_health != mob.config.max_health:

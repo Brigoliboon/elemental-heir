@@ -5,7 +5,7 @@
 Migrate the character and enemy entity architecture so each entity is defined by:
 
 1. A data blueprint resource (`CharacterData`, `EnemyData`).
-2. A `.tres` configuration instance (`warrior.tres`, `goblin.tres`).
+2. A `.tres` configuration instance (`warrior.tres`, `wolf.tres`).
 3. A saved entity scene (`warrior.tscn`, `mob.tscn`).
 
 The UI, branding, theme (Cinzel dark stone) and existing rig art are unchanged.
@@ -31,7 +31,7 @@ fields are consumed where the current runtime already exposes them.
 - `EnemyData` remains a stats-only blueprint.
 - `mob.gd` exports `EnemyData`, initializes health/damage from it and exposes
   `take_damage()`.
-- `mob.tscn` references `goblin.tres`, uses the project physics layers
+- `mob.tscn` references `wolf.tres`, uses the project physics layers
   (Enemies = 3, Player = 2, World = 1) and its attack area detects the Player
   layer.
 - The attack clip is non-looping so `animation_finished` fires.
@@ -60,7 +60,7 @@ fields are consumed where the current runtime already exposes them.
   - Replace inline player nodes in `area_base.tscn` and `warrior_rig_test.tscn`.
   - Test: `tests/test_player_entity.gd`.
 - [x] M3 - Enemy data wiring
-  - `mob.gd` exports `EnemyData`; `mob.tscn` references `goblin.tres`.
+  - `mob.gd` exports `EnemyData`; `mob.tscn` references `wolf.tres`.
   - Fix attack loop, physics layers and attack-area detection.
   - Remove unused `hostile-mob.gd`.
   - Test: `tests/test_mob_entity.gd`.
@@ -423,7 +423,7 @@ Split the runtime `Character` into small components so classes stay data-driven:
 
 ### M11 - Content and validation
 
-- Add enemies beyond the goblin using the same `EnemyData` + `mob.tscn` pattern; only data and sprite frames vary.
+- Add enemies beyond the wolf using the same `EnemyData` + `mob.tscn` pattern; only data and sprite frames vary.
 - Add attack/death/hurt feedback, drop tables and loot pickup.
 - Keep headless tests for: data resources load, all class rigs build, scenes have non-null data, hitboxes use the correct layers, depth order is monotonic.
 
