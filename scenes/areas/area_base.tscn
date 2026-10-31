@@ -93,10 +93,10 @@ texture_normal = ExtResource("5_tdiep")
 [node name="BlockButton" type="TextureButton" parent="HUD/UI" unique_id=1092987463]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 1433.0
-offset_top = 866.0
-offset_right = 1646.0
-offset_bottom = 1079.0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 263.0
+offset_bottom = 263.0
 texture_normal = ExtResource("6_ck6g8")
 
 [node name="BackButton" type="Button" parent="HUD/UI" unique_id=1609870667]
