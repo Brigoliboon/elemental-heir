@@ -90,7 +90,7 @@ func _ready() -> void:
 	combo = AttackCombo.new(anim_player, config)
 	combo.combo_ended.connect(_on_combo_ended)
 	if sfx != null:
-		combo.combo_started.connect(sfx.play_attack)
+		combo.hit_started.connect(_on_combo_hit_started)
 	render_scale = config.base_scale
 	_build_sword_hitbox()
 	_apply_scale()
@@ -455,6 +455,13 @@ func _play_death_fade() -> void:
 		_death_tween.kill()
 	_death_tween = create_tween()
 	_death_tween.tween_property(skeleton, "modulate", Color(1.0, 1.0, 1.0, 0.25), 0.45)
+
+
+## Every swing in a chain gets its own voice, so a fast three-hit combo is not
+## silent after the first press.
+func _on_combo_hit_started(_index: int) -> void:
+	if sfx != null:
+		sfx.play_attack()
 
 
 func _on_combo_ended() -> void:

@@ -5,6 +5,10 @@ extends RefCounted
 
 signal combo_started
 signal combo_ended
+## Fires at the start of every swing, including the queued follow-ups in a chain.
+## Sound and hitbox timing hang off this, not off `combo_started`, which only
+## marks the first press of a chain.
+signal hit_started(index: int)
 
 var _player: AnimationPlayer
 var _config: CharacterData
@@ -45,6 +49,7 @@ func _start(index: int) -> void:
 	_index = index
 	_queued = false
 	_player.play(_config.attacks[index - 1].id, _config.attack_blend)
+	hit_started.emit(index)
 
 
 ## Stops the chain immediately (death, respawn, scene transitions).
