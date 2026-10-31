@@ -311,8 +311,27 @@ func _on_health_changed(current: int, maximum: int) -> void:
 func _on_health_damaged(amount: int, _remaining: int) -> void:
 	_flash_damage()
 	damaged.emit(amount)
+	if amount > 0:
+		_spawn_damage_number(amount, Color(1.0, 0.9, 0.3))
 	if sfx != null:
 		sfx.play_hurt()
+
+
+func _spawn_damage_number(amount: int, color: Color) -> void:
+	var scene := load("res://scenes/ui/damage_number.tscn") as PackedScene
+	if scene == null:
+		return
+	var node := scene.instantiate() as Node2D
+	if node == null:
+		return
+	var parent := get_parent()
+	if parent == null:
+		parent = get_tree().current_scene
+	if parent == null:
+		parent = get_tree().root
+	parent.add_child(node)
+	node.global_position = global_position + Vector2(0, -20)
+	node.setup(amount, color)
 
 
 func _on_health_died() -> void:
