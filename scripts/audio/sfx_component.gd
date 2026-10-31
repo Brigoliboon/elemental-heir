@@ -120,17 +120,19 @@ func _play(kind: StringName, stream: AudioStream) -> void:
 	played.emit(kind)
 
 
-## A set was assigned but this slot was left empty, which is almost always a
-## forgotten assignment rather than intentional silence. Say so once, loudly
+## Silence is the hardest failure to spot, so every empty slot says so once, loudly
 ## enough to show up in `adb logcat` on a device.
 func _warn_missing(kind: StringName) -> void:
-	if sfx_set == null or _missing_warned.has(kind):
+	if _missing_warned.has(kind):
 		return
 	_missing_warned[kind] = true
 	var owner_path := String(name)
 	var owner := get_parent()
 	if owner != null:
 		owner_path = "%s/%s" % [owner.name, name]
+	if sfx_set == null:
+		push_warning("SFX: %s wanted '%s' but has no SfxSet bound" % [owner_path, kind])
+		return
 	push_warning("SFX: no '%s' stream on %s for %s" % [kind, sfx_set.resource_path, owner_path])
 
 
