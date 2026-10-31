@@ -37,16 +37,11 @@ area_name = "Forest - Guild"
 background_texture = SubResource("CompressedTexture2D_1rjxe")
 background_music = ExtResource("3_music")
 ground_far_px = 350.0
+ground_near_px = 1500.0
 spawn_depth = 0.981
 spawn_x_ratio = 0.348
 far_character_scale = 1.8
 near_character_scale = 3.0
-
-[node name="LightSource" type="DirectionalLight2D" parent="." index="0" unique_id=1171029867]
-position = Vector2(985, -226)
-color = Color(0.1430535, 0.08296466, 0.0069741197, 1)
-shadow_enabled = true
-shadow_color = Color(0, 0, 0, 0.9019608)
 
 [node name="Background" parent="." index="1" unique_id=1944799289]
 texture = SubResource("CompressedTexture2D_1rjxe")
