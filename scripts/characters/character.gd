@@ -64,6 +64,8 @@ var current_health: int:
 var _manual_animation := "idle"
 var _is_moving := false
 var _is_blocking := false
+## Timestamp of the last shield clang, so one frame of multiple hits clangs once.
+var _block_sfx_msec := -1000
 var _is_dead := false
 var _flash_tween: Tween
 var _death_tween: Tween
@@ -266,15 +268,30 @@ func toggle_facing() -> void:
 ## mitigated by this character's defence, then reduced by the guard; i-frames and
 ## death live on Health.
 func take_damage(amount: int, _knockback: Vector2 = Vector2.ZERO) -> void:
-	if amount <= 0 or health == null or not health.is_alive() or health.is_invulnerable():
+	if amount <= 0 or health == null or not health.is_alive():
+		return
+	# Give block feedback even when i-frames swallow the hit: the shield is being
+	# struck either way, and a crowd of enemies otherwise makes most guards silent.
+	if _is_blocking and config != null:
+		_play_block_feedback()
+	if health.is_invulnerable():
 		return
 	if stats != null:
 		amount = Damage.final_damage(float(amount), stats.get_stat(Stats.DEFENCE))
 	if _is_blocking and config != null:
 		amount = maxi(0, int(float(amount) * (1.0 - config.block_damage_reduction)))
-		if sfx != null:
-			sfx.play_block()
 	health.take_damage(amount)
+
+
+## One clang per impact, even if several enemies connect on the same frame.
+func _play_block_feedback() -> void:
+	if sfx == null:
+		return
+	var now := Time.get_ticks_msec()
+	if now - _block_sfx_msec < 60:
+		return
+	_block_sfx_msec = now
+	sfx.play_block()
 
 
 func heal(amount: int) -> int:
