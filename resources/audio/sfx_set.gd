@@ -33,7 +33,8 @@ class_name SfxSet
 @export_range(0.0, 0.5, 0.01) var pitch_jitter := 0.05
 
 
-## Shortest idle delay, with the range normalized so min never exceeds max.
+## Shortest and longest idle delay, sorted so min never exceeds max.
 func idle_delay_bounds() -> Vector2:
 	var low := maxf(0.0, minf(idle_delay_min, idle_delay_max))
-	return Vector2(low, maxf(low, idle_delay_max))
+	var high := maxf(low, maxf(idle_delay_min, idle_delay_max))
+	return Vector2(low, high)
