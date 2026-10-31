@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dotkiua53ix6v"
-path="res://.godot/imported/forest_guild_interior.jpg-580c352a1ed67b73d41bbe38baed80eb.ctex"
+uid="uid://crdwrp1o3yudn"
+path="res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/backgrounds/forest/forest_guild_interior.jpg"
-dest_files=["res://.godot/imported/forest_guild_interior.jpg-580c352a1ed67b73d41bbe38baed80eb.ctex"]
+source_file="res://assets/backgrounds/forest/forest_guild_interior.png"
+dest_files=["res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"]
 
 [params]
 
