@@ -178,3 +178,4 @@ color = Color(0.57856774, 0.41206244, 0.24016002, 1)
 energy = 0.3
 blend_mode = 1
 max_distance = 3343.0
+shadow_enabled = true
