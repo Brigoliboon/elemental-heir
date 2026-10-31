@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1rjxe"]
-load_path = "res://.godot/imported/forest_guild_interior.jpg-580c352a1ed67b73d41bbe38baed80eb.ctex"
+load_path = "res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(2501, 72.75)
