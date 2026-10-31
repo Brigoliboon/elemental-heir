@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://cxrrsyk55qqty" path="res://entities/characters/warrior.tscn" id="3_player"]
 [ext_resource type="Texture2D" uid="uid://cujvxnmo3axkt" path="res://assets/backgrounds/forest/forest_village_square.png" id="4_bg"]
 [ext_resource type="Script" uid="uid://blhw1q86j7n4x" path="res://scripts/ui/stats_panel.gd" id="5_stats_panel"]
+[ext_resource type="Texture2D" uid="uid://buylna3m0qe01" path="res://assets/ui/hud/passive-btn.png" id="5_tdiep"]
+[ext_resource type="Texture2D" uid="uid://ck6gfdaaeuhag" path="res://assets/ui/hud/block-btn.png" id="6_ck6g8"]
 [ext_resource type="Script" uid="uid://bap6cwhve1ff2" path="res://scripts/ui/inventory_panel.gd" id="6_inventory_panel"]
 [ext_resource type="Script" uid="uid://c6vu5yvbiavks" path="res://scripts/ui/virtual_joystick.gd" id="7_joystick"]
 [ext_resource type="Texture2D" uid="uid://o7whyoql47ea" path="res://assets/ui/hud/joystick_frame.png" id="8_joystick_frame"]
@@ -80,6 +82,22 @@ theme_override_font_sizes/font_size = 32
 text = "Forest Village Square"
 horizontal_alignment = 1
 
+[node name="PassiveButton" type="TextureButton" parent="HUD/UI" unique_id=1660898053]
+layout_mode = 0
+offset_left = 1671.0
+offset_top = 626.0
+offset_right = 1963.0
+offset_bottom = 918.0
+texture_normal = ExtResource("5_tdiep")
+
+[node name="BlockButton(new,rename later)" type="TextureButton" parent="HUD/UI" unique_id=1092987463]
+layout_mode = 0
+offset_left = 1405.0
+offset_top = 863.0
+offset_right = 1692.0
+offset_bottom = 1150.0
+texture_normal = ExtResource("6_ck6g8")
+
 [node name="BackButton" type="Button" parent="HUD/UI" unique_id=1609870667]
 unique_name_in_owner = true
 layout_mode = 1
@@ -112,9 +130,9 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 94.0
-offset_top = -356.0
-offset_right = 406.0
-offset_bottom = -78.0
+offset_top = -335.0
+offset_right = 435.0
+offset_bottom = -34.0
 grow_vertical = 0
 script = ExtResource("7_joystick")
 frame_texture = ExtResource("8_joystick_frame")
@@ -129,12 +147,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -295.0
-offset_top = -289.0
-offset_right = -60.0
-offset_bottom = -68.0
+offset_left = -379.0
+offset_top = -333.0
+offset_right = -69.0
+offset_bottom = -64.0
 grow_horizontal = 0
 grow_vertical = 0
+rotation = 0.07679449
 tooltip_text = "Attack"
 texture_normal = ExtResource("13_attack_btn")
 ignore_texture_size = true
@@ -149,10 +168,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -568.0
-offset_top = -129.0
-offset_right = -368.0
-offset_bottom = -29.0
+offset_left = -782.0
+offset_top = -189.0
+offset_right = -582.0
+offset_bottom = -89.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Block"
