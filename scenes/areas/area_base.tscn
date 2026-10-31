@@ -84,19 +84,19 @@ horizontal_alignment = 1
 
 [node name="PassiveButton" type="TextureButton" parent="HUD/UI" unique_id=1660898053]
 layout_mode = 0
-offset_left = 1671.0
-offset_top = 626.0
-offset_right = 1963.0
-offset_bottom = 918.0
+offset_left = 1682.0
+offset_top = 668.0
+offset_right = 1897.0
+offset_bottom = 883.0
 texture_normal = ExtResource("5_tdiep")
 
 [node name="BlockButton" type="TextureButton" parent="HUD/UI" unique_id=1092987463]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 1000.0
-offset_top = 480.0
-offset_right = 1287.0
-offset_bottom = 767.0
+offset_left = 1433.0
+offset_top = 866.0
+offset_right = 1646.0
+offset_bottom = 1079.0
 texture_normal = ExtResource("6_ck6g8")
 
 [node name="BackButton" type="Button" parent="HUD/UI" unique_id=1609870667]
@@ -148,10 +148,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -379.0
-offset_top = -333.0
-offset_right = -69.0
-offset_bottom = -64.0
+offset_left = -398.00012
+offset_top = -352.00006
+offset_right = -88.00012
+offset_bottom = -83.00006
 grow_horizontal = 0
 grow_vertical = 0
 rotation = 0.07679449
