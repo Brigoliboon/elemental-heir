@@ -16,6 +16,7 @@ func run(tree: SceneTree) -> Array[String]:
 	_check_variant_pick(failures)
 	await _check_mob_triggers(tree, failures)
 	await _check_player_triggers(tree, failures)
+	await _check_combo_spam(tree, failures)
 	return failures
 
 
@@ -164,6 +165,33 @@ func _check_player_triggers(tree: SceneTree, failures: Array[String]) -> void:
 	await tree.physics_frame
 	if events.has(&"block"):
 		failures.append("an unblocked hit must not play the block sound")
+
+	_cleanup(player)
+	await tree.physics_frame
+
+
+## Hammering the attack button chains swings; every swing in the chain needs its
+## own sound, not just the first press that opened the combo.
+func _check_combo_spam(tree: SceneTree, failures: Array[String]) -> void:
+	var scene := load(WARRIOR_SCENE) as PackedScene
+	if scene == null:
+		failures.append("warrior scene did not load")
+		return
+	var player := scene.instantiate()
+	tree.root.add_child(player)
+	await tree.physics_frame
+
+	var swings: Array[StringName] = []
+	player.sfx.played.connect(func(kind: StringName) -> void:
+		if kind == &"attack":
+			swings.append(kind))
+
+	for _frame in 300:
+		player.attack()
+		await tree.physics_frame
+
+	if swings.size() < 3:
+		failures.append("a spammed combo played %d swing sounds, expected one per hit" % swings.size())
 
 	_cleanup(player)
 	await tree.physics_frame
