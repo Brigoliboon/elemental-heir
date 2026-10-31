@@ -255,6 +255,8 @@ func _respawn_after_delay() -> void:
 
 func _layout_background() -> void:
 	var view := get_viewport_rect().size
+	if view.x <= 0.0 or view.y <= 0.0:
+		return
 	if background_texture == null:
 		push_error("%s has no background_texture" % name)
 		world_width = view.x
@@ -262,7 +264,7 @@ func _layout_background() -> void:
 		ground_near_y = view.y * 0.9
 		return
 	var tex_size := background_texture.get_size()
-	var bg_scale := maxf(view.y / tex_size.y, view.x / tex_size.x)
+	var bg_scale := maxf(1.0, maxf(view.y / tex_size.y, view.x / tex_size.x))
 	background.texture = background_texture
 	background.centered = false
 	background.scale = Vector2(bg_scale, bg_scale)
@@ -271,6 +273,10 @@ func _layout_background() -> void:
 	world_width = tex_size.x * bg_scale
 	ground_far_y = background.position.y + ground_far_px * bg_scale
 	ground_near_y = background.position.y + ground_near_px * bg_scale
+	if ground_near_y < ground_far_y:
+		var tmp := ground_far_y
+		ground_far_y = ground_near_y
+		ground_near_y = tmp
 	if background_props != null:
 		# Props and obstacle footprints are authored in design-world pixels.
 		# Keep them locked to the same scale and bottom anchor as the background.
