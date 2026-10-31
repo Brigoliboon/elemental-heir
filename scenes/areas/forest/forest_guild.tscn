@@ -4,15 +4,21 @@
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="4_g1pyl"]
 [ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
+[ext_resource type="Texture2D" uid="uid://br4jjxh0vrpw2" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
+[ext_resource type="Texture2D" uid="uid://6pq35c7msw5i" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
+[ext_resource type="Texture2D" uid="uid://bkghps3b5ejou" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1rjxe"]
 load_path = "res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
-size = Vector2(1905.25, 72.75)
+size = Vector2(1919.625, 72.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vchhr"]
-size = Vector2(464.5, 147.5)
+size = Vector2(549, 147.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iauxt"]
+size = Vector2(730, 14)
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -27,7 +33,10 @@ fill_from = Vector2(0.49565217, 0.526087)
 area_name = "Forest - Guild"
 background_texture = SubResource("CompressedTexture2D_1rjxe")
 background_music = ExtResource("3_music")
-far_character_scale = 2.0
+ground_far_px = 350.0
+spawn_depth = 0.981
+spawn_x_ratio = 0.348
+far_character_scale = 1.8
 near_character_scale = 3.0
 
 [node name="LightSource" type="DirectionalLight2D" parent="." index="0" unique_id=1171029867]
@@ -47,14 +56,28 @@ script = ExtResource("4_transition")
 target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition" index="0" unique_id=9999102]
-position = Vector2(-1449.375, -1297)
+visible = false
+position = Vector2(-1451, -1313)
 shape = SubResource("RectangleShape2D_exit")
 
 [node name="CollisionAreas" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="1" unique_id=708295572]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="0" unique_id=547705695]
-position = Vector2(755, 854)
+position = Vector2(740.5, 854)
 shape = SubResource("RectangleShape2D_vchhr")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BackgroundProps/CollisionAreas" index="1" unique_id=1891683143]
+polygon = PackedVector2Array(990, 856, 1056, 857, 1072, 831, 1260, 874, 1256, 902, 1347, 946, 1426, 948, 1494, 982, 1686, 1044, 1702, 713, 1352, 691, 982, 686)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="BackgroundProps/CollisionAreas" index="2" unique_id=1528427730]
+position = Vector2(-1.000031, 174.52956)
+scale = Vector2(1.0000002, 0.81379044)
+polygon = PackedVector2Array(395, 863.0459, 402, 745.26373, 491, 509.6993, 549, 441, 549, 441, 549, 441, 551, 719, 453, 900)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="3" unique_id=2088744703]
+position = Vector2(916, 551)
+shape = SubResource("RectangleShape2D_iauxt")
 
 [node name="LightRays" type="CanvasGroup" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="2" unique_id=1290244453]
 
@@ -133,16 +156,29 @@ texture = SubResource("GradientTexture2D_h8rfs")
 texture_scale = 4.14
 script = ExtResource("4_g1pyl")
 
+[node name="LaraStanding" type="Sprite2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="3" unique_id=765076689]
+position = Vector2(731.05865, 630.8797)
+scale = Vector2(0.32313663, 0.31542736)
+texture = ExtResource("5_pverb")
+
+[node name="CanvasGroup" type="CanvasGroup" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="4" unique_id=2073082363]
+
+[node name="OverlaySet" type="Sprite2D" parent="BackgroundProps/CanvasGroup" index="0" unique_id=1361445948]
+position = Vector2(823.6252, 568.5)
+scale = Vector2(1.5086205, 1.4918793)
+texture = ExtResource("5_h8rfs")
+
+[node name="Railings" type="Sprite2D" parent="BackgroundProps/CanvasGroup" index="1" unique_id=1965030840]
+z_index = 60
+position = Vector2(823.6252, 568.5)
+scale = Vector2(1.5086205, 1.4918793)
+texture = ExtResource("7_3btxc")
+
 [node name="Player" parent="." index="3" unique_id=198134559]
-position = Vector2(1081, 852)
+z_index = -1
+position = Vector2(293, 741)
 
-[node name="Camera" parent="." index="4" unique_id=2026197166]
-visible = false
-
-[node name="HUD" parent="." index="5" unique_id=1894165697]
-visible = false
-
-[node name="UI" parent="HUD" index="0" unique_id=1048333084]
+[node name="UI" parent="HUD" parent_id_path=PackedInt32Array(1894165697) index="0" unique_id=1048333084]
 metadata/_edit_use_anchors_ = true
 
 [node name="AreaLabel" parent="HUD/UI" index="0" unique_id=421268983]
