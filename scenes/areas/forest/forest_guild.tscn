@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_guild_interior.jpg" id="2_guild_bg"]
+[ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
+
+[node name="ForestGuild" instance=ExtResource("1_base")]
+area_name = "Forest - Guild"
+background_music = ExtResource("3_music")
+background_texture = ExtResource("2_guild_bg")
+
+[node name="Background" parent="." index="0"]
+texture = ExtResource("2_guild_bg")
