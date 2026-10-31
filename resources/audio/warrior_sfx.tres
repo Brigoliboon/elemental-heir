@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SfxSet" format=3]
+
+[ext_resource type="Script" path="res://resources/audio/sfx_set.gd" id="1_sfxset"]
+[ext_resource type="AudioStream" path="res://assets/audio/entities/characters/sword-swing-1.mp3" id="2_swing1"]
+[ext_resource type="AudioStream" path="res://assets/audio/entities/characters/sword-swing-2.mp3" id="3_swing2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/item/shield-block-1.wav" id="4_block1"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/item/shield-block-2.wav" id="5_block2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/item/shield-block-3.wav" id="6_block3"]
+
+[resource]
+script = ExtResource("1_sfxset")
+attack = Array[AudioStream]([ExtResource("2_swing1"), ExtResource("3_swing2")])
+block = Array[AudioStream]([ExtResource("4_block1"), ExtResource("5_block2"), ExtResource("6_block3")])

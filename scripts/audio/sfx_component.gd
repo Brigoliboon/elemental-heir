@@ -25,6 +25,8 @@ var idle_enabled := true
 var _players: Array[AudioStreamPlayer2D] = []
 var _next_player := 0
 var _idle_timer := 0.0
+## Last stream played per kind, so a variant does not repeat back to back.
+var _last_picked: Dictionary = {}
 ## Kinds already reported as missing, so a mob that attacks every second does not
 ## flood the log with the same warning.
 var _missing_warned: Dictionary = {}
@@ -38,25 +40,30 @@ func _ready() -> void:
 ## Attaches a voice and restarts the idle schedule.
 func bind(new_set: SfxSet) -> void:
 	sfx_set = new_set
+	_last_picked.clear()
 	_schedule_idle()
 
 
 func play_attack() -> void:
-	_play(&"attack", sfx_set.attack if sfx_set != null else null)
+	_play_variant(&"attack")
 
 
 func play_hurt() -> void:
-	_play(&"hurt", sfx_set.hurt if sfx_set != null else null)
+	_play_variant(&"hurt")
+
+
+func play_block() -> void:
+	_play_variant(&"block")
 
 
 func play_death() -> void:
 	# A corpse does not keep vocalizing.
 	idle_enabled = false
-	_play(&"death", sfx_set.death if sfx_set != null else null)
+	_play_variant(&"death")
 
 
 func _process(delta: float) -> void:
-	if sfx_set == null or sfx_set.idle == null:
+	if sfx_set == null or not sfx_set.has_streams(&"idle"):
 		_idle_timer = 0.0
 		return
 	if _idle_timer <= 0.0:
@@ -71,16 +78,27 @@ func _process(delta: float) -> void:
 	if now - _last_idle_msec < int(maxf(0.0, sfx_set.idle_shared_cooldown) * 1000.0):
 		return
 	_last_idle_msec = now
-	_play(&"idle", sfx_set.idle)
+	_play_variant(&"idle")
 
 
 ## Picks the next gap from the set's randomized range.
 func _schedule_idle() -> void:
-	if sfx_set == null or sfx_set.idle == null:
+	if sfx_set == null or not sfx_set.has_streams(&"idle"):
 		_idle_timer = 0.0
 		return
 	var bounds := sfx_set.idle_delay_bounds()
 	_idle_timer = randf_range(bounds.x, bounds.y)
+
+
+## Chooses a random variant for `kind`, avoiding an immediate repeat.
+func _play_variant(kind: StringName) -> void:
+	if sfx_set == null:
+		_warn_missing(kind)
+		return
+	var stream := sfx_set.pick(kind, _last_picked.get(kind))
+	if stream != null:
+		_last_picked[kind] = stream
+	_play(kind, stream)
 
 
 func _play(kind: StringName, stream: AudioStream) -> void:
