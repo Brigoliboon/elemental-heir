@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dkoyd83om8vgr" path="res://scripts/world/depth_overlay.gd" id="5_depth"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="6_music"]
 [ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="7_footsteps"]
+[ext_resource type="Script" path="res://scripts/areas/scene_transition.gd" id="8_transition"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -15,6 +16,10 @@ colors = PackedColorArray(1, 1, 1, 1, 0.042168677, 0.042168677, 0.042168677, 1, 
 gradient = SubResource("Gradient_i6ujb")
 fill = 1
 fill_from = Vector2(0.49565217, 0.526087)
+
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_transition"]
+size = Vector2(120, 120)
 
 [node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
 area_name = "Forest - Village Square"
@@ -132,7 +137,16 @@ limit_right = 10000000
 limit_bottom = 10000000
 
 
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." index="5" unique_id=699851553]
+[node name="SceneTransition" type="Area2D" parent="." index="4" unique_id=9999001]
+position = Vector2(900, 500)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("8_transition")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTransition" unique_id=9999002]
+shape = SubResource("RectangleShape2D_transition")
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." index="5"] unique_id=699851553]
 position = Vector2(1782, 163)
 color = Color(0.57856774, 0.41206244, 0.24016002, 1)
 energy = 0.3
