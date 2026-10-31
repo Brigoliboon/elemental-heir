@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="SfxSet" format=3]
+[gd_resource type="Resource" script_class="SfxSet" format=3 uid="uid://c13qnot5lj7o6"]
 
-[ext_resource type="Script" path="res://resources/audio/sfx_set.gd" id="1_sfxset"]
-[ext_resource type="AudioStream" path="res://assets/audio/entities/monsters/wolf-attack.mp3" id="2_attack"]
-[ext_resource type="AudioStream" path="res://assets/audio/entities/monsters/wolf-hurt.mp3" id="3_hurt"]
+[ext_resource type="Script" uid="uid://1g8cjswiespe" path="res://resources/audio/sfx_set.gd" id="1_sfxset"]
+[ext_resource type="AudioStream" uid="uid://b7x2n7nwqv4pi" path="res://assets/audio/entities/monsters/wolf-attack.mp3" id="2_attack"]
+[ext_resource type="AudioStream" uid="uid://b0guhjuadh3ll" path="res://assets/audio/entities/monsters/wolf-hurt.mp3" id="3_hurt"]
 
 [resource]
 script = ExtResource("1_sfxset")
