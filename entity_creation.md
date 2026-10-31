@@ -14,12 +14,12 @@ class_name EnemyData
 @export var attack_damage: int = 15
 Use code with caution.
 
-Step 3: Create your Configuration File (wolf.tres)
+Step 3: Create your Configuration File (goblin.tres)
 
 1. Right-click your resources folder in the FileSystem dock, select New -> Resource...
 2. Search for EnemyData, select it, and click Create.
-3. Name the file wolf.tres and click Save.
-4. Click wolf.tres. In the right-side Inspector dock, fill out your values (Name: Wolf, Health: 60, Speed: 220, Damage: 15). Save it.
+3. Name the file goblin.tres and click Save.
+4. Click goblin.tres. In the right-side Inspector dock, fill out your values (Name: Goblin, Health: 60, Speed: 220, Damage: 15). Save it.
 
 Step 4: Create and Save the Node Layout (mob.tscn)
 
