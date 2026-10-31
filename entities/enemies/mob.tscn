@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dognuqaltc7fd"]
 
 [ext_resource type="Script" uid="uid://4yd5ihrgkhry" path="res://entities/enemies/mob.gd" id="1_mob"]
-[ext_resource type="Resource" uid="uid://c2rgw3x6hsdbt" path="res://resources/entities/wolf.tres" id="2_wolf"]
+[ext_resource type="Resource" uid="uid://c2rgw3x6hsdbt" path="res://resources/entities/goblin.tres" id="2_goblin"]
 [ext_resource type="Script" uid="uid://bojpu0hvd8w8c" path="res://scripts/combat/hitbox.gd" id="3_hitbox"]
 [ext_resource type="Texture2D" uid="uid://bctdikjsdpc73" path="res://assets/monsters/forest/sprite/attack/1.png" id="3_wkyq3"]
 [ext_resource type="Texture2D" uid="uid://8uygvwxy5ug4" path="res://assets/monsters/forest/sprite/attack/3.png" id="4_dgew0"]
@@ -84,7 +84,7 @@ height = 282.0
 [node name="Mob" type="CharacterBody2D" unique_id=1876476869 groups=["enemies"]]
 collision_layer = 4
 script = ExtResource("1_mob")
-config = ExtResource("2_wolf")
+config = ExtResource("2_goblin")
 
 [node name="Health" type="Node" parent="." unique_id=2104440011]
 script = ExtResource("16_health")
