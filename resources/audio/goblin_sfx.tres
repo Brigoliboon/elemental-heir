@@ -6,5 +6,5 @@
 
 [resource]
 script = ExtResource("1_sfxset")
-attack = ExtResource("2_attack")
-hurt = ExtResource("3_hurt")
+attack = Array[AudioStream]([ExtResource("2_attack")])
+hurt = Array[AudioStream]([ExtResource("3_hurt")])

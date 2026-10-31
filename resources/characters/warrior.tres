@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ckq0eoatxumfo" path="res://resources/characters/character_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://d2lff1a3um7x4" path="res://scripts/characters/attack_data.gd" id="2_attack"]
+[ext_resource type="Resource" path="res://resources/audio/warrior_sfx.tres" id="3_sfx"]
 
 [sub_resource type="Resource" id="Resource_attack_1"]
 script = ExtResource("2_attack")
@@ -181,3 +182,4 @@ draw_order = {
 "upper_arm_r": 33
 }
 attacks = Array[ExtResource("2_attack")]([SubResource("Resource_attack_1"), SubResource("Resource_attack_2"), SubResource("Resource_attack_3")])
+sfx = ExtResource("3_sfx")

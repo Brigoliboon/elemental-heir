@@ -272,6 +272,8 @@ func take_damage(amount: int, _knockback: Vector2 = Vector2.ZERO) -> void:
 		amount = Damage.final_damage(float(amount), stats.get_stat(Stats.DEFENCE))
 	if _is_blocking and config != null:
 		amount = maxi(0, int(float(amount) * (1.0 - config.block_damage_reduction)))
+		if sfx != null:
+			sfx.play_block()
 	health.take_damage(amount)
 
 
