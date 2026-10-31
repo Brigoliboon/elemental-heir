@@ -1,28 +1,43 @@
 [gd_scene format=3 uid="uid://chctwwv5k1ot8"]
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
-[ext_resource type="Texture2D" uid="uid://dotkiua53ix6v" path="res://assets/backgrounds/forest/forest_guild_interior.jpg" id="2_guild_bg"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
-[ext_resource type="Script" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
+[ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1rjxe"]
+load_path = "res://.godot/imported/forest_guild_interior.jpg-580c352a1ed67b73d41bbe38baed80eb.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
-size = Vector2(200, 80)
+size = Vector2(2501, 72.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vchhr"]
 size = Vector2(1159, 359)
 
 [node name="ForestGuild" unique_id=234380443 instance=ExtResource("1_base")]
 area_name = "Forest - Guild"
-background_texture = ExtResource("2_guild_bg")
+background_texture = SubResource("CompressedTexture2D_1rjxe")
 background_music = ExtResource("3_music")
 ground_near_px = 1500.0
 spawn_depth = 1.0
+spawn_x_ratio = 0.262
 near_character_scale = 3.0
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
-texture = ExtResource("2_guild_bg")
+texture = SubResource("CompressedTexture2D_1rjxe")
 
-[node name="CollisionAreas" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=708295572]
+[node name="SceneTransition" type="Area2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=9999101]
+position = Vector2(2411, 2404)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("4_transition")
+target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition" index="0" unique_id=9999102]
+position = Vector2(-79, -139.625)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="CollisionAreas" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="1" unique_id=708295572]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="0" unique_id=547705695]
 position = Vector2(1639.5, 1747)
@@ -32,21 +47,8 @@ shape = SubResource("RectangleShape2D_vchhr")
 polygon = PackedVector2Array(3516, 2138, 2675, 1919, 2672, 1862, 2440, 1772, 2232, 1843, 2103, 1867, 2047, 1514, 2044, 1140, 1319, 1143, 979, 1916, 844, 1582, 1154, 1077, 1181, 1081, 2621, 1079, 3649, 906)
 
 [node name="Player" parent="." index="2" unique_id=198134559]
-position = Vector2(2387, 2143)
+visible = false
+position = Vector2(663, 1752)
 
 [node name="Camera" parent="." index="3" unique_id=2026197166]
 visible = false
-
-[node name="HUD" parent="." index="4" unique_id=1894165697]
-visible = false
-
-
-[node name="SceneTransition" type="Area2D" parent="." unique_id=9999101]
-position = Vector2(2387, 2300)
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("4_transition")
-target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTransition" unique_id=9999102]
-shape = SubResource("RectangleShape2D_exit")
