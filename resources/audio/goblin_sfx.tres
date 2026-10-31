@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="SfxSet" format=3]
 
 [ext_resource type="Script" path="res://resources/audio/sfx_set.gd" id="1_sfxset"]
-[ext_resource type="AudioStream" path="res://assets/audio/btn-click.wav" id="2_click"]
+[ext_resource type="AudioStream" path="res://assets/audio/entities/monsters/wolf-attack.mp3" id="2_attack"]
+[ext_resource type="AudioStream" path="res://assets/audio/entities/monsters/wolf-hurt.mp3" id="3_hurt"]
 
 [resource]
 script = ExtResource("1_sfxset")
-attack = ExtResource("2_click")
-hurt = ExtResource("2_click")
-death = ExtResource("2_click")
+attack = ExtResource("2_attack")
+hurt = ExtResource("3_hurt")
