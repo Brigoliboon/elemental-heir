@@ -4,9 +4,9 @@
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="4_g1pyl"]
 [ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
-[ext_resource type="Texture2D" uid="uid://br4jjxh0vrpw2" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
-[ext_resource type="Texture2D" uid="uid://6pq35c7msw5i" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
-[ext_resource type="Texture2D" uid="uid://bkghps3b5ejou" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
+[ext_resource type="Texture2D" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1rjxe"]
 load_path = "res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"
