@@ -1,13 +1,37 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://chctwwv5k1ot8"]
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_guild_interior.jpg" id="2_guild_bg"]
+[ext_resource type="Texture2D" uid="uid://dotkiua53ix6v" path="res://assets/backgrounds/forest/forest_guild_interior.jpg" id="2_guild_bg"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
 
-[node name="ForestGuild" instance=ExtResource("1_base")]
-area_name = "Forest - Guild"
-background_music = ExtResource("3_music")
-background_texture = ExtResource("2_guild_bg")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vchhr"]
+size = Vector2(1159, 359)
 
-[node name="Background" parent="." index="0"]
+[node name="ForestGuild" unique_id=234380443 instance=ExtResource("1_base")]
+area_name = "Forest - Guild"
+background_texture = ExtResource("2_guild_bg")
+background_music = ExtResource("3_music")
+ground_near_px = 1500.0
+spawn_depth = 1.0
+near_character_scale = 3.0
+
+[node name="Background" parent="." index="0" unique_id=1944799289]
 texture = ExtResource("2_guild_bg")
+
+[node name="CollisionAreas" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=708295572]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="0" unique_id=547705695]
+position = Vector2(1639.5, 1747)
+shape = SubResource("RectangleShape2D_vchhr")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BackgroundProps/CollisionAreas" index="1" unique_id=1967930747]
+polygon = PackedVector2Array(3516, 2138, 2675, 1919, 2672, 1862, 2440, 1772, 2232, 1843, 2103, 1867, 2047, 1514, 2044, 1140, 1319, 1143, 979, 1916, 844, 1582, 1154, 1077, 1181, 1081, 2621, 1079, 3649, 906)
+
+[node name="Player" parent="." index="2" unique_id=198134559]
+position = Vector2(2387, 2143)
+
+[node name="Camera" parent="." index="3" unique_id=2026197166]
+visible = false
+
+[node name="HUD" parent="." index="4" unique_id=1894165697]
+visible = false
