@@ -166,6 +166,19 @@ func _check_player_triggers(tree: SceneTree, failures: Array[String]) -> void:
 	if events.has(&"block"):
 		failures.append("an unblocked hit must not play the block sound")
 
+	# A crowd of enemies lands hits inside the 0.5 s i-frame window; the guard is
+	# still being struck, so each one must clang.
+	events.clear()
+	player.block(true)
+	for _frame in 6:
+		await tree.physics_frame
+	for _hit in 3:
+		player.take_damage(10)
+		for _frame in 12:
+			await tree.physics_frame
+	if events.count(&"block") != 3:
+		failures.append("blocked hits during i-frames clanged %d times, expected 3" % events.count(&"block"))
+
 	_cleanup(player)
 	await tree.physics_frame
 
