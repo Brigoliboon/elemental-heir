@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://c465rkgj8ynv5" path="res://assets/ui/hud/bars/health-bar.png" id="11_health_bar"]
 [ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="12_exp_bar"]
 [ext_resource type="Texture2D" uid="uid://551e72sjqgvn" path="res://assets/ui/hud/attack-btn.png" id="13_attack_btn"]
-[ext_resource type="Texture2D" path="res://assets/ui/hud/map-btn.png" id="14_map_btn"]
+[ext_resource type="Texture2D" uid="uid://bnhje6hllmvw4" path="res://assets/ui/hud/map-btn.png" id="14_map_btn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats_panel"]
 bg_color = Color(0.05, 0.05, 0.07, 0.96)
@@ -40,7 +40,7 @@ scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_bg")
 centered = false
 
-[node name="BackgroundProps" type="Node2D" parent="."]
+[node name="BackgroundProps" type="Node2D" parent="." unique_id=208302050]
 
 [node name="Player" parent="." unique_id=198134559 instance=ExtResource("3_player")]
 position = Vector2(960, 600)
@@ -58,7 +58,8 @@ position_smoothing_speed = 8.0
 layer = 10
 
 [node name="UI" type="Control" parent="HUD" unique_id=1048333084]
-layout_mode = 0
+layout_mode = 3
+anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
@@ -98,10 +99,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -245.0
-offset_top = 47.0
-offset_right = -53.0
-offset_bottom = 239.0
+offset_left = -242.0
+offset_top = 73.0
+offset_right = -50.0
+offset_bottom = 265.0
 grow_horizontal = 0
 texture_normal = ExtResource("14_map_btn")
 
@@ -110,10 +111,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 36.0
-offset_top = -396.0
-offset_right = 396.0
-offset_bottom = -36.0
+offset_left = 188.0
+offset_top = -357.0
+offset_right = 463.0
+offset_bottom = -113.0
 grow_vertical = 0
 script = ExtResource("7_joystick")
 frame_texture = ExtResource("8_joystick_frame")
@@ -128,10 +129,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -304.0
-offset_top = -347.0
-offset_right = -69.0
-offset_bottom = -126.0
+offset_left = -295.0
+offset_top = -289.0
+offset_right = -60.0
+offset_bottom = -68.0
 grow_horizontal = 0
 grow_vertical = 0
 tooltip_text = "Attack"
@@ -168,10 +169,10 @@ theme_override_font_sizes/font_size = 20
 [node name="PlayerHealth" type="Control" parent="HUD/UI" unique_id=1763514042]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 36.0
-offset_top = 88.0
-offset_right = 396.0
-offset_bottom = 228.0
+offset_left = 109.0
+offset_top = 102.0
+offset_right = 555.0
+offset_bottom = 257.0
 mouse_filter = 2
 
 [node name="HealthFrame" type="TextureRect" parent="HUD/UI/PlayerHealth" unique_id=1763514046]

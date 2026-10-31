@@ -20,9 +20,9 @@ radius = 97.89024
 
 [node name="ForestFight" unique_id=1225424177 instance=ExtResource("1_base")]
 area_name = "Forest - Deepwood Clearing"
+background_texture = ExtResource("2_bg")
 background_music = ExtResource("4_music")
 footsteps = ExtResource("5_footsteps")
-background_texture = ExtResource("2_bg")
 ground_far_px = 420.0
 ground_near_px = 680.0
 spawn_x_ratio = 0.1
@@ -130,34 +130,6 @@ color = Color(0.32941177, 0.5254902, 0.54509807, 1)
 energy = 2.0
 texture = SubResource("GradientTexture2D_qjgrj")
 
-[node name="Player" parent="." index="1" unique_id=198134559]
-unique_name_in_owner = true
-position = Vector2(0, 0)
-
-[node name="Camera" parent="." index="2" unique_id=2026197166]
-unique_name_in_owner = true
-position = Vector2(964, 539)
-limit_left = -10000000
-limit_top = -10000000
-limit_right = 10000000
-limit_bottom = 10000000
-
-[node name="AreaLabel" parent="HUD/UI" parent_id_path=PackedInt32Array(1048333084) index="0" unique_id=421268983]
-text = ""
-
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="HUD/UI" parent_id_path=PackedInt32Array(1048333084) index="4" unique_id=420343154]
-position = Vector2(1291.773, 681.71716)
-color = Color(0.6181308, 0.60554236, 0.42371726, 1)
-energy = 0.16
-blend_mode = 2
-max_distance = 0.0
-
-[node name="InventoryPanel" parent="HUD/UI" parent_id_path=PackedInt32Array(1048333084) index="12" unique_id=779569506]
-visible = false
-
-[node name="RightSlots" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" parent_id_path=PackedInt32Array(452098965) index="2" unique_id=373649609]
-visible = true
-
 [node name="Obstacles" type="StaticBody2D" parent="BackgroundProps" index="0" unique_id=1361663244]
 
 [node name="Boulder" type="CollisionShape2D" parent="BackgroundProps/Obstacles" index="0" unique_id=1111918413]
@@ -169,6 +141,41 @@ one_way_collision = true
 position = Vector2(-47, 64)
 polygon = PackedVector2Array(1693, 854, 1640, 876, 1580, 949, 1561, 874, 1495, 927, 1464, 971, 1448, 994, 1461, 1072, 1587, 1076)
 one_way_collision = true
+
+[node name="Player" parent="." index="2" unique_id=198134559]
+unique_name_in_owner = true
+position = Vector2(0, 0)
+
+[node name="Camera" parent="." index="3" unique_id=2026197166]
+unique_name_in_owner = true
+position = Vector2(964, 539)
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+
+[node name="UI" parent="HUD" parent_id_path=PackedInt32Array(1894165697) index="0" unique_id=1048333084]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="AreaLabel" parent="HUD/UI" index="0" unique_id=421268983]
+text = ""
+
+[node name="MoveControls" parent="HUD/UI" index="3" unique_id=1931883080]
+offset_left = 152.0
+offset_top = -437.0
+offset_right = 512.0
+offset_bottom = -77.0
+
+[node name="DirectionalLight2D" type="DirectionalLight2D" parent="HUD/UI" index="4" unique_id=420343154]
+position = Vector2(1291.773, 681.71716)
+color = Color(0.6181308, 0.60554236, 0.42371726, 1)
+energy = 0.16
+blend_mode = 2
+max_distance = 0.0
+
+[node name="RightSlots" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" parent_id_path=PackedInt32Array(452098965) index="2" unique_id=373649609]
+visible = true
 
 [node name="Mob" parent="." index="5" unique_id=1876476869 instance=ExtResource("3_k40ib")]
 position = Vector2(1176, 642)
