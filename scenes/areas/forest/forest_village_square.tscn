@@ -131,46 +131,6 @@ limit_top = -10000000
 limit_right = 10000000
 limit_bottom = 10000000
 
-[node name="UI" parent="HUD" parent_id_path=PackedInt32Array(1894165697) index="0" unique_id=1048333084]
-layout_mode = 3
-anchors_preset = 0
-
-[node name="AreaLabel" parent="HUD/UI" index="0" unique_id=421268983]
-text = ""
-
-[node name="BackButton" parent="HUD/UI" index="1" unique_id=1609870667]
-anchors_preset = 0
-anchor_left = 0.0
-anchor_right = 0.0
-grow_horizontal = 1
-offset_left = 102.0
-offset_top = 214.0
-offset_right = 282.0
-offset_bottom = 277.0
-
-[node name="MoveControls" parent="HUD/UI" index="3" unique_id=1931883080]
-offset_left = 186.0
-offset_top = -354.0
-offset_right = 449.0
-offset_bottom = -98.0
-
-[node name="AttackButton" parent="HUD/UI" index="4" unique_id=1313772405]
-offset_left = -278.0
-offset_top = -256.0
-offset_right = -57.0
-offset_bottom = -49.0
-
-[node name="BlockButton" parent="HUD/UI" index="5" unique_id=1161908045]
-offset_left = -555.0
-offset_top = -157.0
-offset_right = -355.0
-offset_bottom = -57.0
-
-[node name="PlayerHealth" parent="HUD/UI" index="7" unique_id=1763514042]
-offset_left = 90.0
-offset_top = 57.0
-offset_right = 450.0
-offset_bottom = 197.0
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." index="5" unique_id=699851553]
 position = Vector2(1782, 163)

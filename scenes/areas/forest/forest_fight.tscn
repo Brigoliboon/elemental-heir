@@ -154,18 +154,6 @@ limit_top = -10000000
 limit_right = 10000000
 limit_bottom = 10000000
 
-[node name="UI" parent="HUD" parent_id_path=PackedInt32Array(1894165697) index="0" unique_id=1048333084]
-layout_mode = 3
-anchors_preset = 0
-
-[node name="AreaLabel" parent="HUD/UI" index="0" unique_id=421268983]
-text = ""
-
-[node name="MoveControls" parent="HUD/UI" index="3" unique_id=1931883080]
-offset_left = 152.0
-offset_top = -437.0
-offset_right = 512.0
-offset_bottom = -77.0
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="HUD/UI" index="4" unique_id=420343154]
 position = Vector2(1291.773, 681.71716)
