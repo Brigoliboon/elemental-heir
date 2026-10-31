@@ -3,6 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://dotkiua53ix6v" path="res://assets/backgrounds/forest/forest_guild_interior.jpg" id="2_guild_bg"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
+[ext_resource type="Script" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(200, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vchhr"]
 size = Vector2(1159, 359)
@@ -35,3 +39,14 @@ visible = false
 
 [node name="HUD" parent="." index="4" unique_id=1894165697]
 visible = false
+
+
+[node name="SceneTransition" type="Area2D" parent="." unique_id=9999101]
+position = Vector2(2387, 2300)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("4_transition")
+target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTransition" unique_id=9999102]
+shape = SubResource("RectangleShape2D_exit")
