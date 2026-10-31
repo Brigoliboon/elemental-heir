@@ -173,6 +173,7 @@ color = Color(0.6181308, 0.60554236, 0.42371726, 1)
 energy = 0.16
 blend_mode = 2
 max_distance = 0.0
+shadow_enabled = true
 
 [node name="RightSlots" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" parent_id_path=PackedInt32Array(452098965) index="2" unique_id=373649609]
 visible = true
