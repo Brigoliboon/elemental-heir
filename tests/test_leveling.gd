@@ -45,7 +45,7 @@ func run(tree: SceneTree) -> Array[String]:
 	if level_events.size() != 0:
 		failures.append("partial XP must not emit level_changed")
 
-	# Kill a goblin at level 1 so the enemy reward is exercised before the cap.
+	# Kill a wolf at level 1 so the enemy reward is exercised before the cap.
 	var mob_packed := load("res://entities/enemies/mob.tscn") as PackedScene
 	var mob := mob_packed.instantiate()
 	tree.root.add_child(mob)

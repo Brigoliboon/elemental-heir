@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c2rgw3x6hsdbt"]
 
 [ext_resource type="Script" uid="uid://dnl4dc7oxawbp" path="res://resources/entities/enemy_data.gd" id="1_tuyss"]
-[ext_resource type="Resource" path="res://resources/audio/goblin_sfx.tres" id="2_sfx"]
+[ext_resource type="Resource" path="res://resources/audio/wolf_sfx.tres" id="2_sfx"]
 
 [resource]
 script = ExtResource("1_tuyss")

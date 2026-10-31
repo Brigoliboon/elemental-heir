@@ -2,7 +2,7 @@ extends Resource
 class_name EnemyData
 
 @export_group("Identity")
-@export var enemy_name: String = "Goblin"
+@export var enemy_name: String = "Wolf"
 @export var level: int = 1
 
 @export_group("Base Stats")
