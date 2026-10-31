@@ -12,13 +12,16 @@
 load_path = "res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
-size = Vector2(1919.625, 72.75)
+size = Vector2(613, 72.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vchhr"]
 size = Vector2(549, 147.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iauxt"]
 size = Vector2(730, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqy30"]
+size = Vector2(95, 228.5)
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -56,19 +59,17 @@ script = ExtResource("4_transition")
 target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition" index="0" unique_id=9999102]
-visible = false
-position = Vector2(-1451, -1313)
+position = Vector2(-1446.5, -1313)
 shape = SubResource("RectangleShape2D_exit")
 
 [node name="CollisionAreas" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="1" unique_id=708295572]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="0" unique_id=547705695]
 position = Vector2(740.5, 854)
 shape = SubResource("RectangleShape2D_vchhr")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BackgroundProps/CollisionAreas" index="1" unique_id=1891683143]
-polygon = PackedVector2Array(990, 856, 1056, 857, 1072, 831, 1260, 874, 1256, 902, 1347, 946, 1426, 948, 1494, 982, 1686, 1044, 1702, 713, 1352, 691, 982, 686)
+polygon = PackedVector2Array(987, 872, 1052, 877, 1080, 855, 1260, 874, 1256, 902, 1347, 946, 1426, 948, 1494, 982, 1686, 1044, 1702, 713, 1352, 691, 982, 686)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="BackgroundProps/CollisionAreas" index="2" unique_id=1528427730]
 position = Vector2(-1.000031, 174.52956)
@@ -78,6 +79,10 @@ polygon = PackedVector2Array(395, 863.0459, 402, 745.26373, 491, 509.6993, 549, 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="3" unique_id=2088744703]
 position = Vector2(916, 551)
 shape = SubResource("RectangleShape2D_iauxt")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="BackgroundProps/CollisionAreas" index="4" unique_id=801881617]
+position = Vector2(1231.5, 382.25)
+shape = SubResource("RectangleShape2D_dqy30")
 
 [node name="LightRays" type="CanvasGroup" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="2" unique_id=1290244453]
 
@@ -169,7 +174,7 @@ scale = Vector2(1.5086205, 1.4918793)
 texture = ExtResource("5_h8rfs")
 
 [node name="Railings" type="Sprite2D" parent="BackgroundProps/CanvasGroup" index="1" unique_id=1965030840]
-z_index = 60
+z_index = 850
 position = Vector2(823.6252, 568.5)
 scale = Vector2(1.5086205, 1.4918793)
 texture = ExtResource("7_3btxc")
