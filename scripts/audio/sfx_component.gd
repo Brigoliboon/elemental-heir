@@ -25,6 +25,9 @@ var idle_enabled := true
 var _players: Array[AudioStreamPlayer2D] = []
 var _next_player := 0
 var _idle_timer := 0.0
+## Kinds already reported as missing, so a mob that attacks every second does not
+## flood the log with the same warning.
+var _missing_warned: Dictionary = {}
 
 
 func _ready() -> void:
@@ -81,7 +84,10 @@ func _schedule_idle() -> void:
 
 
 func _play(kind: StringName, stream: AudioStream) -> void:
-	if stream == null or not is_inside_tree():
+	if stream == null:
+		_warn_missing(kind)
+		return
+	if not is_inside_tree():
 		return
 	_build_pool()
 	if _players.is_empty():
@@ -94,6 +100,20 @@ func _play(kind: StringName, stream: AudioStream) -> void:
 	player.pitch_scale = randf_range(1.0 - jitter, 1.0 + jitter)
 	player.play()
 	played.emit(kind)
+
+
+## A set was assigned but this slot was left empty, which is almost always a
+## forgotten assignment rather than intentional silence. Say so once, loudly
+## enough to show up in `adb logcat` on a device.
+func _warn_missing(kind: StringName) -> void:
+	if sfx_set == null or _missing_warned.has(kind):
+		return
+	_missing_warned[kind] = true
+	var owner_path := String(name)
+	var owner := get_parent()
+	if owner != null:
+		owner_path = "%s/%s" % [owner.name, name]
+	push_warning("SFX: no '%s' stream on %s for %s" % [kind, sfx_set.resource_path, owner_path])
 
 
 func _build_pool() -> void:

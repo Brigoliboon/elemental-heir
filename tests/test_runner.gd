@@ -29,6 +29,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_background_props.gd"),
 	preload("res://tests/test_hud_layout.gd"),
 	preload("res://tests/test_title_layout.gd"),
+	preload("res://tests/test_sfx_wiring.gd"),
 ]
 
 
