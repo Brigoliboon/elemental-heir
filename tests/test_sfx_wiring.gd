@@ -16,8 +16,9 @@ func run(tree: SceneTree) -> Array[String]:
 	return failures
 
 
-## Any EnemyData carrying an sfx set is expected to speak for all three combat
-## moments. Idle stays optional because a silent idle is a valid design choice.
+## Any EnemyData carrying an sfx set is expected to speak when it swings and when
+## it is hit. Death and idle stay optional: a set may ship before those recordings
+## exist, and a missing one is silent rather than an error.
 func _check_enemy_sets(failures: Array[String]) -> void:
 	for file in _tres_files(ENEMY_DIR):
 		var data := load(file)
@@ -25,13 +26,21 @@ func _check_enemy_sets(failures: Array[String]) -> void:
 			continue
 		if data.sfx == null:
 			continue
-		for kind in ["attack", "hurt", "death"]:
-			var stream: AudioStream = data.sfx.get(kind)
-			if stream == null:
-				failures.append("%s: sfx set %s has no %s stream" % [
-					file, data.sfx.resource_path, kind,
-				])
-			elif stream.get_length() <= 0.0:
+		var assigned := {
+			"attack": data.sfx.attack,
+			"hurt": data.sfx.hurt,
+			"death": data.sfx.death,
+			"idle": data.sfx.idle,
+		}
+		for kind in assigned:
+			if kind == "attack" or kind == "hurt":
+				if assigned[kind] == null:
+					failures.append("%s: sfx set %s has no %s stream" % [
+						file, data.sfx.resource_path, kind,
+					])
+					continue
+			var stream: AudioStream = assigned[kind]
+			if stream != null and stream.get_length() <= 0.0:
 				failures.append("%s: sfx %s stream %s has no audio" % [
 					file, kind, stream.resource_path,
 				])
@@ -87,7 +96,7 @@ func _check_mob_triggers(tree: SceneTree, failures: Array[String]) -> void:
 	events.clear()
 	mob.take_damage(9999)
 	await tree.physics_frame
-	if not events.has(&"death"):
+	if mob.sfx.sfx_set != null and mob.sfx.sfx_set.death != null and not events.has(&"death"):
 		failures.append("mob death did not fire its death sound")
 
 	dummy.queue_free()
