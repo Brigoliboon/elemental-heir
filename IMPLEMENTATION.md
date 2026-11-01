@@ -365,6 +365,16 @@ fields are consumed where the current runtime already exposes them.
     accept input.
   - Test: `tests/test_hud_click_masks.gd`.
 
+## Fix - Joystick control across scene changes
+
+- [x] J1 - Keep the joystick dragging through a scene change
+  - The old scene frees the joystick while a finger is still down. The new
+    joystick starts with no active touch, ignores the continuing drag events,
+    and forces the player to release and grab it again.
+  - Persist the active pointer/touch and its screen position across scene
+    changes, and restore them when the new joystick is ready.
+  - Test: `tests/test_joystick_scene_change.gd`.
+
 ## Fix - Guild background export
 
 - [x] G1 - Load the guild background from the source PNG
