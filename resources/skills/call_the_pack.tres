@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SummonSkill" format=3]
+
+[ext_resource type="Script" path="res://resources/skills/summon_skill.gd" id="1_skill"]
+[ext_resource type="PackedScene" path="res://entities/enemies/boarlet.tscn" id="2_boarlet"]
+
+[resource]
+script = ExtResource("1_skill")
+id = &"call_the_pack"
+cooldown = 12.0
+max_range = 520.0
+priority = 1
+animation = &"attack"
+animation_speed = 0.9
+count = 3
+max_alive = 4
+spawn_radius = 150.0
+spawn_telegraph = 0.5
+summon_scene = ExtResource("2_boarlet")

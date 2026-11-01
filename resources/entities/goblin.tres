@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://c2rgw3x6hsdbt"]
+[gd_resource type="Resource" script_class="MonsterData" format=3 uid="uid://c2rgw3x6hsdbt"]
 
-[ext_resource type="Script" uid="uid://dnl4dc7oxawbp" path="res://resources/entities/enemy_data.gd" id="1_tuyss"]
+[ext_resource type="Script" uid="uid://7l0jb0po42ni" path="res://resources/entities/monster_data.gd" id="1_data"]
 [ext_resource type="Resource" uid="uid://c13qnot5lj7o6" path="res://resources/audio/goblin_sfx.tres" id="2_sfx"]
+[ext_resource type="Resource" path="res://resources/skills/bite.tres" id="3_bite"]
 
 [resource]
-script = ExtResource("1_tuyss")
+script = ExtResource("1_data")
+enemy_name = "Goblin"
 max_health = 60
 move_speed = 220.0
+basic_attack = ExtResource("3_bite")
 sfx = ExtResource("2_sfx")
-metadata/_custom_type_script = "uid://dnl4dc7oxawbp"

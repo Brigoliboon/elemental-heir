@@ -3,11 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://48ynv0y3l3ce" path="res://assets/backgrounds/forest/forest_entrance_base.jpg" id="2_bg"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
+[ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="4_footsteps"]
 
 [node name="ForestEntrance" unique_id=9000001 instance=ExtResource("1_base")]
 area_name = "Forest - Entrance"
 background_texture = ExtResource("2_bg")
 background_music = ExtResource("3_music")
+footsteps = ExtResource("4_footsteps")
 ground_far_px = 420.0
 ground_near_px = 680.0
 spawn_x_ratio = 0.5

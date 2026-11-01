@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MonsterData" format=3]
+
+[ext_resource type="Script" path="res://resources/entities/monster_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://resources/skills/guardian_cleave.tres" id="2_cleave"]
+[ext_resource type="Resource" path="res://resources/skills/call_the_pack.tres" id="3_pack"]
+[ext_resource type="Resource" path="res://resources/skills/summon_general.tres" id="4_general"]
+[ext_resource type="Resource" path="res://resources/skills/enrage.tres" id="5_enrage"]
+[ext_resource type="Resource" path="res://resources/passives/guardian_aura.tres" id="6_aura"]
+
+[resource]
+script = ExtResource("1_data")
+enemy_name = "Hollowhart Guardian"
+rank = 2
+level = 5
+max_health = 900
+move_speed = 150.0
+attack_damage = 22
+defence = 8
+xp_reward = 250
+attack_cooldown = 1.1
+attack_range = 175.0
+min_attack_space = 95.0
+attack_space = 130.0
+aggro_radius = 460.0
+global_cooldown = 1.0
+basic_attack = ExtResource("2_cleave")
+skills = Array[Resource]([ExtResource("3_pack"), ExtResource("4_general"), ExtResource("5_enrage")])
+passives = Array[Resource]([ExtResource("6_aura")])

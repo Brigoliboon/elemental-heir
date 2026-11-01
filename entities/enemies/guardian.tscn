@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="1_mob"]
+[ext_resource type="Resource" path="res://resources/entities/guardian.tres" id="2_config"]
+
+[node name="Guardian" instance=ExtResource("1_mob")]
+config = ExtResource("2_config")
+scale = Vector2(1.45, 1.45)
+base_tint = Color(0.86, 0.78, 0.92, 1)

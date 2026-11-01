@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BuffSkill" format=3]
+
+[ext_resource type="Script" path="res://resources/skills/buff_skill.gd" id="1_skill"]
+[ext_resource type="Resource" path="res://resources/skills/buffs/enrage_attack.tres" id="2_buff"]
+
+[resource]
+script = ExtResource("1_skill")
+id = &"enrage"
+cooldown = 20.0
+max_range = 0.0
+health_below = 0.5
+priority = 2
+animation = &"attack"
+hit_start = 0.25
+hit_end = 0.85
+buffs = Array[Resource]([ExtResource("2_buff")])
