@@ -391,6 +391,15 @@ fields are consumed where the current runtime already exposes them.
     `forest_guild.tscn`, under the background music and at a lower volume.
   - Test: `tests/test_guild_ambient.gd`.
 
+## Fix - Area footstep wiring
+
+- [x] F1 - Pass the scene's footstep set to the player
+  - The village and fight scenes assign `footsteps = footsteps_grass.tres` to
+    their root `Area`, but `Area` never exposed that property or handed it to
+    the player, so `player.sfx.footsteps` stayed null and no steps played.
+  - Add the exported property and apply it when the area starts.
+  - Test: `tests/test_area_footsteps.gd`.
+
 ## Fix - Guild background export
 
 - [x] G1 - Load the guild background from the source PNG

@@ -28,6 +28,8 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @export var area_name := ""
 @export var background_texture: Texture2D
 @export var background_music: AudioStream
+## Surface the player walks on; null keeps footsteps silent.
+@export var footsteps: FootstepSet
 
 @export_group("Walkable ground")
 ## Top (far) edge of the walkable band, in background-image pixels.
@@ -122,6 +124,7 @@ func _ready() -> void:
 	_apply_hud_click_masks()
 	_collect_blockers()
 	_place_player()
+	player.set_footsteps(footsteps)
 	if inventory_panel != null and player != null and player.inventory != null:
 		inventory_panel.bind(player.inventory, player.stats)
 	_restore_player_progress()
