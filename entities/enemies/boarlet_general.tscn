@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3]
-
-[ext_resource type="PackedScene" path="res://entities/enemies/boarlet.tscn" id="1_boarlet"]
-[ext_resource type="Resource" path="res://resources/entities/boarlet_general.tres" id="2_config"]
-
-[node name="BoarletGeneral" instance=ExtResource("1_boarlet")]
-config = ExtResource("2_config")
-scale = Vector2(1.2, 1.2)
-base_tint = Color(1, 0.92, 0.7, 1)

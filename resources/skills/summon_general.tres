@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SummonSkill" format=3]
 
-[ext_resource type="Script" path="res://resources/skills/summon_skill.gd" id="1_skill"]
-[ext_resource type="PackedScene" path="res://entities/enemies/boarlet_general.tscn" id="2_general"]
+[ext_resource type="Script" uid="uid://bj13bk3lrvgy3" path="res://resources/skills/summon_skill.gd" id="1_skill"]
+[ext_resource type="PackedScene" path="res://entities/enemies/rootbound.tscn" id="2_general"]
 [ext_resource type="Resource" path="res://resources/skills/buffs/summon_health.tres" id="3_health"]
 [ext_resource type="Resource" path="res://resources/skills/buffs/summon_attack.tres" id="4_attack"]
 
