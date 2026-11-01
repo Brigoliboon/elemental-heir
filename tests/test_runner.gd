@@ -5,6 +5,7 @@ extends Node
 const TEST_SCRIPTS := [
 	preload("res://tests/test_character_data.gd"),
 	preload("res://tests/test_player_entity.gd"),
+	preload("res://tests/test_rig_editor.gd"),
 	preload("res://tests/test_mob_entity.gd"),
 	preload("res://tests/test_depth_sort.gd"),
 	preload("res://tests/test_player_scale.gd"),

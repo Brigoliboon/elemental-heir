@@ -12,6 +12,7 @@ const CHARACTER_MARGIN := 130.0
 @onready var right_button: Button = %RightButton
 @onready var attack_button: Button = %AttackButton
 @onready var block_button: Button = %BlockButton
+@onready var edit_bones_button: Button = %EditBonesButton
 
 var _left_held := false
 var _right_held := false
@@ -29,6 +30,7 @@ func _ready() -> void:
 	attack_button.pressed.connect(character.attack)
 	block_button.button_down.connect(func() -> void: character.block(true))
 	block_button.button_up.connect(func() -> void: character.block(false))
+	edit_bones_button.pressed.connect(_on_edit_bones_pressed)
 	character.facing_changed.connect(_update_facing_label)
 	_update_facing_label(character.facing_right)
 
@@ -64,3 +66,7 @@ func _update_facing_label(facing_right: bool) -> void:
 
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/title/title_screen.tscn")
+
+
+func _on_edit_bones_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/tests/rig_editor.tscn")
