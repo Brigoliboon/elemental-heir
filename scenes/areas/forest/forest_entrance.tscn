@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://48ynv0y3l3ce" path="res://assets/backgrounds/forest/forest_entrance_base.jpg" id="2_bg"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
 [ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="4_footsteps"]
+[ext_resource type="PackedScene" path="res://entities/enemies/boarlet.tscn" id="5_ur1u1"]
+[ext_resource type="PackedScene" path="res://entities/enemies/rootbound.tscn" id="6_4i6x8"]
 
 [node name="ForestEntrance" unique_id=9000001 instance=ExtResource("1_base")]
 area_name = "Forest - Entrance"
@@ -31,3 +33,21 @@ limit_left = -10000000
 limit_top = -10000000
 limit_right = 10000000
 limit_bottom = 10000000
+
+[node name="Boarlet" parent="." index="5" unique_id=1670953031 instance=ExtResource("5_ur1u1")]
+position = Vector2(1547, 672)
+
+[node name="Boarlet2" parent="." index="6" unique_id=468952915 instance=ExtResource("5_ur1u1")]
+position = Vector2(1245, 917)
+
+[node name="Boarlet3" parent="." index="7" unique_id=1997760415 instance=ExtResource("5_ur1u1")]
+position = Vector2(1142, 635)
+
+[node name="Boarlet4" parent="." index="8" unique_id=90445657 instance=ExtResource("5_ur1u1")]
+position = Vector2(1343, 763)
+
+[node name="Boarlet5" parent="." index="9" unique_id=894863886 instance=ExtResource("5_ur1u1")]
+position = Vector2(972, 992)
+
+[node name="BoarletGeneral" parent="." index="10" unique_id=365947532 instance=ExtResource("6_4i6x8")]
+position = Vector2(2977, 801)
