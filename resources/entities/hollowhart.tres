@@ -1,12 +1,16 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3]
+[gd_resource type="Resource" script_class="MonsterData" format=3]
 
-[ext_resource type="Script" path="res://resources/entities/enemy_data.gd" id="1_kgf7v"]
+[ext_resource type="Script" path="res://resources/entities/monster_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://resources/skills/bite.tres" id="2_bite"]
 
 [resource]
-script = ExtResource("1_kgf7v")
+script = ExtResource("1_data")
 enemy_name = "Hollowhart"
 max_health = 80
 move_speed = 180.0
 attack_damage = 12
 defence = 2
 xp_reward = 15
+attack_space = 115.0
+aggro_radius = 360.0
+basic_attack = ExtResource("2_bite")

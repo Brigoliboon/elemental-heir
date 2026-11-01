@@ -23,6 +23,10 @@ var sfx_set: SfxSet
 var footsteps: FootstepSet
 ## Idle vocalizations pause while the owner is moving, attacking or dead.
 var idle_enabled := true
+## Intentional silence: a monster with no voice set. Playback and the
+## "no set bound" warnings are skipped, while a configured set still reports
+## individual missing slots.
+var muted := false
 
 var _players: Array[AudioStreamPlayer2D] = []
 var _next_player := 0
@@ -69,6 +73,8 @@ func play_death() -> void:
 ## Plays the next step in the surface's sequence, wrapping. Steps are sequential
 ## rather than random so a two-sample gait does not repeat the same foot.
 func play_footstep() -> void:
+	if muted:
+		return
 	if footsteps == null:
 		return
 	var stream := footsteps.stream_at(_footstep_index)
@@ -79,6 +85,8 @@ func play_footstep() -> void:
 
 
 func _process(delta: float) -> void:
+	if muted:
+		return
 	if sfx_set == null or not sfx_set.has_streams(&"idle"):
 		_idle_timer = 0.0
 		return
@@ -108,6 +116,8 @@ func _schedule_idle() -> void:
 
 ## Chooses a random variant for `kind`, avoiding an immediate repeat.
 func _play_variant(kind: StringName) -> void:
+	if muted:
+		return
 	if sfx_set == null:
 		_warn_missing(kind)
 		return

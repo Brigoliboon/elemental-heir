@@ -1,11 +1,18 @@
-[gd_resource type="Resource" script_class="EnemyData" format=3]
+[gd_resource type="Resource" script_class="MonsterData" format=3]
 
-[ext_resource type="Script" path="res://resources/entities/enemy_data.gd" id="1_kgf7v"]
+[ext_resource type="Script" path="res://resources/entities/monster_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://resources/skills/gore.tres" id="2_gore"]
+[ext_resource type="Resource" path="res://resources/skills/charge.tres" id="3_charge"]
 
 [resource]
-script = ExtResource("1_kgf7v")
+script = ExtResource("1_data")
 enemy_name = "Boarlet"
 max_health = 50
 move_speed = 240.0
 attack_damage = 8
 xp_reward = 8
+attack_cooldown = 0.9
+attack_range = 130.0
+attack_space = 95.0
+basic_attack = ExtResource("2_gore")
+skills = Array[Resource]([ExtResource("3_charge")])

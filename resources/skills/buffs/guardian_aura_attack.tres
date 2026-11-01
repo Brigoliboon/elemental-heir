@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StatBuff" format=3]
+
+[ext_resource type="Script" path="res://resources/skills/stat_buff.gd" id="1_buff"]
+
+[resource]
+script = ExtResource("1_buff")
+stat = &"attack"
+pct = 0.15
