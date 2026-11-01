@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="SummonSkill" format=3]
+
+[ext_resource type="Script" path="res://resources/skills/summon_skill.gd" id="1_skill"]
+[ext_resource type="PackedScene" path="res://entities/enemies/boarlet_general.tscn" id="2_general"]
+[ext_resource type="Resource" path="res://resources/skills/buffs/summon_health.tres" id="3_health"]
+[ext_resource type="Resource" path="res://resources/skills/buffs/summon_attack.tres" id="4_attack"]
+
+[resource]
+script = ExtResource("1_skill")
+id = &"summon_general"
+cooldown = 45.0
+max_range = 520.0
+max_casts = 1
+priority = 3
+animation = &"attack"
+animation_speed = 0.8
+count = 1
+max_alive = 1
+spawn_radius = 130.0
+spawn_telegraph = 0.8
+summon_scene = ExtResource("2_general")
+buffs = Array[Resource]([ExtResource("3_health"), ExtResource("4_attack")])

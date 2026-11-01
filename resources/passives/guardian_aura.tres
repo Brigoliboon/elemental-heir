@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AuraPassive" format=3]
+
+[ext_resource type="Script" path="res://resources/passives/aura_passive.gd" id="1_passive"]
+[ext_resource type="Resource" path="res://resources/skills/buffs/guardian_aura_attack.tres" id="2_buff"]
+
+[resource]
+script = ExtResource("1_passive")
+id = &"guardian_aura"
+radius = 300.0
+tick_seconds = 0.5
+buffs = Array[Resource]([ExtResource("2_buff")])

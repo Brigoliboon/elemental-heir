@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MonsterData" format=3]
+
+[ext_resource type="Script" path="res://resources/entities/monster_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://resources/skills/gore.tres" id="2_gore"]
+[ext_resource type="Resource" path="res://resources/skills/charge.tres" id="3_charge"]
+[ext_resource type="Resource" path="res://resources/skills/enrage.tres" id="4_enrage"]
+
+[resource]
+script = ExtResource("1_data")
+enemy_name = "Boarlet General"
+rank = 1
+level = 2
+max_health = 220
+move_speed = 210.0
+attack_damage = 14
+defence = 4
+xp_reward = 60
+attack_cooldown = 0.9
+attack_range = 145.0
+attack_space = 120.0
+aggro_radius = 420.0
+global_cooldown = 0.9
+basic_attack = ExtResource("2_gore")
+skills = Array[Resource]([ExtResource("3_charge"), ExtResource("4_enrage")])
