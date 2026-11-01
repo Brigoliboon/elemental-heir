@@ -353,6 +353,24 @@ fields are consumed where the current runtime already exposes them.
     off-screen at x = -625. It is left-anchored now, keeping the authored
     position at every scale and resolution.
   - `tests/test_hud_layout.gd` now also checks every control at mobile scale.
+- [x] H4 - Keep passive and block buttons on screen
+  - Anchor `PassiveButton` and `BlockButton` to the bottom-right instead of
+    absolute design-pixel offsets, so the 1.4x mobile HUD scale cannot push
+    them past the viewport.
+  - Test: `tests/test_hud_layout.gd`.
+
+## Fix - Guild background export
+
+- [x] G1 - Load the guild background from the source PNG
+  - Replace the stale `.godot/imported/*.ctex` subresource with the source PNG
+    `ext_resource`, so exported/mobile builds can load the guild background.
+  - Guard `Area._layout_background()` against zero-size textures so a missing
+    background cannot abort player placement or the area label.
+  - Test: `tests/test_guild_scene.gd`.
+- [x] G2 - Spawn the player outside guild collision blocks
+  - Move the guild spawn point out of the counter collision so the player does
+    not enter the scene stuck.
+  - Test: `tests/test_guild_scene.gd`.
 
 ## Fix - Character frozen after switching attack and block
 

@@ -1,15 +1,13 @@
 [gd_scene format=3 uid="uid://chctwwv5k1ot8"]
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://crdwrp1o3yudn" path="res://assets/backgrounds/forest/forest_guild/forest_guild_interior.png" id="2_interior"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="4_g1pyl"]
 [ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
-[ext_resource type="Texture2D" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1rjxe"]
-load_path = "res://.godot/imported/forest_guild_interior.png-0c5feaf35a6b0f7d2366bd43c6c3f393.ctex"
+[ext_resource type="Texture2D" uid="uid://br4jjxh0vrpw2" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
+[ext_resource type="Texture2D" uid="uid://6pq35c7msw5i" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
+[ext_resource type="Texture2D" uid="uid://bkghps3b5ejou" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(613, 72.75)
@@ -34,17 +32,17 @@ fill_from = Vector2(0.49565217, 0.526087)
 
 [node name="ForestGuild" unique_id=234380443 instance=ExtResource("1_base")]
 area_name = "Forest - Guild"
-background_texture = SubResource("CompressedTexture2D_1rjxe")
+background_texture = ExtResource("2_interior")
 background_music = ExtResource("3_music")
 ground_far_px = 100.0
-ground_near_px = 650.0
-spawn_depth = 0.8
+ground_near_px = 750.0
+spawn_depth = 0.98
 spawn_x_ratio = 0.348
 far_character_scale = 1.8
-near_character_scale = 3.0
+near_character_scale = 3.5
 
-[node name="Background" parent="." index="1" unique_id=1944799289]
-texture = SubResource("CompressedTexture2D_1rjxe")
+[node name="Background" parent="." index="0" unique_id=1944799289]
+texture = ExtResource("2_interior")
 
 [node name="SceneTransition" type="Area2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=9999101]
 position = Vector2(2411, 2359)
@@ -54,7 +52,7 @@ script = ExtResource("4_transition")
 target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition" index="0" unique_id=9999102]
-position = Vector2(-1446.5, -1313)
+position = Vector2(-1446, -1263)
 shape = SubResource("RectangleShape2D_exit")
 
 [node name="CollisionAreas" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="1" unique_id=708295572]
@@ -174,7 +172,7 @@ position = Vector2(823.6252, 568.5)
 scale = Vector2(1.5086205, 1.4918793)
 texture = ExtResource("7_3btxc")
 
-[node name="Player" parent="." index="3" unique_id=198134559]
+[node name="Player" parent="." index="2" unique_id=198134559]
 z_index = -1
 position = Vector2(293, 741)
 
@@ -184,25 +182,25 @@ metadata/_edit_use_anchors_ = true
 [node name="AreaLabel" parent="HUD/UI" index="0" unique_id=421268983]
 metadata/_edit_use_anchors_ = true
 
-[node name="BackButton" parent="HUD/UI" index="1" unique_id=1609870667]
+[node name="BlockButton" parent="HUD/UI" index="2" unique_id=1092987463]
 metadata/_edit_use_anchors_ = true
 
-[node name="MapButton" parent="HUD/UI" index="2" unique_id=1642454422]
+[node name="BackButton" parent="HUD/UI" index="3" unique_id=1609870667]
 metadata/_edit_use_anchors_ = true
 
-[node name="MoveControls" parent="HUD/UI" index="3" unique_id=1931883080]
+[node name="MapButton" parent="HUD/UI" index="4" unique_id=1642454422]
 metadata/_edit_use_anchors_ = true
 
-[node name="AttackButton" parent="HUD/UI" index="4" unique_id=1313772405]
+[node name="MoveControls" parent="HUD/UI" index="5" unique_id=1931883080]
 metadata/_edit_use_anchors_ = true
 
-[node name="BlockButton" parent="HUD/UI" index="5" unique_id=1161908045]
+[node name="AttackButton" parent="HUD/UI" index="6" unique_id=1313772405]
 metadata/_edit_use_anchors_ = true
 
-[node name="DebugLabel" parent="HUD/UI" index="6" unique_id=837648817]
+[node name="DebugLabel" parent="HUD/UI" index="7" unique_id=837648817]
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerHealth" parent="HUD/UI" index="7" unique_id=1763514042]
+[node name="PlayerHealth" parent="HUD/UI" index="8" unique_id=1763514042]
 metadata/_edit_use_anchors_ = true
 
 [node name="HealthFrame" parent="HUD/UI/PlayerHealth" index="0" unique_id=1763514046]

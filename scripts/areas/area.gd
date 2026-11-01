@@ -264,6 +264,12 @@ func _layout_background() -> void:
 		ground_near_y = view.y * 0.9
 		return
 	var tex_size := background_texture.get_size()
+	if tex_size.x <= 0.0 or tex_size.y <= 0.0:
+		push_error("%s has a zero-size background texture" % name)
+		world_width = view.x
+		ground_far_y = view.y * 0.6
+		ground_near_y = view.y * 0.9
+		return
 	var bg_scale := maxf(1.0, maxf(view.y / tex_size.y, view.x / tex_size.x))
 	background.texture = background_texture
 	background.centered = false
