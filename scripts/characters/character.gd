@@ -24,6 +24,8 @@ const SWORD_HITBOX_SIZE := Vector2(20.0, 58.0)
 const SWORD_HITBOX_CENTER := Vector2(0.0, 22.0)
 ## Impulse applied to enemies hit by the sword, in px/s.
 const SWORD_KNOCKBACK := 260.0
+## Rig units the floating damage text sits above the head bone.
+const DAMAGE_TEXT_LIFT := 28.0
 const DEFAULT_PROGRESSION := preload("res://resources/progression/default_progression.tres")
 
 @export var config: CharacterData
@@ -201,6 +203,16 @@ func set_render_scale(value: float) -> void:
 ## World-space y coordinate of the character's feet (depth anchor).
 func get_feet_y() -> float:
 	return global_position.y + FEET_OFFSET_LOCAL * render_scale
+
+
+## World-space point where this character's floating damage text starts, just
+## above the head. Follows the rig so it stays put when the character is scaled.
+func damage_number_anchor() -> Vector2:
+	if rig != null:
+		var head := rig.bones.get("head") as Bone2D
+		if head != null:
+			return head.global_position + Vector2(0.0, -DAMAGE_TEXT_LIFT * render_scale)
+	return global_position
 
 
 func _apply_scale() -> void:
@@ -453,7 +465,9 @@ func _spawn_damage_number(amount: int, color: Color) -> void:
 	if parent == null:
 		parent = get_tree().root
 	parent.add_child(node)
-	node.global_position = global_position + Vector2(0, -20)
+	node.global_position = damage_number_anchor()
+	# Sit just in front of this character but still behind anyone nearer the camera.
+	node.z_index = DepthSort.z_for_y(get_feet_y()) + 1
 	node.setup(amount, color)
 
 
