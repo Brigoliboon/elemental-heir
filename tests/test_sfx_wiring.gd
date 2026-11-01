@@ -14,6 +14,7 @@ func run(tree: SceneTree) -> Array[String]:
 	_check_enemy_sets(failures)
 	_check_idle_bounds(failures)
 	_check_variant_pick(failures)
+	_check_scene_footsteps(failures)
 	await _check_mob_triggers(tree, failures)
 	await _check_player_triggers(tree, failures)
 	await _check_combo_spam(tree, failures)
@@ -211,6 +212,24 @@ func _check_combo_spam(tree: SceneTree, failures: Array[String]) -> void:
 	await tree.physics_frame
 
 
+## Every forest scene must hand the player a surface, otherwise walking there is
+## silent and the omission is easy to miss. The entrance scene was added without
+## one and this check keeps the next new area from repeating that.
+func _check_scene_footsteps(failures: Array[String]) -> void:
+	for file in _tscn_files("res://scenes/areas/forest"):
+		var scene := load(file) as PackedScene
+		if scene == null:
+			failures.append("%s did not load" % file)
+			continue
+		var area := scene.instantiate()
+		if area is Area:
+			if area.footsteps == null:
+				failures.append("%s does not set a footstep set" % file)
+			elif area.footsteps.variant_count() == 0:
+				failures.append("%s has an empty footstep set" % file)
+		area.free()
+
+
 ## Footsteps are per-surface and sequential: 1, 2, 1, 2. Random picking would
 ## repeat a foot and expose the two-sample loop.
 func _check_footsteps(tree: SceneTree, failures: Array[String]) -> void:
@@ -289,12 +308,20 @@ func _count_steps(player: Node, tree: SceneTree, frames: int) -> int:
 
 
 func _tres_files(dir_path: String) -> Array[String]:
+	return _files_with_extension(dir_path, ".tres")
+
+
+func _tscn_files(dir_path: String) -> Array[String]:
+	return _files_with_extension(dir_path, ".tscn")
+
+
+func _files_with_extension(dir_path: String, extension: String) -> Array[String]:
 	var files: Array[String] = []
 	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		return files
 	for file in dir.get_files():
-		if file.ends_with(".tres"):
+		if file.ends_with(extension):
 			files.append(dir_path.path_join(file))
 	return files
 

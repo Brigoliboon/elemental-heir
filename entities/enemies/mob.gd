@@ -172,6 +172,15 @@ func get_feet_y() -> float:
 	return global_position.y + depth_foot_offset * scale.y
 
 
+## World-space point where this mob's floating damage text starts, just above the
+## health bar so the number never covers the creature or its bar.
+func damage_number_anchor() -> Vector2:
+	var bar := get_node_or_null("HealthBar") as Node2D
+	if bar != null:
+		return bar.global_position + Vector2(0.0, -24.0)
+	return Vector2(global_position.x, get_feet_y() - 120.0)
+
+
 func _move_with_knockback(delta: float) -> void:
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_decay * delta)
 	if velocity != Vector2.ZERO:
@@ -330,7 +339,9 @@ func _spawn_damage_number(amount: int, color: Color) -> void:
 	if parent == null:
 		parent = get_tree().root
 	parent.add_child(node)
-	node.global_position = global_position + Vector2(0, -20)
+	node.global_position = damage_number_anchor()
+	# Sit just in front of this mob but still behind anyone nearer the camera.
+	node.z_index = DepthSort.z_for_y(get_feet_y()) + 1
 	node.setup(amount, color)
 
 
