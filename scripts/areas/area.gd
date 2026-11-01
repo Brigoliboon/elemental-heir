@@ -474,11 +474,20 @@ func _resolve_obstacles(from: Vector2, to: Vector2) -> Vector2:
 	return from
 
 
+## Character depth scale is authored for the 1.5x design background. Wider
+## viewports grow the background, so grow the character with it; never shrink
+## below the authored scale on smaller screens.
+func _character_scale() -> float:
+	var depth_scale := lerpf(far_character_scale, near_character_scale, depth_ratio())
+	var background_scale := background.scale.x if background != null else DESIGN_BACKGROUND_SCALE
+	return depth_scale * maxf(1.0, background_scale / DESIGN_BACKGROUND_SCALE)
+
+
 ## Scales the character for its depth and stands it on the current feet line.
 ## Also sets z_index so that characters farther up (farther back) render behind
 ## those closer down (nearer to camera), giving proper sprite overlap.
 func _apply_depth() -> void:
-	var s := lerpf(far_character_scale, near_character_scale, depth_ratio())
+	var s := _character_scale()
 	player.set_render_scale(s)
 	player.position.y = _feet_y - FEET_OFFSET_LOCAL * s
 	# One shared y -> z mapping for the whole game: farther up = lower index.

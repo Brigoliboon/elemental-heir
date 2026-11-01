@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://br4jjxh0vrpw2" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
 [ext_resource type="Texture2D" uid="uid://6pq35c7msw5i" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
 [ext_resource type="Texture2D" uid="uid://bkghps3b5ejou" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
+[ext_resource type="AudioStream" uid="uid://bymn2dx58v8nr" path="res://assets/audio/sfx/environment/fire-crackling.mp3" id="8_fire"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(613, 72.75)
@@ -34,15 +35,20 @@ fill_from = Vector2(0.49565217, 0.526087)
 area_name = "Forest - Guild"
 background_texture = ExtResource("2_interior")
 background_music = ExtResource("3_music")
-ground_far_px = 100.0
+ground_far_px = 350.0
 ground_near_px = 750.0
 spawn_depth = 0.98
 spawn_x_ratio = 0.348
 far_character_scale = 1.8
-near_character_scale = 3.5
+near_character_scale = 3.4
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
 texture = ExtResource("2_interior")
+
+[node name="FireCrackling" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_fire")
+volume_db = -10.0
+autoplay = true
 
 [node name="SceneTransition" type="Area2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=9999101]
 position = Vector2(2411, 2359)

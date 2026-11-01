@@ -375,6 +375,22 @@ fields are consumed where the current runtime already exposes them.
     changes, and restore them when the new joystick is ready.
   - Test: `tests/test_joystick_scene_change.gd`.
 
+## Fix - Player scale across viewports
+
+- [x] S1 - Keep the player proportional to the background
+  - Character depth scales are authored for the 1.5x design background. Wider
+    landscape viewports grow the background but not the character, so the
+    player looks smaller on tall phones. Scale the character with the
+    background, but never below the authored design scale.
+  - Test: `tests/test_player_scale.gd`.
+
+## Fix - Guild ambient fire loop
+
+- [x] A1 - Loop the fire crackling ambience in the guild
+  - Add `fire-crackling.mp3` as a looping `AudioStreamPlayer` in
+    `forest_guild.tscn`, under the background music and at a lower volume.
+  - Test: `tests/test_guild_ambient.gd`.
+
 ## Fix - Guild background export
 
 - [x] G1 - Load the guild background from the source PNG
