@@ -13,6 +13,8 @@ static var _entry_side := ""
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
 const ATTACK_PRESSED_ALPHA := 0.55
+## Alpha below this is treated as transparent when building HUD click masks.
+const HUD_CLICK_ALPHA_THRESHOLD := 0.1
 ## Backgrounds are authored against the 1920x1080 design viewport, where the
 ## art is drawn at 1.5x. Props and obstacle polygons use those same world
 ## coordinates and are rescaled with the background when the viewport changes.
@@ -26,6 +28,8 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @export var area_name := ""
 @export var background_texture: Texture2D
 @export var background_music: AudioStream
+## Surface the player walks on; null keeps footsteps silent.
+@export var footsteps: FootstepSet
 
 @export_group("Walkable ground")
 ## Top (far) edge of the walkable band, in background-image pixels.
@@ -81,6 +85,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var joystick: HudJoystick = $HUD/UI/MoveControls
 @onready var attack_button: TextureButton = $HUD/UI/AttackButton
 @onready var block_button: TextureButton = $HUD/UI/BlockButton
+@onready var passive_button: TextureButton = $HUD/UI/PassiveButton
 @onready var back_button: Button = $HUD/UI/BackButton
 @onready var health_bar: TextureProgressBar = $HUD/UI/PlayerHealth/HealthBar
 @onready var health_label: Label = $HUD/UI/PlayerHealth/HealthLabel
@@ -116,8 +121,10 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_on_viewport_resized)
 	_layout_background()
 	_layout_hud()
+	_apply_hud_click_masks()
 	_collect_blockers()
 	_place_player()
+	player.set_footsteps(footsteps)
 	if inventory_panel != null and player != null and player.inventory != null:
 		inventory_panel.bind(player.inventory, player.stats)
 	_restore_player_progress()
@@ -264,6 +271,12 @@ func _layout_background() -> void:
 		ground_near_y = view.y * 0.9
 		return
 	var tex_size := background_texture.get_size()
+	if tex_size.x <= 0.0 or tex_size.y <= 0.0:
+		push_error("%s has a zero-size background texture" % name)
+		world_width = view.x
+		ground_far_y = view.y * 0.6
+		ground_near_y = view.y * 0.9
+		return
 	var bg_scale := maxf(1.0, maxf(view.y / tex_size.y, view.x / tex_size.x))
 	background.texture = background_texture
 	background.centered = false
@@ -318,6 +331,26 @@ func _layout_hud() -> void:
 	hud_ui.pivot_offset = Vector2.ZERO
 	hud_ui.scale = Vector2.ONE * factor
 	hud_ui.size = view / factor
+
+
+## The rotated bottom-right buttons have overlapping control rectangles, so their
+## transparent corners would otherwise steal taps from each other.
+func _apply_hud_click_masks() -> void:
+	for button in [attack_button, block_button, passive_button]:
+		_apply_click_mask(button)
+
+
+func _apply_click_mask(button: TextureButton) -> void:
+	if button == null or button.texture_normal == null:
+		return
+	var image := button.texture_normal.get_image()
+	if image == null or image.is_empty():
+		return
+	if image.is_compressed():
+		image.decompress()
+	var mask := BitMap.new()
+	mask.create_from_image_alpha(image, HUD_CLICK_ALPHA_THRESHOLD)
+	button.texture_click_mask = mask
 
 
 func _on_block_button_down() -> void:
@@ -444,11 +477,20 @@ func _resolve_obstacles(from: Vector2, to: Vector2) -> Vector2:
 	return from
 
 
+## Character depth scale is authored for the 1.5x design background. Wider
+## viewports grow the background, so grow the character with it; never shrink
+## below the authored scale on smaller screens.
+func _character_scale() -> float:
+	var depth_scale := lerpf(far_character_scale, near_character_scale, depth_ratio())
+	var background_scale := background.scale.x if background != null else DESIGN_BACKGROUND_SCALE
+	return depth_scale * maxf(1.0, background_scale / DESIGN_BACKGROUND_SCALE)
+
+
 ## Scales the character for its depth and stands it on the current feet line.
 ## Also sets z_index so that characters farther up (farther back) render behind
 ## those closer down (nearer to camera), giving proper sprite overlap.
 func _apply_depth() -> void:
-	var s := lerpf(far_character_scale, near_character_scale, depth_ratio())
+	var s := _character_scale()
 	player.set_render_scale(s)
 	player.position.y = _feet_y - FEET_OFFSET_LOCAL * s
 	# One shared y -> z mapping for the whole game: farther up = lower index.

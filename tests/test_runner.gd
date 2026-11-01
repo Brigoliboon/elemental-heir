@@ -5,8 +5,10 @@ extends Node
 const TEST_SCRIPTS := [
 	preload("res://tests/test_character_data.gd"),
 	preload("res://tests/test_player_entity.gd"),
+	preload("res://tests/test_rig_editor.gd"),
 	preload("res://tests/test_mob_entity.gd"),
 	preload("res://tests/test_depth_sort.gd"),
+	preload("res://tests/test_player_scale.gd"),
 	preload("res://tests/test_scene_integrity.gd"),
 	preload("res://tests/test_combat.gd"),
 	preload("res://tests/test_health.gd"),
@@ -20,6 +22,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_player_progress.gd"),
 	preload("res://tests/test_item_data.gd"),
 	preload("res://tests/test_virtual_joystick.gd"),
+	preload("res://tests/test_joystick_scene_change.gd"),
 	preload("res://tests/test_hud_bars.gd"),
 	preload("res://tests/test_hud_buttons.gd"),
 	preload("res://tests/test_hud_profile.gd"),
@@ -27,9 +30,13 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_attack_block_lock.gd"),
 	preload("res://tests/test_world_map.gd"),
 	preload("res://tests/test_background_props.gd"),
+	preload("res://tests/test_guild_scene.gd"),
+	preload("res://tests/test_guild_ambient.gd"),
 	preload("res://tests/test_hud_layout.gd"),
+	preload("res://tests/test_hud_click_masks.gd"),
 	preload("res://tests/test_title_layout.gd"),
 	preload("res://tests/test_sfx_wiring.gd"),
+	preload("res://tests/test_area_footsteps.gd"),
 ]
 
 
