@@ -358,6 +358,12 @@ fields are consumed where the current runtime already exposes them.
     absolute design-pixel offsets, so the 1.4x mobile HUD scale cannot push
     them past the viewport.
   - Test: `tests/test_hud_layout.gd`.
+- [x] H5 - Match HUD button clicks to the visible art
+  - The rotated attack, block and passive buttons have overlapping rectangular
+    controls, so the attack button steals taps in its transparent corners.
+    Build a `texture_click_mask` from each button texture so only visible pixels
+    accept input.
+  - Test: `tests/test_hud_click_masks.gd`.
 
 ## Fix - Guild background export
 

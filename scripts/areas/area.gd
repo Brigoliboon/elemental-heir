@@ -13,6 +13,8 @@ static var _entry_side := ""
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
 const ATTACK_PRESSED_ALPHA := 0.55
+## Alpha below this is treated as transparent when building HUD click masks.
+const HUD_CLICK_ALPHA_THRESHOLD := 0.1
 ## Backgrounds are authored against the 1920x1080 design viewport, where the
 ## art is drawn at 1.5x. Props and obstacle polygons use those same world
 ## coordinates and are rescaled with the background when the viewport changes.
@@ -81,6 +83,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var joystick: HudJoystick = $HUD/UI/MoveControls
 @onready var attack_button: TextureButton = $HUD/UI/AttackButton
 @onready var block_button: TextureButton = $HUD/UI/BlockButton
+@onready var passive_button: TextureButton = $HUD/UI/PassiveButton
 @onready var back_button: Button = $HUD/UI/BackButton
 @onready var health_bar: TextureProgressBar = $HUD/UI/PlayerHealth/HealthBar
 @onready var health_label: Label = $HUD/UI/PlayerHealth/HealthLabel
@@ -116,6 +119,7 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_on_viewport_resized)
 	_layout_background()
 	_layout_hud()
+	_apply_hud_click_masks()
 	_collect_blockers()
 	_place_player()
 	if inventory_panel != null and player != null and player.inventory != null:
@@ -324,6 +328,26 @@ func _layout_hud() -> void:
 	hud_ui.pivot_offset = Vector2.ZERO
 	hud_ui.scale = Vector2.ONE * factor
 	hud_ui.size = view / factor
+
+
+## The rotated bottom-right buttons have overlapping control rectangles, so their
+## transparent corners would otherwise steal taps from each other.
+func _apply_hud_click_masks() -> void:
+	for button in [attack_button, block_button, passive_button]:
+		_apply_click_mask(button)
+
+
+func _apply_click_mask(button: TextureButton) -> void:
+	if button == null or button.texture_normal == null:
+		return
+	var image := button.texture_normal.get_image()
+	if image == null or image.is_empty():
+		return
+	if image.is_compressed():
+		image.decompress()
+	var mask := BitMap.new()
+	mask.create_from_image_alpha(image, HUD_CLICK_ALPHA_THRESHOLD)
+	button.texture_click_mask = mask
 
 
 func _on_block_button_down() -> void:
