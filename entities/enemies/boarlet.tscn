@@ -1,0 +1,203 @@
+[gd_scene load_steps=21 format=3]
+
+[ext_resource type="Script" uid="uid://4yd5ihrgkhry" path="res://entities/enemies/monster.gd" id="1_monster"]
+[ext_resource type="Resource" path="res://resources/entities/boarlet.tres" id="2_boarlet"]
+[ext_resource type="Script" uid="uid://bojpu0hvd8w8c" path="res://scripts/combat/hitbox.gd" id="3_hitbox"]
+[ext_resource type="Texture2D" path="res://assets/monsters/forest/boarlet_sprites/boarlet_idle.png" id="4_idle"]
+[ext_resource type="Texture2D" path="res://assets/monsters/forest/boarlet_sprites/boarlet_run.png" id="5_run"]
+[ext_resource type="Texture2D" path="res://assets/monsters/forest/boarlet_sprites/boarlet_attack.png" id="6_attack"]
+[ext_resource type="Texture2D" path="res://assets/monsters/forest/boarlet_sprites/boarlet_death.png" id="7_death"]
+[ext_resource type="Script" uid="uid://cflx0defitjua" path="res://scripts/combat/health.gd" id="8_health"]
+[ext_resource type="Script" uid="uid://2krryjgb84f2" path="res://scripts/ui/world_health_bar.gd" id="9_healthbar"]
+[ext_resource type="Script" uid="uid://dpm7uuok3hdmp" path="res://scripts/combat/stats.gd" id="10_stats"]
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_0"]
+atlas = ExtResource("4_idle")
+region = Rect2(0, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_1"]
+atlas = ExtResource("4_idle")
+region = Rect2(128, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_2"]
+atlas = ExtResource("4_idle")
+region = Rect2(256, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_3"]
+atlas = ExtResource("4_idle")
+region = Rect2(384, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_run_0"]
+atlas = ExtResource("5_run")
+region = Rect2(0, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_run_1"]
+atlas = ExtResource("5_run")
+region = Rect2(128, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_run_2"]
+atlas = ExtResource("5_run")
+region = Rect2(256, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_run_3"]
+atlas = ExtResource("5_run")
+region = Rect2(384, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_0"]
+atlas = ExtResource("6_attack")
+region = Rect2(0, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_1"]
+atlas = ExtResource("6_attack")
+region = Rect2(128, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_2"]
+atlas = ExtResource("6_attack")
+region = Rect2(256, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_3"]
+atlas = ExtResource("6_attack")
+region = Rect2(384, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_0"]
+atlas = ExtResource("7_death")
+region = Rect2(0, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_1"]
+atlas = ExtResource("7_death")
+region = Rect2(128, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_2"]
+atlas = ExtResource("7_death")
+region = Rect2(256, 0, 128, 96)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_3"]
+atlas = ExtResource("7_death")
+region = Rect2(384, 0, 128, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_boarlet"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle_3")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_run_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_run_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_run_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_run_3")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_attack_3")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_death_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_death_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_death_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_death_3")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aggro"]
+radius = 260.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(150, 120)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 34.0
+height = 120.0
+
+[node name="Boarlet" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 4
+script = ExtResource("1_monster")
+config = ExtResource("2_boarlet")
+depth_foot_offset = 67.0
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("8_health")
+max_health = 50
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("10_stats")
+
+[node name="HealthBar" type="Node2D" parent="."]
+z_index = 1
+position = Vector2(0, -92)
+script = ExtResource("9_healthbar")
+width = 60.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.4, 1.4)
+sprite_frames = SubResource("SpriteFrames_boarlet")
+autoplay = "default"
+
+[node name="Attack Radius" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="attack_border" type="CollisionShape2D" parent="Attack Radius"]
+shape = SubResource("CircleShape2D_aggro")
+
+[node name="AttackHitbox" type="Area2D" parent="." groups=["enemy_hitbox"]]
+collision_layer = 16
+collision_mask = 2
+monitoring = false
+script = ExtResource("3_hitbox")
+target_group = "player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+position = Vector2(3, -2)
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -34)
+shape = SubResource("CapsuleShape2D_body")
