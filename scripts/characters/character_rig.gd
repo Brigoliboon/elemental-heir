@@ -21,8 +21,27 @@ func _init(config: CharacterData, skeleton: Skeleton2D) -> void:
 
 func build() -> void:
 	_load_parts(_config.pivots_path)
+	_build_bones()
+
+
+## Rebuilds the skeleton from the current `parts` dictionary without reading the file again.
+func rebuild() -> void:
+	_clear_bones()
+	_build_bones()
+
+
+func _build_bones() -> void:
 	for part_name in parts.keys():
 		_ensure_bone(str(part_name))
+
+
+func _clear_bones() -> void:
+	for child in _skeleton.get_children():
+		_skeleton.remove_child(child)
+		child.free()
+	bones.clear()
+	rest_rotation_deg.clear()
+	rest_position.clear()
 
 
 func _load_parts(pivots_path: String) -> void:

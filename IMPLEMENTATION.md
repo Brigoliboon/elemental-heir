@@ -353,6 +353,65 @@ fields are consumed where the current runtime already exposes them.
     off-screen at x = -625. It is left-anchored now, keeping the authored
     position at every scale and resolution.
   - `tests/test_hud_layout.gd` now also checks every control at mobile scale.
+- [x] H4 - Keep passive and block buttons on screen
+  - Anchor `PassiveButton` and `BlockButton` to the bottom-right instead of
+    absolute design-pixel offsets, so the 1.4x mobile HUD scale cannot push
+    them past the viewport.
+  - Test: `tests/test_hud_layout.gd`.
+- [x] H5 - Match HUD button clicks to the visible art
+  - The rotated attack, block and passive buttons have overlapping rectangular
+    controls, so the attack button steals taps in its transparent corners.
+    Build a `texture_click_mask` from each button texture so only visible pixels
+    accept input.
+  - Test: `tests/test_hud_click_masks.gd`.
+
+## Fix - Joystick control across scene changes
+
+- [x] J1 - Keep the joystick dragging through a scene change
+  - The old scene frees the joystick while a finger is still down. The new
+    joystick starts with no active touch, ignores the continuing drag events,
+    and forces the player to release and grab it again.
+  - Persist the active pointer/touch and its screen position across scene
+    changes, and restore them when the new joystick is ready.
+  - Test: `tests/test_joystick_scene_change.gd`.
+
+## Fix - Player scale across viewports
+
+- [x] S1 - Keep the player proportional to the background
+  - Character depth scales are authored for the 1.5x design background. Wider
+    landscape viewports grow the background but not the character, so the
+    player looks smaller on tall phones. Scale the character with the
+    background, but never below the authored design scale.
+  - Test: `tests/test_player_scale.gd`.
+
+## Fix - Guild ambient fire loop
+
+- [x] A1 - Loop the fire crackling ambience in the guild
+  - Add `fire-crackling.mp3` as a looping `AudioStreamPlayer` in
+    `forest_guild.tscn`, under the background music and at a lower volume.
+  - Test: `tests/test_guild_ambient.gd`.
+
+## Fix - Area footstep wiring
+
+- [x] F1 - Pass the scene's footstep set to the player
+  - The village and fight scenes assign `footsteps = footsteps_grass.tres` to
+    their root `Area`, but `Area` never exposed that property or handed it to
+    the player, so `player.sfx.footsteps` stayed null and no steps played.
+  - Add the exported property and apply it when the area starts.
+  - Test: `tests/test_area_footsteps.gd`.
+
+## Fix - Guild background export
+
+- [x] G1 - Load the guild background from the source PNG
+  - Replace the stale `.godot/imported/*.ctex` subresource with the source PNG
+    `ext_resource`, so exported/mobile builds can load the guild background.
+  - Guard `Area._layout_background()` against zero-size textures so a missing
+    background cannot abort player placement or the area label.
+  - Test: `tests/test_guild_scene.gd`.
+- [x] G2 - Spawn the player outside guild collision blocks
+  - Move the guild spawn point out of the counter collision so the player does
+    not enter the scene stuck.
+  - Test: `tests/test_guild_scene.gd`.
 
 ## Fix - Character frozen after switching attack and block
 

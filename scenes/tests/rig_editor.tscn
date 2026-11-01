@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/rig_editor.gd" id="1_editor"]
+[ext_resource type="Resource" path="res://resources/characters/warrior.tres" id="2_config"]
+
+[node name="RigEditor" type="Node2D"]
+script = ExtResource("1_editor")
+config = ExtResource("2_config")

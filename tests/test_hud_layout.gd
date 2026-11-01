@@ -11,6 +11,7 @@ const CONTROLS := [
 	"HUD/UI/MapButton",
 	"HUD/UI/AttackButton",
 	"HUD/UI/BlockButton",
+	"HUD/UI/PassiveButton",
 	"HUD/UI/PlayerHealth",
 	"HUD/UI/PlayerHealth/Profile",
 	"HUD/UI/PlayerHealth/HealthBar",

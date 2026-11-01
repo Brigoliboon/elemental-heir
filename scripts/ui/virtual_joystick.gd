@@ -22,13 +22,25 @@ var _dragging := false
 var _active_touch := -1
 var _knob_offset := Vector2.ZERO
 
+## A scene change frees this control while the finger is still down. Keep the
+## active pointer in static state so the next area's joystick can resume it.
+static var _shared_dragging := false
+static var _shared_active_touch := -1
+static var _shared_screen_position := Vector2.ZERO
+
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	resized.connect(_on_resized)
 	_ensure_visuals()
 	_update_visuals()
-	reset()
+	if _shared_dragging:
+		_dragging = true
+		_active_touch = _shared_active_touch
+		update_from_local(_shared_screen_position - global_position)
+		call_deferred("_restore_shared_pointer")
+	else:
+		reset()
 
 
 ## Updates the stick from a local control-space position. Public so tests and
@@ -56,7 +68,24 @@ func reset() -> void:
 	_knob_offset = Vector2.ZERO
 	_dragging = false
 	_active_touch = -1
+	_shared_dragging = false
+	_shared_active_touch = -1
+	_shared_screen_position = Vector2.ZERO
 	_apply_knob_position()
+
+
+func _restore_shared_pointer() -> void:
+	if not _shared_dragging or not is_inside_tree():
+		return
+	_dragging = true
+	_active_touch = _shared_active_touch
+	update_from_local(_shared_screen_position - global_position)
+
+
+func _remember_pointer(screen_position: Vector2) -> void:
+	_shared_dragging = _dragging
+	_shared_active_touch = _active_touch
+	_shared_screen_position = screen_position
 
 
 func _input(event: InputEvent) -> void:
@@ -66,6 +95,7 @@ func _input(event: InputEvent) -> void:
 				_dragging = true
 				_active_touch = event.index
 				update_from_local(event.position - global_position)
+				_remember_pointer(event.position)
 				get_viewport().set_input_as_handled()
 		elif event.index == _active_touch:
 			reset()
@@ -75,6 +105,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
 		if event.index == _active_touch:
 			update_from_local(event.position - global_position)
+			_remember_pointer(event.position)
 			get_viewport().set_input_as_handled()
 		return
 
@@ -82,7 +113,9 @@ func _input(event: InputEvent) -> void:
 		if event.pressed:
 			if not _dragging and get_global_rect().has_point(event.position):
 				_dragging = true
+				_active_touch = -1
 				update_from_local(event.position - global_position)
+				_remember_pointer(event.position)
 				get_viewport().set_input_as_handled()
 		elif _dragging:
 			reset()
@@ -91,6 +124,7 @@ func _input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion and _dragging:
 		update_from_local(event.position - global_position)
+		_remember_pointer(event.position)
 		get_viewport().set_input_as_handled()
 
 
