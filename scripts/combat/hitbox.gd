@@ -21,6 +21,10 @@ signal hit_landed(target: Node2D)
 @export var depth_tolerance: float = 40.0
 ## The entity that owns this hitbox. If null, resolved by searching parents.
 @export var attacker: Node2D
+## Node whose feet-y defines the impact depth. Defaults to the attacker. Detached
+## ground-target hitboxes point this at their impact marker so depth is checked
+## against the landing spot, not the caster.
+@export var depth_origin: Node2D
 ## Draw the hitbox in the editor/debug runs.
 @export var debug_draw := false
 
@@ -99,7 +103,7 @@ func _try_hit(node: Node) -> void:
 		return
 	# Verify depth alignment so attacks don't connect across different depth planes.
 	if depth_tolerance > 0.0:
-		var att := _get_attacker()
+		var att := depth_origin if depth_origin != null else _get_attacker()
 		if att != null and not DepthSort.is_in_depth(att, node, depth_tolerance):
 			return
 	_hit_targets[id] = true

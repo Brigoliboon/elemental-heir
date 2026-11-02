@@ -5,14 +5,14 @@ extends RefCounted
 
 const MOB_SCENE := "res://entities/enemies/mob.tscn"
 const BOARLET_SCENE := "res://entities/enemies/boarlet.tscn"
-const BOARLET_GENERAL_SCENE := "res://entities/enemies/boarlet_general.tscn"
+const ROOTBOUND_SCENE := "res://entities/enemies/rootbound.tscn"
 const GUARDIAN_SCENE := "res://entities/enemies/guardian.tscn"
 
 const ENTITY_DATA := [
 	"res://resources/entities/goblin.tres",
 	"res://resources/entities/boarlet.tres",
 	"res://resources/entities/hollowhart.tres",
-	"res://resources/entities/boarlet_general.tres",
+	"res://resources/entities/rootbound.tres",
 	"res://resources/entities/guardian.tres",
 ]
 
@@ -86,13 +86,13 @@ func _check_data(failures: Array[String]) -> void:
 	elif guardian.passives.is_empty():
 		failures.append("guardian.tres needs the aura passive")
 
-	var general := load("res://resources/entities/boarlet_general.tres") as MonsterData
+	var general := load("res://resources/entities/rootbound.tres") as MonsterData
 	if general == null or general.rank != MonsterData.Rank.GENERAL:
-		failures.append("boarlet_general.tres must use the GENERAL rank")
+		failures.append("rootbound.tres must use the GENERAL rank")
 
 
 func _check_scenes(tree: SceneTree, failures: Array[String]) -> void:
-	for path in [BOARLET_SCENE, BOARLET_GENERAL_SCENE, GUARDIAN_SCENE]:
+	for path in [BOARLET_SCENE, ROOTBOUND_SCENE, GUARDIAN_SCENE]:
 		var packed := load(path) as PackedScene
 		if packed == null:
 			failures.append("%s did not load" % path)

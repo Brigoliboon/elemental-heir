@@ -36,12 +36,10 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_hud_click_masks.gd"),
 	preload("res://tests/test_title_layout.gd"),
 	preload("res://tests/test_sfx_wiring.gd"),
-<<<<<<< HEAD
 	preload("res://tests/test_area_footsteps.gd"),
-=======
 	preload("res://tests/test_damage_numbers.gd"),
 	preload("res://tests/test_monster_skills.gd"),
->>>>>>> 43c47dc6c8425ecf7a77fc4c4123aebf5ddddc62
+	preload("res://tests/test_area_skills.gd"),
 ]
 
 

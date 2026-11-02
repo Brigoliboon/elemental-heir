@@ -49,5 +49,5 @@ position = Vector2(1343, 763)
 [node name="Boarlet5" parent="." index="9" unique_id=894863886 instance=ExtResource("5_ur1u1")]
 position = Vector2(972, 992)
 
-[node name="BoarletGeneral" parent="." index="10" unique_id=365947532 instance=ExtResource("6_4i6x8")]
+[node name="Rootbound" parent="." index="10" unique_id=365947532 instance=ExtResource("6_4i6x8")]
 position = Vector2(3595, 748.00006)
