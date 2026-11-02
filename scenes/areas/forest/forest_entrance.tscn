@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
 [ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="4_footsteps"]
 [ext_resource type="PackedScene" path="res://entities/enemies/boarlet.tscn" id="5_ur1u1"]
-[ext_resource type="PackedScene" path="res://entities/enemies/rootbound.tscn" id="6_4i6x8"]
+[ext_resource type="PackedScene" uid="uid://bca22srnt0mjc" path="res://entities/enemies/rootbound.tscn" id="6_4i6x8"]
 
 [node name="ForestEntrance" unique_id=9000001 instance=ExtResource("1_base")]
 area_name = "Forest - Entrance"
@@ -50,4 +50,4 @@ position = Vector2(1343, 763)
 position = Vector2(972, 992)
 
 [node name="BoarletGeneral" parent="." index="10" unique_id=365947532 instance=ExtResource("6_4i6x8")]
-position = Vector2(2977, 801)
+position = Vector2(3595, 748.00006)
