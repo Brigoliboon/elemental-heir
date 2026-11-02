@@ -9,3 +9,9 @@ class_name GroundTargetSkill
 @export_group("Targeting")
 ## Capture the target's position when the cast starts. False recaptures at impact.
 @export var lock_at_cast := true
+
+@export_group("Telegraph")
+## Show a ground marker at the impact point while the cast is winding up.
+@export var show_marker := true
+## Base colour of the ground marker. The marker drives alpha itself.
+@export var marker_color := Color(1.0, 0.35, 0.2, 1.0)

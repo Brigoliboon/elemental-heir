@@ -99,6 +99,8 @@ var _pending_summons: Dictionary = {}
 var _cast_target: Node2D
 var _cast_target_position := Vector2.ZERO
 var _has_cast_target_position := false
+## Visible telegraph for a GroundTargetSkill, cleared when the cast resolves.
+var _cast_marker: GroundTargetMarker
 
 
 func _ready() -> void:
@@ -237,6 +239,7 @@ func _physics_process(delta: float) -> void:
 
 	if is_attacking:
 		_update_cast_hit()
+		_update_cast_marker()
 		velocity = knockback_velocity
 		_move_with_knockback(delta)
 		_apply_depth()
@@ -379,8 +382,12 @@ func _cast_skill(skill: MonsterSkill, is_basic := false, target: Node2D = null) 
 	attack_timer = attack_cooldown
 	_cast_target = target
 	_has_cast_target_position = false
-	if skill is GroundTargetSkill and (skill as GroundTargetSkill).lock_at_cast:
-		_capture_ground_target(target)
+	_clear_cast_marker()
+	if skill is GroundTargetSkill:
+		var ground := skill as GroundTargetSkill
+		if ground.lock_at_cast:
+			_capture_ground_target(target)
+		_start_cast_marker(ground)
 	animated_sprite.speed_scale = maxf(0.05, skill.animation_speed)
 	_reset_hitbox_geometry()
 	if skill is MeleeSkill:
@@ -453,6 +460,7 @@ func _execute_effect(skill: MonsterSkill) -> void:
 	elif skill is AoESkill:
 		_execute_aoe(skill as AoESkill)
 	elif skill is GroundTargetSkill:
+		_finish_cast_marker()
 		_execute_ground_target(skill as GroundTargetSkill)
 
 
@@ -498,6 +506,66 @@ func _capture_ground_target(target: Node2D) -> void:
 		_has_cast_target_position = true
 	else:
 		_has_cast_target_position = false
+
+
+## Creates the visible ground telegraph at the captured impact point. Tracking
+## skills move it every physics frame until the effect resolves.
+func _start_cast_marker(skill: GroundTargetSkill) -> void:
+	if not skill.show_marker:
+		return
+	var parent := get_parent()
+	if parent == null:
+		return
+	var center := _cast_target_position
+	if not _has_cast_target_position:
+		center = _current_ground_target_point()
+	var marker := GroundTargetMarker.new()
+	marker.radius = skill.radius
+	marker.color = skill.marker_color
+	parent.add_child(marker)
+	marker.global_position = center
+	marker.z_index = DepthSort.z_for_y(center.y) - 1
+	_cast_marker = marker
+
+
+func _update_cast_marker() -> void:
+	if not is_instance_valid(_cast_marker):
+		_cast_marker = null
+		return
+	var skill := _casting_skill as GroundTargetSkill
+	if skill == null or skill.lock_at_cast:
+		return
+	var target := _cast_target
+	if not is_instance_valid(target):
+		target = _get_target_player()
+		_cast_target = target
+	if not is_instance_valid(target):
+		return
+	var point := _impact_point_of(target)
+	_cast_marker.global_position = point
+	_cast_marker.z_index = DepthSort.z_for_y(point.y) - 1
+
+
+func _current_ground_target_point() -> Vector2:
+	var target := _cast_target
+	if not is_instance_valid(target):
+		target = _get_target_player()
+	if is_instance_valid(target):
+		return _impact_point_of(target)
+	return Vector2(global_position.x, get_feet_y())
+
+
+## Flashes the telegraph at the hit frame. The marker frees itself afterwards.
+func _finish_cast_marker() -> void:
+	if is_instance_valid(_cast_marker):
+		_cast_marker.flash()
+	_cast_marker = null
+
+
+func _clear_cast_marker() -> void:
+	if is_instance_valid(_cast_marker):
+		_cast_marker.queue_free()
+	_cast_marker = null
 
 
 ## Builds a detached, short-lived circular [Hitbox] at `center`. The marker node
@@ -947,6 +1015,7 @@ func _on_animation_finished() -> void:
 	_casting_animation = &""
 	_cast_target = null
 	_has_cast_target_position = false
+	_clear_cast_marker()
 	animated_sprite.speed_scale = 1.0
 	attack_hitbox.deactivate()
 	_reset_hitbox_geometry()
@@ -1010,6 +1079,7 @@ func _on_health_died() -> void:
 	_is_dead = true
 	is_attacking = false
 	_casting_skill = null
+	_clear_cast_marker()
 	knockback_velocity = Vector2.ZERO
 	velocity = Vector2.ZERO
 	attack_hitbox.deactivate()

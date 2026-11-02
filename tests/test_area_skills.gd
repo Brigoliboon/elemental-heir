@@ -114,19 +114,34 @@ func _check_ground_lock(tree: SceneTree, failures: Array[String]) -> void:
 	skill.lock_at_cast = true
 	mob._cast_skill(skill, false, target)
 
+	var telegraph := mob._cast_marker
+	if not is_instance_valid(telegraph):
+		failures.append("a ground-targeted cast must show a telegraph marker")
+	elif not telegraph.global_position.is_equal_approx(Vector2(300.0, feet)):
+		failures.append("the telegraph must sit on the locked impact point")
+
 	# The player dodges after the cast starts; the impact must stay on the old spot.
 	target.global_position = Vector2(900.0, feet)
-	var marker := _target(tree, Vector2(300.0, feet))
+	var old_spot := _target(tree, Vector2(300.0, feet))
 	await tree.physics_frame
+	mob._update_cast_marker()
+	if is_instance_valid(telegraph) and not telegraph.global_position.is_equal_approx(Vector2(300.0, feet)):
+		failures.append("a locked telegraph must not follow a target that moved away")
+
 	mob._execute_effect(skill)
+	await tree.physics_frame
+	if is_instance_valid(telegraph) and not telegraph.is_flashing():
+		failures.append("the telegraph must flash when the impact lands")
 	await _settle(tree)
 
-	if marker.damage_taken == 0:
+	if old_spot.damage_taken == 0:
 		failures.append("a locked ground target must hit the position captured at cast time")
 	if target.damage_taken != 0:
 		failures.append("a locked ground target must not follow a target that moved away")
+	if is_instance_valid(telegraph):
+		failures.append("the telegraph must free itself after the impact flash")
 
-	await _cleanup(tree, mob, [target, marker])
+	await _cleanup(tree, mob, [target, old_spot])
 
 
 func _check_ground_tracking(tree: SceneTree, failures: Array[String]) -> void:
@@ -144,9 +159,14 @@ func _check_ground_tracking(tree: SceneTree, failures: Array[String]) -> void:
 	skill.active_seconds = 0.05
 	skill.lock_at_cast = false
 	mob._cast_skill(skill, false, target)
+	var telegraph := mob._cast_marker
 
 	# Without the lock, the impact should follow the target to its new position.
 	target.global_position = Vector2(600.0, feet)
+	mob._update_cast_marker()
+	if is_instance_valid(telegraph) and not telegraph.global_position.is_equal_approx(Vector2(600.0, feet)):
+		failures.append("an unlocked telegraph must follow the target until impact")
+
 	var old_spot := _target(tree, Vector2(300.0, feet))
 	await tree.physics_frame
 	mob._execute_effect(skill)
@@ -188,7 +208,7 @@ func _target(tree: SceneTree, position: Vector2) -> TargetBody:
 func _settle(tree: SceneTree) -> void:
 	for _frame in 3:
 		await tree.physics_frame
-	await tree.create_timer(0.1).timeout
+	await tree.create_timer(0.2).timeout
 
 
 func _cleanup(tree: SceneTree, mob: Monster, targets: Array) -> void:
