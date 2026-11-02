@@ -14,6 +14,8 @@ signal died
 signal skill_cast(skill: MonsterSkill)
 
 @export var config: EnemyData
+## Rarity chosen by the area spawn table. -1 uses the data resource's own rarity.
+@export var spawn_rarity: int = -1
 @export var attack_cooldown: float = 1.0
 ## Distance at which the monster considers the player in attack range.
 @export var attack_range: float = 135.0
@@ -124,6 +126,9 @@ func _ready() -> void:
 	attack_radius.body_exited.connect(_on_attack_radius_body_exited)
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 
+	var rarity_tint := EnemyData.rarity_tint(effective_rarity())
+	if rarity_tint != Color.WHITE:
+		base_tint *= rarity_tint
 	_active_tint = base_tint
 	animated_sprite.modulate = _active_tint
 
@@ -149,8 +154,27 @@ func _ensure_stats() -> void:
 		add_child(stats)
 	if config != null:
 		stats.configure(config, config.level)
+		_apply_rarity_modifiers()
 		attack_damage = int(stats.get_stat(Stats.ATTACK))
 		move_speed = stats.get_stat(Stats.MOVE_SPEED)
+
+
+## Spawn rarity scales the combat stat block through the shared Stats pipeline.
+func _apply_rarity_modifiers() -> void:
+	var multiplier := EnemyData.rarity_multiplier(effective_rarity())
+	if is_equal_approx(multiplier, 1.0):
+		return
+	var pct := multiplier - 1.0
+	stats.add_modifier(&"spawn_rarity", Stats.MAX_HEALTH, 0.0, pct)
+	stats.add_modifier(&"spawn_rarity", Stats.ATTACK, 0.0, pct)
+	stats.add_modifier(&"spawn_rarity", Stats.DEFENCE, 0.0, pct)
+
+
+## -1 follows the data resource; spawn tables pass an explicit rarity.
+func effective_rarity() -> int:
+	if spawn_rarity >= 0:
+		return spawn_rarity
+	return config.rarity if config != null else EnemyData.Rarity.NORMAL
 
 
 func _ensure_health() -> void:
@@ -1116,7 +1140,8 @@ func _award_experience() -> void:
 		return
 	var player := get_tree().get_first_node_in_group("player")
 	if player != null and player.has_method("add_experience"):
-		player.add_experience(config.xp_reward)
+		var reward := int(round(config.xp_reward * EnemyData.rarity_multiplier(effective_rarity())))
+		player.add_experience(maxi(1, reward))
 
 
 func _flash_damage() -> void:

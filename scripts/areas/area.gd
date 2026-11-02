@@ -30,6 +30,11 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @export var background_music: AudioStream
 ## Surface the player walks on; null keeps footsteps silent.
 @export var footsteps: FootstepSet
+## Encounter table for this area stage. Null means the area has no spawns.
+@export var spawn_data: AreaSpawnData
+## Safe areas (the village) reset SpawnState so cleared fighting areas respawn
+## on the next visit.
+@export var safe_zone := false
 
 @export_group("Walkable ground")
 ## Top (far) edge of the walkable band, in background-image pixels.
@@ -77,6 +82,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 
 @onready var background: Sprite2D = $Background
 @onready var background_props: Node2D = get_node_or_null("BackgroundProps")
+@onready var spawn_handler: SpawnHandler = get_node_or_null("SpawnHandler")
 @onready var player: Character = $Player
 @onready var camera: Camera2D = $Camera
 @onready var hud_ui: Control = $HUD/UI
@@ -131,6 +137,10 @@ func _ready() -> void:
 	area_label.text = area_name
 	_bind_player_health()
 	_bind_player_progress()
+	if safe_zone:
+		SpawnState.reset_all()
+	if spawn_handler != null:
+		spawn_handler.start()
 	map_button.pressed.connect(_on_map_button_pressed)
 	profile_button.pressed.connect(_on_inventory_button_pressed)
 	attack_button.pressed.connect(player.attack)

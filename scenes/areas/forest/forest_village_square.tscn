@@ -25,6 +25,7 @@ area_name = "Forest - Village Square"
 background_music = ExtResource("6_music")
 footsteps = ExtResource("7_footsteps")
 spawn_x_ratio = 0.3
+safe_zone = true
 exit_right_scene = "res://scenes/areas/forest/forest_entrance.tscn"
 
 [node name="Background" parent="." index="0" unique_id=1944799289]

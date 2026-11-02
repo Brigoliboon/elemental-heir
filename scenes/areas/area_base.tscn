@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="12_exp_bar"]
 [ext_resource type="Texture2D" uid="uid://551e72sjqgvn" path="res://assets/ui/hud/attack-btn.png" id="13_attack_btn"]
 [ext_resource type="Texture2D" uid="uid://bnhje6hllmvw4" path="res://assets/ui/hud/map-btn.png" id="14_map_btn"]
+[ext_resource type="Script" path="res://scripts/world/spawn_handler.gd" id="15_spawn_handler"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats_panel"]
 bg_color = Color(0.05, 0.05, 0.07, 0.96)
@@ -461,3 +462,6 @@ columns = 7
 [node name="Close" type="Button" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=200197597]
 layout_mode = 2
 text = "Close"
+
+[node name="SpawnHandler" type="Node" parent="."]
+script = ExtResource("15_spawn_handler")
