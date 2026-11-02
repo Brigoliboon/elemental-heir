@@ -3,13 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://crdwrp1o3yudn" path="res://assets/backgrounds/forest/forest_guild/forest_guild_interior.png" id="2_interior"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
-[ext_resource type="Resource" path="res://resources/audio/footsteps_stone.tres" id="8_footsteps"]
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="4_g1pyl"]
 [ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
 [ext_resource type="Texture2D" uid="uid://br4jjxh0vrpw2" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
-[ext_resource type="Texture2D" uid="uid://6pq35c7msw5i" path="res://assets/characters/npcs/Lara/lara_standing_cropped.png" id="5_pverb"]
+[ext_resource type="Texture2D" uid="uid://ks0vlfgii4r1" path="res://assets/characters/npcs/Lara/animation/lara_idle/lara_idle_sheet.png" id="5_lara"]
 [ext_resource type="Texture2D" uid="uid://bkghps3b5ejou" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
 [ext_resource type="AudioStream" uid="uid://bymn2dx58v8nr" path="res://assets/audio/sfx/environment/fire-crackling.mp3" id="8_fire"]
+[ext_resource type="Resource" path="res://resources/audio/footsteps_stone.tres" id="8_footsteps"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(613, 72.75)
@@ -32,6 +32,70 @@ gradient = SubResource("Gradient_i6ujb")
 fill = 1
 fill_from = Vector2(0.49565217, 0.526087)
 
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_0"]
+atlas = ExtResource("5_lara")
+region = Rect2(0, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_1"]
+atlas = ExtResource("5_lara")
+region = Rect2(66, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_2"]
+atlas = ExtResource("5_lara")
+region = Rect2(132, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_3"]
+atlas = ExtResource("5_lara")
+region = Rect2(198, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_4"]
+atlas = ExtResource("5_lara")
+region = Rect2(264, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_5"]
+atlas = ExtResource("5_lara")
+region = Rect2(330, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_6"]
+atlas = ExtResource("5_lara")
+region = Rect2(396, 0, 66, 64)
+
+[sub_resource type="AtlasTexture" id="Atlas_lara_idle_7"]
+atlas = ExtResource("5_lara")
+region = Rect2(462, 0, 66, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lara_idle"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("Atlas_lara_idle_0")
+}, {
+"duration": 0.22,
+"texture": SubResource("Atlas_lara_idle_1")
+}, {
+"duration": 0.32,
+"texture": SubResource("Atlas_lara_idle_2")
+}, {
+"duration": 0.22,
+"texture": SubResource("Atlas_lara_idle_3")
+}, {
+"duration": 0.42,
+"texture": SubResource("Atlas_lara_idle_4")
+}, {
+"duration": 0.07,
+"texture": SubResource("Atlas_lara_idle_5")
+}, {
+"duration": 0.1,
+"texture": SubResource("Atlas_lara_idle_6")
+}, {
+"duration": 0.07,
+"texture": SubResource("Atlas_lara_idle_7")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 0.7
+}]
+
 [node name="ForestGuild" unique_id=234380443 instance=ExtResource("1_base")]
 area_name = "Forest - Guild"
 background_texture = ExtResource("2_interior")
@@ -46,11 +110,6 @@ near_character_scale = 3.4
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
 texture = ExtResource("2_interior")
-
-[node name="FireCrackling" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("8_fire")
-volume_db = -10.0
-autoplay = true
 
 [node name="SceneTransition" type="Area2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=9999101]
 position = Vector2(2411, 2359)
@@ -162,10 +221,13 @@ texture = SubResource("GradientTexture2D_h8rfs")
 texture_scale = 4.14
 script = ExtResource("4_g1pyl")
 
-[node name="LaraStanding" type="Sprite2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="3" unique_id=765076689]
+[node name="Lara" type="AnimatedSprite2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="3" unique_id=765076689]
 position = Vector2(731.05865, 630.8797)
-scale = Vector2(0.32313663, 0.31542736)
-texture = ExtResource("5_pverb")
+scale = Vector2(3.3, 3.3)
+sprite_frames = SubResource("SpriteFrames_lara_idle")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.4728765
 
 [node name="CanvasGroup" type="CanvasGroup" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="4" unique_id=2073082363]
 
@@ -234,3 +296,8 @@ metadata/_edit_use_anchors_ = true
 
 [node name="LevelLabel" parent="HUD/UI/PlayerHealth" index="7" unique_id=1230690410]
 metadata/_edit_use_anchors_ = true
+
+[node name="FireCrackling" type="AudioStreamPlayer" parent="." index="6" unique_id=301677773]
+stream = ExtResource("8_fire")
+volume_db = -10.0
+autoplay = true

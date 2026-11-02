@@ -5,6 +5,7 @@ extends RefCounted
 
 const GUILD_SCENE := "res://scenes/areas/forest/forest_guild.tscn"
 const GUILD_BACKGROUND_PATH := "res://assets/backgrounds/forest/forest_guild/forest_guild_interior.png"
+const LARA_SHEET_PATH := "res://assets/characters/npcs/Lara/animation/lara_idle/lara_idle_sheet.png"
 const SIZES := [Vector2i(1920, 1080), Vector2i(2400, 1080), Vector2i(1280, 720)]
 
 
@@ -70,5 +71,40 @@ func _check_guild(guild: Area, view: Vector2i) -> Array[String]:
 		var feet := Vector2(guild.player.position.x, guild.player.get_feet_y())
 		if guild.is_blocked(feet):
 			failures.append("the guild spawn must not be inside a collision block at %s" % view)
+
+	failures.append_array(_check_lara(guild))
+	return failures
+
+
+func _check_lara(guild: Area) -> Array[String]:
+	var failures: Array[String] = []
+	var lara := guild.get_node_or_null("BackgroundProps/Lara") as AnimatedSprite2D
+	if lara == null:
+		failures.append("the guild needs an AnimatedSprite2D named Lara")
+		return failures
+
+	if lara.sprite_frames == null:
+		failures.append("Lara needs sprite frames")
+		return failures
+	if not lara.sprite_frames.has_animation("idle"):
+		failures.append("Lara needs an idle animation")
+		return failures
+	if lara.sprite_frames.get_frame_count("idle") != 8:
+		failures.append("Lara's idle animation must have 8 frames")
+	if not lara.sprite_frames.get_animation_loop("idle"):
+		failures.append("Lara's idle animation must loop")
+	if not is_equal_approx(lara.sprite_frames.get_frame_duration("idle", 0), 0.5):
+		failures.append("Lara's idle frames must keep their authored durations")
+	if lara.animation != &"idle":
+		failures.append("Lara must start on the idle animation")
+	if not lara.is_playing():
+		failures.append("Lara's idle animation must autoplay")
+
+	for index in lara.sprite_frames.get_frame_count("idle"):
+		var frame := lara.sprite_frames.get_frame_texture("idle", index) as AtlasTexture
+		if frame == null:
+			failures.append("Lara's idle frame %d must be an AtlasTexture" % index)
+		elif frame.atlas == null or frame.atlas.resource_path != LARA_SHEET_PATH:
+			failures.append("Lara's idle frame %d must use the native sheet" % index)
 
 	return failures
