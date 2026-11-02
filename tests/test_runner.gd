@@ -40,6 +40,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_damage_numbers.gd"),
 	preload("res://tests/test_monster_skills.gd"),
 	preload("res://tests/test_area_skills.gd"),
+	preload("res://tests/test_monster_aggro.gd"),
 ]
 
 

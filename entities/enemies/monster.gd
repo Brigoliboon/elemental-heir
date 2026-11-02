@@ -25,6 +25,9 @@ signal skill_cast(skill: MonsterSkill)
 @export var attack_depth_tolerance: float = 30.0
 ## Distance at which the monster notices the player (matches the Attack Radius area).
 @export var aggro_radius: float = 325.0
+## Once the monster reaches attack range, keep chasing even when the player leaves
+## aggro_radius. Disable to leash the monster at its notice radius.
+@export var chase_after_engage := true
 ## Root-to-feet offset used as the monster's depth anchor.
 @export var depth_foot_offset: float = 80.0
 ## How quickly a hit's knockback impulse bleeds off (px/s per second).
@@ -99,6 +102,8 @@ var _pending_summons: Dictionary = {}
 var _cast_target: Node2D
 var _cast_target_position := Vector2.ZERO
 var _has_cast_target_position := false
+## True after the monster first reaches attack range; keeps it chasing afterwards.
+var _engaged := false
 ## Visible telegraph for a GroundTargetSkill, cleared when the cast resolves.
 var _cast_marker: GroundTargetMarker
 
@@ -133,6 +138,7 @@ func _apply_config() -> void:
 	attack_space = data.attack_space
 	attack_depth_tolerance = data.depth_tolerance
 	aggro_radius = data.aggro_radius
+	chase_after_engage = data.chase_after_engage
 
 
 func _ensure_stats() -> void:
@@ -256,6 +262,8 @@ func _physics_process(delta: float) -> void:
 		var dist_x := absf(delta_x)
 		var in_depth := absf(delta_y) <= attack_depth_tolerance
 		var in_attack_range := dist_x <= attack_range and dist_x >= min_attack_space
+		if chase_after_engage and dist_x <= attack_range:
+			_engaged = true
 
 		if in_depth and in_attack_range:
 			velocity = knockback_velocity
@@ -923,7 +931,7 @@ func _apply_depth() -> void:
 
 func _get_target_player() -> Node2D:
 	if is_instance_valid(player_in_range):
-		if _ground_distance_to(player_in_range) <= aggro_radius:
+		if _engaged or _ground_distance_to(player_in_range) <= aggro_radius:
 			return player_in_range
 		player_in_range = null
 
@@ -931,7 +939,9 @@ func _get_target_player() -> Node2D:
 	if tree == null:
 		return null
 	var player := tree.get_first_node_in_group("player") as Node2D
-	if player != null and _ground_distance_to(player) <= aggro_radius:
+	if player == null:
+		return null
+	if _engaged or _ground_distance_to(player) <= aggro_radius:
 		return player
 	return null
 
@@ -1079,6 +1089,7 @@ func _on_health_died() -> void:
 	_is_dead = true
 	is_attacking = false
 	_casting_skill = null
+	_engaged = false
 	_clear_cast_marker()
 	knockback_velocity = Vector2.ZERO
 	velocity = Vector2.ZERO

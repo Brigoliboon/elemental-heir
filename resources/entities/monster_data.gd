@@ -24,6 +24,9 @@ enum Rank { NORMAL, GENERAL, GUARDIAN }
 @export var depth_tolerance: float = 30.0
 ## Distance at which the monster notices the player.
 @export var aggro_radius: float = 325.0
+## Once the monster reaches attack range, keep chasing even when the player leaves
+## aggro_radius. Disable to leash the monster at its notice radius.
+@export var chase_after_engage := true
 ## Minimum gap between any two special casts, so skills do not fire back to back.
 @export var global_cooldown: float = 0.8
 
