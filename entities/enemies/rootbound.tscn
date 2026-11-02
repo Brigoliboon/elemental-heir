@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bca22srnt0mjc"]
 
 [ext_resource type="PackedScene" path="res://entities/enemies/boarlet.tscn" id="1_boarlet"]
-[ext_resource type="Resource" path="res://resources/entities/boarlet_general.tres" id="2_config"]
+[ext_resource type="Resource" path="res://resources/entities/rootbound.tres" id="2_config"]
 [ext_resource type="Texture2D" uid="uid://cxciv1nsu4tn" path="res://assets/monsters/forest/rootbound_sprites/rootbound_attack.png" id="3_h7yly"]
 [ext_resource type="Texture2D" uid="uid://dfaxbwjrr4uxc" path="res://assets/monsters/forest/rootbound_sprites/rootbound_death.png" id="4_adhc3"]
 [ext_resource type="Texture2D" uid="uid://crokvfrk3xwjo" path="res://assets/monsters/forest/rootbound_sprites/rootbound_idle.png" id="5_h7yly"]
@@ -226,7 +226,7 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="BoarletGeneral" unique_id=828159561 instance=ExtResource("1_boarlet")]
+[node name="Rootbound" unique_id=828159561 instance=ExtResource("1_boarlet")]
 scale = Vector2(1.2, 1.2)
 config = ExtResource("2_config")
 base_tint = Color(1, 0.92, 0.7, 1)

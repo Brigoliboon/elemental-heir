@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="3_k40ib"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="4_music"]
 [ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="5_footsteps"]
+[ext_resource type="PackedScene" uid="uid://bidk6nyb7anv5" path="res://entities/enemies/guardian.tscn" id="6_guardian"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -174,3 +175,6 @@ position = Vector2(1553, 663)
 
 [node name="Mob3" parent="." index="7" unique_id=632704922 instance=ExtResource("3_k40ib")]
 position = Vector2(1354, 813)
+
+[node name="Guardian" parent="." index="8" unique_id=1827463910 instance=ExtResource("6_guardian")]
+position = Vector2(2920, 820)

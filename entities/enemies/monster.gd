@@ -95,6 +95,10 @@ var _default_hitbox_size := Vector2(176.0, 154.0)
 var _default_depth_tolerance := 40.0
 ## SummonSkill -> spawns waiting on their telegraph, counted against max_alive.
 var _pending_summons: Dictionary = {}
+## GroundTargetSkill capture: target reference, impact point and whether it is valid.
+var _cast_target: Node2D
+var _cast_target_position := Vector2.ZERO
+var _has_cast_target_position := false
 
 
 func _ready() -> void:
@@ -291,11 +295,11 @@ func _tick_timers(delta: float) -> void:
 func _try_attack(target: Node2D) -> void:
 	var special := _pick_special(target)
 	if special != null:
-		_cast_skill(special)
+		_cast_skill(special, false, target)
 		return
 	var basic := _basic_skill()
 	if basic != null:
-		_cast_skill(basic, true)
+		_cast_skill(basic, true, target)
 
 
 ## Returns the highest-priority eligible special skill, breaking ties by weight.
@@ -359,10 +363,10 @@ func attack_player() -> void:
 	var basic := _basic_skill()
 	if basic == null:
 		return
-	_cast_skill(basic, true)
+	_cast_skill(basic, true, player_in_range)
 
 
-func _cast_skill(skill: MonsterSkill, is_basic := false) -> void:
+func _cast_skill(skill: MonsterSkill, is_basic := false, target: Node2D = null) -> void:
 	var animation := _resolve_animation(skill)
 	if animation == &"":
 		_warn_once(&"missing:%d" % skill.get_instance_id(), "%s cannot cast '%s': no animation" % [name, skill.id])
@@ -373,6 +377,10 @@ func _cast_skill(skill: MonsterSkill, is_basic := false) -> void:
 	_cast_effect_done = false
 	is_attacking = true
 	attack_timer = attack_cooldown
+	_cast_target = target
+	_has_cast_target_position = false
+	if skill is GroundTargetSkill and (skill as GroundTargetSkill).lock_at_cast:
+		_capture_ground_target(target)
 	animated_sprite.speed_scale = maxf(0.05, skill.animation_speed)
 	_reset_hitbox_geometry()
 	if skill is MeleeSkill:
@@ -442,6 +450,98 @@ func _execute_effect(skill: MonsterSkill) -> void:
 		_apply_skill_buffs(skill as BuffSkill)
 	elif skill is SummonSkill:
 		_summon(skill as SummonSkill)
+	elif skill is AoESkill:
+		_execute_aoe(skill as AoESkill)
+	elif skill is GroundTargetSkill:
+		_execute_ground_target(skill as GroundTargetSkill)
+
+
+## Radial burst centred on the caster's feet at the moment the effect resolves.
+func _execute_aoe(skill: AoESkill) -> void:
+	var center := Vector2(
+		global_position.x + skill.offset.x * facing_sign,
+		get_feet_y() + skill.offset.y
+	)
+	_spawn_area_hitbox(center, skill)
+
+
+## Radial hit on the position captured for a ground-targeted skill. When the
+## skill does not lock at cast, the target is re-sampled at impact time.
+func _execute_ground_target(skill: GroundTargetSkill) -> void:
+	var target := _cast_target
+	var center := _cast_target_position
+	var has_center := _has_cast_target_position
+
+	if not skill.lock_at_cast or not has_center:
+		if not is_instance_valid(target):
+			target = _get_target_player()
+		if is_instance_valid(target):
+			center = _impact_point_of(target)
+			has_center = true
+	if not has_center:
+		center = Vector2(global_position.x, get_feet_y())
+	_spawn_area_hitbox(center, skill)
+
+
+## World-space feet point used as an impact centre. Keeps x at the target's body
+## and y at its depth anchor so circular hitboxes line up with the depth check.
+func _impact_point_of(target: Node2D) -> Vector2:
+	if not is_instance_valid(target):
+		return Vector2(global_position.x, get_feet_y())
+	return Vector2(target.global_position.x, DepthSort.get_feet_y(target))
+
+
+func _capture_ground_target(target: Node2D) -> void:
+	_cast_target = target
+	if is_instance_valid(target):
+		_cast_target_position = _impact_point_of(target)
+		_has_cast_target_position = true
+	else:
+		_has_cast_target_position = false
+
+
+## Builds a detached, short-lived circular [Hitbox] at `center`. The marker node
+## supplies the depth reference; the hitbox itself uses the monster for stats and
+## damage attribution.
+func _spawn_area_hitbox(center: Vector2, skill: RadialSkill) -> void:
+	var parent := get_parent()
+	if parent == null:
+		return
+
+	var anchor := Node2D.new()
+	anchor.name = "SkillImpact"
+	parent.add_child(anchor)
+	anchor.global_position = center
+
+	var hitbox := Hitbox.new()
+	hitbox.name = "Hitbox"
+	hitbox.collision_layer = attack_hitbox.collision_layer
+	hitbox.collision_mask = attack_hitbox.collision_mask
+	hitbox.damage = attack_damage
+	hitbox.target_group = "player"
+	hitbox.attacker = self
+	hitbox.depth_origin = anchor
+	hitbox.damage_multiplier = skill.damage_multiplier
+	hitbox.knockback_force = skill.knockback
+	hitbox.depth_tolerance = skill.hit_depth_tolerance
+
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = skill.radius
+	shape.shape = circle
+	hitbox.add_child(shape)
+	anchor.add_child(hitbox)
+	hitbox.activate()
+
+	var tree := get_tree()
+	if tree != null:
+		var lifetime := maxf(0.05, skill.active_seconds)
+		tree.create_timer(lifetime).timeout.connect(func() -> void:
+			if is_instance_valid(hitbox):
+				hitbox.deactivate()
+			if is_instance_valid(anchor):
+				anchor.queue_free()
+		)
 
 
 func _apply_skill_buffs(skill: BuffSkill) -> void:
@@ -845,6 +945,8 @@ func _on_animation_finished() -> void:
 	_cast_effect_done = false
 	_casting_skill = null
 	_casting_animation = &""
+	_cast_target = null
+	_has_cast_target_position = false
 	animated_sprite.speed_scale = 1.0
 	attack_hitbox.deactivate()
 	_reset_hitbox_geometry()
