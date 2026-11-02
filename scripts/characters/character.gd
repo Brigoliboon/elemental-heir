@@ -356,13 +356,13 @@ func _ensure_inventory() -> void:
 		inventory = Inventory.new()
 		inventory.name = "Inventory"
 		add_child(inventory)
-	var sword = load("res://resources/items/weapons/default_sword.tres")
-	var buckler = load("res://resources/items/weapons/default_buckler.tres")
+	var sword = load("res://resources/items/weapons/swords/default_sword.tres")
+	var buckler = load("res://resources/items/weapons/swords/default_buckler.tres")
 	if sword != null:
 		inventory.add_item(sword, 1)
 	if buckler != null:
 		inventory.add_item(buckler, 1)
-	var holy = load("res://resources/items/weapons/holy_sword.tres")
+	var holy = load("res://resources/items/weapons/swords/holy_sword.tres")
 	if holy != null:
 		inventory.add_item(holy, 1)
 
