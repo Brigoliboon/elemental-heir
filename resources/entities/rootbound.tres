@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://7l0jb0po42ni" path="res://resources/entities/monster_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://cw2kug3amsluc" path="res://resources/passives/monster_passive.gd" id="2_600gf"]
 [ext_resource type="Resource" path="res://resources/skills/gore.tres" id="2_gore"]
-[ext_resource type="Resource" path="res://resources/skills/charge.tres" id="3_charge"]
-[ext_resource type="Resource" uid="uid://dnr7rv4xhwmf3" path="res://resources/skills/enrage.tres" id="4_enrage"]
+[ext_resource type="Resource" path="res://resources/skills/rootbound_charge.tres" id="3_charge"]
+[ext_resource type="Resource" path="res://resources/skills/rootbound_enrage.tres" id="4_enrage"]
 [ext_resource type="Resource" path="res://resources/skills/rootbound_slam.tres" id="5_slam"]
+[ext_resource type="Resource" path="res://resources/skills/rootbound_call_herd.tres" id="6_herd"]
 [ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="4_piseb"]
 
 [resource]
@@ -17,7 +18,7 @@ attack_space = 120.0
 aggro_radius = 420.0
 global_cooldown = 0.9
 basic_attack = ExtResource("2_gore")
-skills = Array[ExtResource("4_piseb")]([ExtResource("3_charge"), ExtResource("4_enrage"), ExtResource("5_slam")])
+skills = Array[ExtResource("4_piseb")]([ExtResource("3_charge"), ExtResource("4_enrage"), ExtResource("5_slam"), ExtResource("6_herd")])
 enemy_name = "Rootbound General"
 level = 2
 max_health = 220

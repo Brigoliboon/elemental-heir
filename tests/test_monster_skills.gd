@@ -121,8 +121,43 @@ func _check_scenes(tree: SceneTree, failures: Array[String]) -> void:
 				if skill != null and not sprite.sprite_frames.has_animation(skill.animation):
 					failures.append("%s skill '%s' animation '%s' is missing" % [path, skill.id, skill.animation])
 
+		if path == ROOTBOUND_SCENE:
+			_check_skill_overlays(monster, sprite, failures)
+
 		monster.queue_free()
 		await tree.process_frame
+
+
+## The General's overgrowth aura and root trail are visual overlays triggered by
+## their matching skill animations rather than body clips.
+func _check_skill_overlays(monster: Monster, sprite: AnimatedSprite2D, failures: Array[String]) -> void:
+	if sprite == null:
+		return
+	var aura := sprite.get_node_or_null("OvergrowthAura") as AnimatedSprite2D
+	var trail := sprite.get_node_or_null("RootTrail") as AnimatedSprite2D
+	if aura == null or trail == null:
+		failures.append("rootbound needs the overgrowth aura and root trail overlays")
+		return
+	var data := monster.config as MonsterData
+	var charge := _find_skill(data, &"charge")
+	var enrage := _find_skill(data, &"enrage")
+	if charge != null:
+		monster._cast_skill(charge, false, null)
+		if not trail.visible:
+			failures.append("casting the root charge must show the root trail")
+		if aura.visible:
+			failures.append("the root charge must not show the overgrowth aura")
+	if enrage != null:
+		monster._cast_skill(enrage, false, null)
+		if not aura.visible:
+			failures.append("casting enrage must show the overgrowth aura")
+
+
+func _find_skill(data: MonsterData, id: StringName) -> MonsterSkill:
+	for skill in data.skills:
+		if skill != null and skill.id == id:
+			return skill
+	return null
 
 
 func _check_skill_gates(tree: SceneTree, failures: Array[String]) -> void:

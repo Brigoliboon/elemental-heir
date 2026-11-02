@@ -6,6 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://dfaxbwjrr4uxc" path="res://assets/monsters/forest/rootbound_sprites/rootbound_death.png" id="4_adhc3"]
 [ext_resource type="Texture2D" uid="uid://crokvfrk3xwjo" path="res://assets/monsters/forest/rootbound_sprites/rootbound_idle.png" id="5_h7yly"]
 [ext_resource type="Texture2D" uid="uid://dsehonqdyxa4y" path="res://assets/monsters/forest/rootbound_sprites/rootbound_run.png" id="6_lqm3g"]
+[ext_resource type="Texture2D" uid="uid://coph21j1hlxrq" path="res://assets/monsters/forest/rootbound_sprites/rootbound_overgrowth.png" id="7_ovg"]
+[ext_resource type="Texture2D" uid="uid://chaem5p6khm8j" path="res://assets/monsters/forest/rootbound_sprites/rootbound_call_herd.png" id="8_herd"]
+[ext_resource type="Texture2D" uid="uid://nvyuuvr2tdwj" path="res://assets/monsters/forest/rootbound_sprites/rootbound_root_charge.png" id="9_charge"]
+[ext_resource type="Texture2D" uid="uid://c63xy0cfqgw0r" path="res://assets/monsters/forest/rootbound_sprites/rootbound_fx_overgrowth_aura.png" id="10_aura"]
+[ext_resource type="Texture2D" uid="uid://cfiadn2syxax4" path="res://assets/monsters/forest/rootbound_sprites/rootbound_fx_root_trail.png" id="11_trail"]
+[ext_resource type="Script" path="res://scripts/combat/skill_overlay.gd" id="12_overlay"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hqgro"]
 atlas = ExtResource("3_h7yly")
@@ -119,6 +125,150 @@ region = Rect2(1344, 0, 224, 160)
 atlas = ExtResource("6_lqm3g")
 region = Rect2(1568, 0, 224, 160)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg0"]
+atlas = ExtResource("7_ovg")
+region = Rect2(0, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg1"]
+atlas = ExtResource("7_ovg")
+region = Rect2(224, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg2"]
+atlas = ExtResource("7_ovg")
+region = Rect2(448, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg3"]
+atlas = ExtResource("7_ovg")
+region = Rect2(672, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg4"]
+atlas = ExtResource("7_ovg")
+region = Rect2(896, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg5"]
+atlas = ExtResource("7_ovg")
+region = Rect2(1120, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg6"]
+atlas = ExtResource("7_ovg")
+region = Rect2(1344, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovg7"]
+atlas = ExtResource("7_ovg")
+region = Rect2(1568, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd0"]
+atlas = ExtResource("8_herd")
+region = Rect2(0, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd1"]
+atlas = ExtResource("8_herd")
+region = Rect2(224, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd2"]
+atlas = ExtResource("8_herd")
+region = Rect2(448, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd3"]
+atlas = ExtResource("8_herd")
+region = Rect2(672, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd4"]
+atlas = ExtResource("8_herd")
+region = Rect2(896, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd5"]
+atlas = ExtResource("8_herd")
+region = Rect2(1120, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd6"]
+atlas = ExtResource("8_herd")
+region = Rect2(1344, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herd7"]
+atlas = ExtResource("8_herd")
+region = Rect2(1568, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg0"]
+atlas = ExtResource("9_charge")
+region = Rect2(0, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg1"]
+atlas = ExtResource("9_charge")
+region = Rect2(224, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg2"]
+atlas = ExtResource("9_charge")
+region = Rect2(448, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg3"]
+atlas = ExtResource("9_charge")
+region = Rect2(672, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg4"]
+atlas = ExtResource("9_charge")
+region = Rect2(896, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg5"]
+atlas = ExtResource("9_charge")
+region = Rect2(1120, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg6"]
+atlas = ExtResource("9_charge")
+region = Rect2(1344, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chg7"]
+atlas = ExtResource("9_charge")
+region = Rect2(1568, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aura0"]
+atlas = ExtResource("10_aura")
+region = Rect2(0, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aura1"]
+atlas = ExtResource("10_aura")
+region = Rect2(224, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aura2"]
+atlas = ExtResource("10_aura")
+region = Rect2(448, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aura3"]
+atlas = ExtResource("10_aura")
+region = Rect2(672, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aura4"]
+atlas = ExtResource("10_aura")
+region = Rect2(896, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aura5"]
+atlas = ExtResource("10_aura")
+region = Rect2(1120, 0, 224, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trail0"]
+atlas = ExtResource("11_trail")
+region = Rect2(0, 0, 96, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trail1"]
+atlas = ExtResource("11_trail")
+region = Rect2(96, 0, 96, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trail2"]
+atlas = ExtResource("11_trail")
+region = Rect2(192, 0, 96, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trail3"]
+atlas = ExtResource("11_trail")
+region = Rect2(288, 0, 96, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trail4"]
+atlas = ExtResource("11_trail")
+region = Rect2(384, 0, 96, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trail5"]
+atlas = ExtResource("11_trail")
+region = Rect2(480, 0, 96, 160)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_v1jn4"]
 animations = [{
 "frames": [{
@@ -224,6 +374,145 @@ animations = [{
 "loop": 1,
 "name": &"walk",
 "speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herd7")
+}],
+"loop": 0,
+"name": &"call_herd",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovg7")
+}],
+"loop": 0,
+"name": &"enrage",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chg7")
+}],
+"loop": 0,
+"name": &"root_charge",
+"speed": 9.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_aura"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aura0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aura1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aura2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aura3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aura4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aura5")
+}],
+"loop": 1,
+"name": &"enrage",
+"speed": 6.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_trail"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trail0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trail1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trail2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trail3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trail4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trail5")
+}],
+"loop": 0,
+"name": &"root_charge",
+"speed": 7.0
 }]
 
 [node name="Rootbound" unique_id=828159561 instance=ExtResource("1_boarlet")]
@@ -233,3 +522,19 @@ base_tint = Color(1, 0.92, 0.7, 1)
 
 [node name="AnimatedSprite2D" parent="." index="3"]
 sprite_frames = SubResource("SpriteFrames_v1jn4")
+
+[node name="OvergrowthAura" type="AnimatedSprite2D" parent="AnimatedSprite2D"]
+visible = false
+show_behind_parent = true
+sprite_frames = SubResource("SpriteFrames_aura")
+script = ExtResource("12_overlay")
+trigger_animation = &"enrage"
+effect_seconds = 6.0
+
+[node name="RootTrail" type="AnimatedSprite2D" parent="AnimatedSprite2D"]
+visible = false
+position = Vector2(0, 8)
+show_behind_parent = true
+sprite_frames = SubResource("SpriteFrames_trail")
+script = ExtResource("12_overlay")
+trigger_animation = &"root_charge"
