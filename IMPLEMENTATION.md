@@ -260,6 +260,35 @@ fields are consumed where the current runtime already exposes them.
   - Equip both on the warrior entity and keep `Health`/sword damage in sync
     with equipment stat changes.
 
+## Phase 4 - Area spawning (current)
+
+- [x] S1 - Spawn data resources
+  - `AreaSpawnData` describes one area stage: `area_id`, `region`, `stage`, its
+    `AreaSpawnEntry` list, and the Normal/Epic/Legendary/Anomaly chance table.
+  - `AreaSpawnEntry` binds a `PackedScene` to a min/max count and an optional
+    `rarity_override` for unique enemies (bosses keep their authored stats).
+  - `EnemyData.rarity` and the shared rarity multipliers/tints implement the
+    DESIGN_ROADMAP §5.1 tiers.
+  - Tests: `tests/test_spawning.gd`.
+- [x] S2 - Runtime handler and encounter memory
+  - `SpawnHandler` (child of `Area`) rolls the encounter once, caches slot
+    scene/position/rarity in `SpawnState`, and spawns only living slots.
+  - Positions are stored as normalised x/depth ratios so they survive viewport
+    changes; spawns keep `min_player_distance` from the player.
+  - `Monster.spawn_rarity` applies the rarity stat multiplier through `Stats`,
+    tints the sprite and scales the XP reward.
+  - Test: `tests/test_spawning.gd`.
+- [x] S3 - Respawn gate
+  - `Area.safe_zone` (set on the village) clears `SpawnState` on entry.
+  - While moving between fighting areas, killed slots stay defeated and are not
+    respawned when the scene reloads.
+  - `forest_entrance.tres` and `forest_fight.tres` replace the hand-placed
+    monsters with spawn tables (boarlets in the entrance; goblins + Hollowhart
+    Guardian in the clearing). The village is the reset point.
+  - Note: the goblin and Hollowhart are stale demo content aimed at another
+    region. Keep them wired for now; replace them when that region is authored.
+  - Test: `tests/test_spawning.gd`.
+
 ## UI - HUD virtual joystick
 
 - [x] J1 - Replace the D-pad with the joystick art

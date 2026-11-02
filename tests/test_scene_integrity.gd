@@ -5,6 +5,7 @@ extends RefCounted
 
 const SCENES := [
 	"res://scenes/areas/forest/forest_village_square.tscn",
+	"res://scenes/areas/forest/forest_entrance.tscn",
 	"res://scenes/areas/forest/forest_fight.tscn",
 ]
 
@@ -30,9 +31,11 @@ func run(tree: SceneTree) -> Array[String]:
 		elif player.rig == null or player.rig.bones.is_empty():
 			failures.append("%s player rig did not build" % path)
 
-		var mob := scene.get_node_or_null("Mob")
-		if mob != null and mob.config == null:
-			failures.append("%s Mob.config is null" % path)
+		var handler := scene.get_node_or_null("SpawnHandler") as SpawnHandler
+		if handler == null:
+			failures.append("%s has no SpawnHandler" % path)
+		elif scene.spawn_data != null and handler.area_id.is_empty():
+			failures.append("%s did not start its spawn encounter" % path)
 
 		scene.queue_free()
 		await tree.process_frame

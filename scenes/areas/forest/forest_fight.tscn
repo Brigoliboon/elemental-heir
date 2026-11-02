@@ -2,10 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://cxgvljscnbjb2" path="res://assets/backgrounds/forest/forest_fight.png" id="2_bg"]
-[ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="3_k40ib"]
 [ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="4_music"]
 [ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="5_footsteps"]
-[ext_resource type="PackedScene" uid="uid://bidk6nyb7anv5" path="res://entities/enemies/guardian.tscn" id="6_guardian"]
+[ext_resource type="Resource" path="res://resources/spawning/forest_fight.tres" id="7_spawn"]
 
 [sub_resource type="Gradient" id="Gradient_i6ujb"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -24,6 +23,7 @@ area_name = "Forest - Deepwood Clearing"
 background_texture = ExtResource("2_bg")
 background_music = ExtResource("4_music")
 footsteps = ExtResource("5_footsteps")
+spawn_data = ExtResource("7_spawn")
 ground_far_px = 420.0
 ground_near_px = 680.0
 spawn_x_ratio = 0.1
@@ -166,15 +166,3 @@ shadow_enabled = true
 
 [node name="RightSlots" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" parent_id_path=PackedInt32Array(452098965) index="2" unique_id=373649609]
 visible = true
-
-[node name="Mob" parent="." index="5" unique_id=1876476869 instance=ExtResource("3_k40ib")]
-position = Vector2(1176, 642)
-
-[node name="Mob2" parent="." index="6" unique_id=2109792798 instance=ExtResource("3_k40ib")]
-position = Vector2(1553, 663)
-
-[node name="Mob3" parent="." index="7" unique_id=632704922 instance=ExtResource("3_k40ib")]
-position = Vector2(1354, 813)
-
-[node name="Guardian" parent="." index="8" unique_id=1827463910 instance=ExtResource("6_guardian")]
-position = Vector2(2920, 820)

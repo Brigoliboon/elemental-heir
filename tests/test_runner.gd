@@ -41,6 +41,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_monster_skills.gd"),
 	preload("res://tests/test_area_skills.gd"),
 	preload("res://tests/test_monster_aggro.gd"),
+	preload("res://tests/test_spawning.gd"),
 ]
 
 
@@ -49,6 +50,9 @@ func _ready() -> void:
 	if progress != null:
 		progress.persistence_enabled = false
 		progress.reset(false)
+	var spawn_state := get_node_or_null("/root/SpawnState")
+	if spawn_state != null:
+		spawn_state.reset_all()
 
 	var failures: Array[String] = []
 	for script in TEST_SCRIPTS:
