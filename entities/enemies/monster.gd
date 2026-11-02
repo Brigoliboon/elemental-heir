@@ -664,7 +664,9 @@ func _living_summons(skill: SummonSkill) -> int:
 		return 0
 	var living: Array[Node] = []
 	for node in _summons[skill]:
-		if _is_living_summon(node):
+		# Check validity before the typed call: a freed node no longer satisfies
+		# the `Node` parameter type, so passing it would raise a type error.
+		if is_instance_valid(node) and _is_living_summon(node):
 			living.append(node)
 	_summons[skill] = living
 	return living.size()

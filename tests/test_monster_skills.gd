@@ -367,11 +367,17 @@ func _check_summons(tree: SceneTree, failures: Array[String]) -> void:
 
 	# Summons are worth no experience.
 	var summoned := mob._summons[summon][0] as Monster
+	var survivor := mob._summons[summon][1] as Monster
 	var xp_before := player.experience
 	summoned.take_damage(99999)
 	await tree.process_frame
 	if player.experience != xp_before:
 		failures.append("killing a summon must not grant experience")
+
+	# A freed summon reference must not poison the next summon check.
+	await tree.create_timer(0.5).timeout
+	if mob._living_summons(summon) != 1:
+		failures.append("a freed summon must be pruned from the living count")
 
 	# A normal monster still grants its reward.
 	var normal := (load(BOARLET_SCENE) as PackedScene).instantiate() as Monster
@@ -405,7 +411,6 @@ func _check_summons(tree: SceneTree, failures: Array[String]) -> void:
 			(node as Monster).set_physics_process(false)
 
 	# The summoner's death clears its adds.
-	var survivor := mob._summons[summon][1] as Monster
 	mob.take_damage(99999)
 	await tree.process_frame
 	if is_instance_valid(survivor) and survivor.is_inside_tree():
