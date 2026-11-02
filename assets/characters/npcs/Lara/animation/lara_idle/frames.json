@@ -1,0 +1,274 @@
+{
+ "sprite": "lara_idle",
+ "frame_size": [
+  66,
+  64
+ ],
+ "frame_count": 8,
+ "layout": "single row, left to right, no padding",
+ "anchor": {
+  "type": "bottom-centre",
+  "x": 33,
+  "y": 63,
+  "note": "bottom row is the thigh crop and is identical in every frame"
+ },
+ "native_grid": "recovered from reference at ~9.37 px per pixel",
+ "palette_colours": 28,
+ "durations_ms": [
+  500,
+  220,
+  320,
+  220,
+  420,
+  70,
+  100,
+  70
+ ],
+ "suggested_fps_if_uniform": 8,
+ "loop": true,
+ "frames": [
+  {
+   "index": 0,
+   "x": 0,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 500,
+   "breath_up_px": 0,
+   "hair_sway_px": 0,
+   "hand_settle_px": 0,
+   "eyes": "open"
+  },
+  {
+   "index": 1,
+   "x": 66,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 220,
+   "breath_up_px": 1,
+   "hair_sway_px": 0,
+   "hand_settle_px": 0,
+   "eyes": "open"
+  },
+  {
+   "index": 2,
+   "x": 132,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 320,
+   "breath_up_px": 1,
+   "hair_sway_px": 1,
+   "hand_settle_px": 0,
+   "eyes": "open"
+  },
+  {
+   "index": 3,
+   "x": 198,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 220,
+   "breath_up_px": 0,
+   "hair_sway_px": 1,
+   "hand_settle_px": 1,
+   "eyes": "open"
+  },
+  {
+   "index": 4,
+   "x": 264,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 420,
+   "breath_up_px": 0,
+   "hair_sway_px": 0,
+   "hand_settle_px": 1,
+   "eyes": "open"
+  },
+  {
+   "index": 5,
+   "x": 330,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 70,
+   "breath_up_px": 0,
+   "hair_sway_px": 0,
+   "hand_settle_px": 1,
+   "eyes": "half"
+  },
+  {
+   "index": 6,
+   "x": 396,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 100,
+   "breath_up_px": 0,
+   "hair_sway_px": 0,
+   "hand_settle_px": 1,
+   "eyes": "closed"
+  },
+  {
+   "index": 7,
+   "x": 462,
+   "y": 0,
+   "w": 66,
+   "h": 64,
+   "duration_ms": 70,
+   "breath_up_px": 0,
+   "hair_sway_px": 0,
+   "hand_settle_px": 1,
+   "eyes": "half"
+  }
+ ],
+ "blink_frames": [
+  5,
+  6,
+  7
+ ],
+ "palette": [
+  [
+   22,
+   19,
+   24
+  ],
+  [
+   36,
+   17,
+   24
+  ],
+  [
+   31,
+   32,
+   36
+  ],
+  [
+   69,
+   25,
+   36
+  ],
+  [
+   14,
+   68,
+   70
+  ],
+  [
+   6,
+   78,
+   82
+  ],
+  [
+   52,
+   57,
+   57
+  ],
+  [
+   91,
+   35,
+   47
+  ],
+  [
+   7,
+   97,
+   76
+  ],
+  [
+   103,
+   44,
+   57
+  ],
+  [
+   9,
+   115,
+   101
+  ],
+  [
+   6,
+   139,
+   84
+  ],
+  [
+   2,
+   142,
+   95
+  ],
+  [
+   101,
+   72,
+   76
+  ],
+  [
+   132,
+   56,
+   69
+  ],
+  [
+   145,
+   80,
+   81
+  ],
+  [
+   155,
+   94,
+   95
+  ],
+  [
+   172,
+   103,
+   90
+  ],
+  [
+   131,
+   126,
+   135
+  ],
+  [
+   169,
+   130,
+   115
+  ],
+  [
+   196,
+   124,
+   101
+  ],
+  [
+   221,
+   119,
+   118
+  ],
+  [
+   211,
+   134,
+   137
+  ],
+  [
+   229,
+   179,
+   139
+  ],
+  [
+   242,
+   193,
+   129
+  ],
+  [
+   241,
+   192,
+   165
+  ],
+  [
+   247,
+   208,
+   189
+  ],
+  [
+   247,
+   241,
+   230
+  ]
+ ]
+}
