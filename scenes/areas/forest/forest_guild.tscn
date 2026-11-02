@@ -36,16 +36,9 @@ fill_from = Vector2(0.49565217, 0.526087)
 area_name = "Forest - Guild"
 background_texture = ExtResource("2_interior")
 background_music = ExtResource("3_music")
-<<<<<<< HEAD
 ground_far_px = 350.0
 ground_near_px = 750.0
 spawn_depth = 0.98
-=======
-footsteps = ExtResource("8_footsteps")
-ground_far_px = 100.0
-ground_near_px = 650.0
-spawn_depth = 0.8
->>>>>>> 43c47dc6c8425ecf7a77fc4c4123aebf5ddddc62
 spawn_x_ratio = 0.348
 far_character_scale = 1.8
 near_character_scale = 3.4

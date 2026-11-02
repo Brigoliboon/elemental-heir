@@ -150,5 +150,5 @@ script = ExtResource("8_transition")
 target_scene = "res://scenes/areas/forest/forest_guild.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTransition" index="0" unique_id=9999002]
-position = Vector2(-397, 227)
+position = Vector2(-424, 227)
 shape = SubResource("RectangleShape2D_transition")
