@@ -115,6 +115,7 @@ func _ready() -> void:
 	if config == null:
 		push_error("%s has no MonsterData" % name)
 	_apply_config()
+	_ensure_name_label()
 	_ensure_stats()
 	_ensure_health()
 	_ensure_sfx()
@@ -144,6 +145,28 @@ func _apply_config() -> void:
 	attack_depth_tolerance = data.depth_tolerance
 	aggro_radius = data.aggro_radius
 	chase_after_engage = data.chase_after_engage
+
+
+func _ensure_name_label() -> void:
+	var label := get_node_or_null("NameLabel") as Label
+	if label == null:
+		label = Label.new()
+		label.name = "NameLabel"
+		add_child(label)
+
+	var bar := get_node_or_null("HealthBar") as Node2D
+	var bar_top := bar.position.y if bar != null else -120.0
+	label.position = Vector2(-90.0, bar_top - 34.0)
+	label.size = Vector2(180.0, 28.0)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.z_index = 2
+	label.text = config.enemy_name if config != null else name
+	label.add_theme_font_size_override("font_size", 20)
+	label.add_theme_color_override("font_color", EnemyData.rarity_tint(effective_rarity()))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 4)
 
 
 func _ensure_stats() -> void:

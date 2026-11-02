@@ -277,6 +277,8 @@ fields are consumed where the current runtime already exposes them.
     changes; spawns keep `min_player_distance` from the player.
   - `Monster.spawn_rarity` applies the rarity stat multiplier through `Stats`,
     tints the sprite and scales the XP reward.
+  - Each monster builds a `NameLabel` above its health bar using
+    `EnemyData.enemy_name`, with the text colored by the spawn rarity.
   - Test: `tests/test_spawning.gd`.
 - [x] S3 - Respawn gate
   - `Area.safe_zone` (set on the village) clears `SpawnState` on entry.

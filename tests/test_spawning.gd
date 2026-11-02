@@ -157,6 +157,14 @@ func _check_rarity_roll(
 			failures.append("anomaly rarity must scale attack")
 		if monster.base_tint == Color.WHITE:
 			failures.append("rare spawns must use a visible tint")
+		var name_label := monster.get_node_or_null("NameLabel") as Label
+		if name_label == null:
+			failures.append("monsters must show a name label")
+		else:
+			if name_label.text != "Boarlet":
+				failures.append("the name label must use EnemyData.enemy_name")
+			if name_label.get_theme_color("font_color") != EnemyData.rarity_tint(EnemyData.Rarity.ANOMALY):
+				failures.append("the name label must use the spawn rarity color")
 
 	# A normal roll still obeys the table.
 	var rng := RandomNumberGenerator.new()
