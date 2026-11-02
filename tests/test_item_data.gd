@@ -2,8 +2,8 @@ extends RefCounted
 ## Validates the item/equipment resources and the default warrior gear.
 
 
-const SWORD_PATH := "res://resources/items/weapons/default_sword.tres"
-const BUCKLER_PATH := "res://resources/items/weapons/default_buckler.tres"
+const SWORD_PATH := "res://resources/items/weapons/swords/default_sword.tres"
+const BUCKLER_PATH := "res://resources/items/weapons/swords/default_buckler.tres"
 
 
 func run(_tree: SceneTree) -> Array[String]:
