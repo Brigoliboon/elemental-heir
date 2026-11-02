@@ -18,7 +18,7 @@ fill = 1
 fill_from = Vector2(0.49565217, 0.526087)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_transition"]
-size = Vector2(120, 120)
+size = Vector2(80, 120)
 
 [node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
 area_name = "Forest - Village Square"
@@ -143,13 +143,24 @@ blend_mode = 1
 shadow_enabled = true
 max_distance = 3343.0
 
-[node name="SceneTransition" type="Area2D" parent="." index="6" unique_id=9999001]
+[node name="GuildEntrance" type="Area2D" parent="." index="6" unique_id=9999001]
 position = Vector2(900, 510)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("8_transition")
 target_scene = "res://scenes/areas/forest/forest_guild.tscn"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTransition" index="0" unique_id=9999002]
+[node name="Guild" type="CollisionShape2D" parent="GuildEntrance" index="0" unique_id=9999002]
 position = Vector2(-424, 227)
+shape = SubResource("RectangleShape2D_transition")
+
+[node name="InnEntrance" type="Area2D" parent="." index="8" unique_id=599336995]
+position = Vector2(900, 510)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("8_transition")
+target_scene = "res://scenes/areas/forest/forest_inn.tscn"
+
+[node name="Inn" type="CollisionShape2D" parent="InnEntrance" index="0" unique_id=1166446282]
+position = Vector2(665, 258)
 shape = SubResource("RectangleShape2D_transition")
