@@ -70,7 +70,9 @@ func _init(rig: CharacterRig) -> void:
 
 
 ## Returns a library with "idle", "walk" and one clip per AttackData (named by its id).
-func build_library(attacks: Array[AttackData]) -> AnimationLibrary:
+## Player skills are baked the same way: they extend AttackData, so their key poses
+## and hit windows use exactly one animation format.
+func build_library(attacks: Array[AttackData], skills: Array = []) -> AnimationLibrary:
 	var library := AnimationLibrary.new()
 	library.add_animation("idle", _make_idle_animation())
 	library.add_animation("walk", _make_walk_animation())
@@ -78,6 +80,9 @@ func build_library(attacks: Array[AttackData]) -> AnimationLibrary:
 	library.add_animation("block", _make_block_animation())
 	for attack in attacks:
 		library.add_animation(attack.id, _make_attack_animation(attack))
+	for skill in skills:
+		if skill is AttackData:
+			library.add_animation(skill.id, _make_attack_animation(skill))
 	return library
 
 
@@ -517,7 +522,7 @@ func _make_attack_animation(attack: AttackData) -> Animation:
 		torso_rot.append(lean)
 		pelvis_rot.append(0.0)
 		pelvis_pos.append(pelvis_rest + Vector2(px, py))
-		head_rot.append(-lean - HEAD_LOOK_UP)
+		head_rot.append(-lean - HEAD_LOOK_UP + float(key.get("head", 0.0)))
 		head_pos.append(head_rest)
 		thigh_l_rot.append(leg_l[0])
 		shin_l_rot.append(leg_l[1])
@@ -525,8 +530,10 @@ func _make_attack_animation(attack: AttackData) -> Animation:
 		thigh_r_rot.append(leg_r[0])
 		shin_r_rot.append(leg_r[1])
 		foot_r_rot.append(leg_r[2])
-		arm_l.append(0.5 * float(key["lean"]))
-		forearm_l.append(-1.0)
+		# `arm_l` and `fore_l` are optional so existing attack keys keep their
+		# old far-arm sway while a shout or brace can raise the shield arm too.
+		arm_l.append(0.5 * float(key["lean"]) + float(key.get("arm_l", 0.0)))
+		forearm_l.append(-1.0 + float(key.get("fore_l", 0.0)))
 		arm_r.append(upper)
 		forearm_r.append(fore)
 		hand_r.append(hand)

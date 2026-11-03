@@ -17,6 +17,11 @@ class_name SfxSet
 ## Played once when the character dies.
 @export var death: Array[AudioStream] = []
 
+@export_group("Animations")
+## Per-clip one-shot sounds. A clip listed here plays its own stream instead of the
+## shared `attack` slot; missing clips fall back to `attack`.
+@export var animation_sounds: Array[AnimationSfx] = []
+
 @export_group("Idle")
 ## Occasional vocalization. Leave empty for silent idle.
 @export var idle: Array[AudioStream] = []
@@ -54,8 +59,34 @@ func has_streams(kind: StringName) -> bool:
 ## A random variant for `kind`. When `avoid` is set it is skipped if there is
 ## another choice, so the previous sound does not repeat back to back.
 func pick(kind: StringName, avoid: AudioStream = null) -> AudioStream:
+	return _pick_from(_streams(kind), avoid)
+
+
+## A random variant for a specific animation clip, or null when the clip has no
+## dedicated streams. Callers fall back to the shared `attack` slot.
+func pick_animation(animation: StringName, avoid: AudioStream = null) -> AudioStream:
+	return _pick_from(animation_streams(animation), avoid)
+
+
+## Streams registered for `animation`, in the order they were added.
+func animation_streams(animation: StringName) -> Array[AudioStream]:
+	for entry in animation_sounds:
+		if entry != null and entry.animation == animation:
+			return entry.streams
+	return []
+
+
+## True when `animation` has at least one real stream behind it.
+func has_animation_sounds(animation: StringName) -> bool:
+	for stream in animation_streams(animation):
+		if stream != null:
+			return true
+	return false
+
+
+func _pick_from(list: Array, avoid: AudioStream) -> AudioStream:
 	var options: Array[AudioStream] = []
-	for stream in _streams(kind):
+	for stream in list:
 		if stream != null:
 			options.append(stream)
 	if options.size() > 1 and avoid != null:

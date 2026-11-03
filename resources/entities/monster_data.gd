@@ -27,6 +27,9 @@ enum Rank { NORMAL, GENERAL, GUARDIAN }
 ## Once the monster reaches attack range, keep chasing even when the player leaves
 ## aggro_radius. Disable to leash the monster at its notice radius.
 @export var chase_after_engage := true
+## Generals and Guardians already resist knockdown by rank; set this on a normal
+## mob that should also stay on its feet.
+@export var knockdown_immune := false
 ## Minimum gap between any two special casts, so skills do not fire back to back.
 @export var global_cooldown: float = 0.8
 
@@ -43,6 +46,19 @@ enum Rank { NORMAL, GENERAL, GUARDIAN }
 @export_group("Animation")
 @export var idle_animation: StringName = &"default"
 @export var walk_animation: StringName = &"walk"
+## Per-monster skill animation swaps. Lets several monsters share one tuned skill
+## resource while each plays its own clip.
+@export var animation_overrides: Array[SkillAnimationOverride] = []
+
+
+## The override registered for `skill`, or null when the skill plays its own clip.
+func animation_override_for(skill: MonsterSkill) -> SkillAnimationOverride:
+	if skill == null:
+		return null
+	for entry in animation_overrides:
+		if entry != null and entry.skill_id == skill.id:
+			return entry
+	return null
 
 
 ## True when this monster can chase and fight. A monster without a basic attack

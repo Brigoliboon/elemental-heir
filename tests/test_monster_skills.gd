@@ -123,6 +123,7 @@ func _check_scenes(tree: SceneTree, failures: Array[String]) -> void:
 
 		if path == ROOTBOUND_SCENE:
 			_check_skill_overlays(monster, sprite, failures)
+			_check_animation_overrides(monster, failures)
 
 		monster.queue_free()
 		await tree.process_frame
@@ -158,6 +159,35 @@ func _find_skill(data: MonsterData, id: StringName) -> MonsterSkill:
 		if skill != null and skill.id == id:
 			return skill
 	return null
+
+
+## A general can share a tuned skill with other monsters and still play its own
+## clip through MonsterData.animation_overrides.
+func _check_animation_overrides(monster: Monster, failures: Array[String]) -> void:
+	var data := monster.config as MonsterData
+	if data == null:
+		return
+	var charge := _find_skill(data, &"charge")
+	if charge == null:
+		failures.append("rootbound is missing its shared charge skill")
+		return
+	if monster._resolve_animation(charge) != &"root_charge":
+		failures.append("rootbound's charge override must resolve to root_charge")
+	if not is_equal_approx(monster._cast_animation_speed(charge), 1.0):
+		failures.append("rootbound's charge override must keep its 1.0 animation speed")
+
+	var enrage := _find_skill(data, &"enrage")
+	if enrage != null and monster._resolve_animation(enrage) != &"enrage":
+		failures.append("rootbound's enrage override must resolve to enrage")
+
+	# A missing override clip falls back to the skill's own animation.
+	var missing := SkillAnimationOverride.new()
+	missing.skill_id = &"charge"
+	missing.animation = &"does_not_exist"
+	data.animation_overrides.push_front(missing)
+	if monster._resolve_animation(charge) != charge.animation:
+		failures.append("a missing override clip must fall back to the skill animation")
+	data.animation_overrides.pop_front()
 
 
 func _check_skill_gates(tree: SceneTree, failures: Array[String]) -> void:
