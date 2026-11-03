@@ -30,6 +30,11 @@ extends AttackData
 @export var hit_flash_color := Color(0.0, 0.0, 0.0, 0.0)
 @export var hit_flash_seconds := 0.22
 
+@export_group("Audio")
+## Cast sound variants, one picked at random. Leave empty to use the character's
+## [SfxSet] entry for `id`, then the shared `attack` slot.
+@export var cast_sounds: Array[AudioStream] = []
+
 
 ## Cooldown after the character's cooldown-reduction stat is applied. The cap
 ## keeps a stacked build from reaching zero and bypassing the cast lock.

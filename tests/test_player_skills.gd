@@ -17,6 +17,7 @@ func run(tree: SceneTree) -> Array[String]:
 	await _check_iron_will(tree, failures)
 	await _check_war_cry(tree, failures)
 	await _check_ground_slam(tree, failures)
+	await _check_skill_audio(tree, failures)
 	await _check_hud(tree, failures)
 	return failures
 
@@ -300,6 +301,39 @@ func _check_ground_slam(tree: SceneTree, failures: Array[String]) -> void:
 
 	_cleanup([player, left, right, general])
 	await tree.physics_frame
+
+
+func _check_skill_audio(tree: SceneTree, failures: Array[String]) -> void:
+	var player: Character = await _spawn_player(tree)
+	if player == null:
+		failures.append("warrior scene did not instantiate for the audio check")
+		return
+	var source := player.skill_by_id(&"heavy_strike")
+	if source == null:
+		failures.append("Heavy Strike is missing for the audio check")
+		_cleanup([player])
+		await tree.process_frame
+		return
+
+	# Duplicate so this does not leak the test stream into the shared resource.
+	var skill := source.duplicate() as PlayerSkill
+	var wav := AudioStreamWAV.new()
+	wav.format = AudioStreamWAV.FORMAT_8_BITS
+	wav.mix_rate = 8000
+	wav.stereo = false
+	wav.data = PackedByteArray([0, 0, 0, 0])
+	var streams: Array[AudioStream] = [wav]
+	skill.cast_sounds = streams
+
+	var played: Array[StringName] = []
+	player.sfx.played.connect(func(kind: StringName) -> void: played.append(kind))
+	if not player.cast_skill(skill):
+		failures.append("a skill with its own cast sound must still cast")
+	elif played.is_empty() or played[0] != skill.id:
+		failures.append("a skill's cast_sounds must play under the skill id")
+
+	_cleanup([player])
+	await tree.process_frame
 
 
 func _check_hud(tree: SceneTree, failures: Array[String]) -> void:

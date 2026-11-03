@@ -286,7 +286,10 @@ func cast_skill(skill: PlayerSkill) -> bool:
 	anim_player.play(skill.id, config.attack_blend)
 	skill_started.emit(skill)
 	if sfx != null:
-		sfx.play_animation(skill.id)
+		if not skill.cast_sounds.is_empty():
+			sfx.play_streams(skill.id, skill.cast_sounds)
+		else:
+			sfx.play_animation(skill.id)
 	return true
 
 
