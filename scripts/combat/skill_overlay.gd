@@ -4,8 +4,12 @@ extends AnimatedSprite2D
 ## matches `trigger_animation`. Auras and trails use this so the body sprite can
 ## keep its normal clip.
 
-## Skill animation name that starts this overlay.
+## Skill animation name that starts this overlay. Matches the clip actually
+## played, including a MonsterData animation override.
 @export var trigger_animation: StringName = &""
+## Optional skill id that also starts this overlay. Use when two skills share a
+## clip but only one should show the effect.
+@export var trigger_skill_id: StringName = &""
 ## Greater than zero keeps the overlay (usually a looping clip) alive for this many
 ## seconds. Zero hides it as soon as its clip finishes.
 @export var effect_seconds := 0.0
@@ -32,13 +36,22 @@ func _process(_delta: float) -> void:
 		flip_v = body.flip_v
 
 
-func _on_skill_cast(skill: MonsterSkill) -> void:
-	if skill == null or trigger_animation == &"" or skill.animation != trigger_animation:
+func _on_skill_cast(skill: MonsterSkill, animation: StringName) -> void:
+	if skill == null:
 		return
-	if sprite_frames == null or not sprite_frames.has_animation(trigger_animation):
+	var matches_animation := trigger_animation != &"" and animation == trigger_animation
+	var matches_skill := trigger_skill_id != &"" and skill.id == trigger_skill_id
+	if not matches_animation and not matches_skill:
+		return
+	if sprite_frames == null:
+		return
+	var clip := trigger_animation
+	if clip == &"" or not sprite_frames.has_animation(clip):
+		clip = animation
+	if not sprite_frames.has_animation(clip):
 		return
 	visible = true
-	play(trigger_animation)
+	play(clip)
 	if effect_seconds > 0.0:
 		var tree := get_tree()
 		if tree != null:

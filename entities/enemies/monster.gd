@@ -11,7 +11,7 @@ signal health_changed(current: int, maximum: int)
 signal damaged(amount: int)
 signal died
 ## Emitted when the monster starts casting a skill. Useful for debug overlays.
-signal skill_cast(skill: MonsterSkill)
+signal skill_cast(skill: MonsterSkill, animation: StringName)
 
 @export var config: EnemyData
 ## Rarity chosen by the area spawn table. -1 uses the data resource's own rarity.
@@ -443,7 +443,7 @@ func _cast_skill(skill: MonsterSkill, is_basic := false, target: Node2D = null) 
 		if ground.lock_at_cast:
 			_capture_ground_target(target)
 		_start_cast_marker(ground)
-	animated_sprite.speed_scale = maxf(0.05, skill.animation_speed)
+	animated_sprite.speed_scale = maxf(0.05, _cast_animation_speed(skill))
 	_reset_hitbox_geometry()
 	if skill is MeleeSkill:
 		_prepare_melee(skill as MeleeSkill)
@@ -459,8 +459,8 @@ func _cast_skill(skill: MonsterSkill, is_basic := false, target: Node2D = null) 
 	animated_sprite.play(animation)
 	if sfx != null:
 		sfx.idle_enabled = false
-		sfx.play_attack()
-	skill_cast.emit(skill)
+		sfx.play_animation(animation)
+	skill_cast.emit(skill, animation)
 
 
 func _global_cooldown() -> float:
@@ -469,11 +469,29 @@ func _global_cooldown() -> float:
 
 
 func _resolve_animation(skill: MonsterSkill) -> StringName:
+	var override := _animation_override(skill)
+	if override != null and override.animation != &"" and _has_animation(override.animation):
+		return override.animation
 	if _has_animation(skill.animation):
 		return skill.animation
 	if _has_animation(&"attack"):
 		return &"attack"
 	return &""
+
+
+## Playback speed for a cast, including a per-monster override when one is set.
+func _cast_animation_speed(skill: MonsterSkill) -> float:
+	var override := _animation_override(skill)
+	if override != null and override.animation_speed > 0.0:
+		return override.animation_speed
+	return skill.animation_speed
+
+
+func _animation_override(skill: MonsterSkill) -> SkillAnimationOverride:
+	var data := config as MonsterData
+	if data == null:
+		return null
+	return data.animation_override_for(skill)
 
 
 func _has_animation(animation: StringName) -> bool:

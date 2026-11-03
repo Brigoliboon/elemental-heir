@@ -56,6 +56,21 @@ func play_attack() -> void:
 	_play_variant(&"attack")
 
 
+## Plays the clip-specific sound for `animation`, falling back to the shared attack
+## slot when that clip has no dedicated streams.
+func play_animation(animation: StringName) -> void:
+	if muted:
+		return
+	var stream: AudioStream = null
+	if sfx_set != null:
+		stream = sfx_set.pick_animation(animation, _last_picked.get(animation))
+	if stream == null:
+		play_attack()
+		return
+	_last_picked[animation] = stream
+	_play(animation, stream, sfx_set.volume_db, sfx_set.pitch_jitter)
+
+
 func play_hurt() -> void:
 	_play_variant(&"hurt")
 
