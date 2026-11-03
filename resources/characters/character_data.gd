@@ -45,6 +45,18 @@ enum CharacterRole {
 @export_group("Block")
 @export var block_damage_reduction: float = 0.5
 
+@export_group("Skills")
+## Active skills in slot order. Slot 1 is the first HUD button and the `1` key.
+## Iron Will is data too; the area binds it to the existing passive button.
+@export var skills: Array[PlayerSkill] = []
+## Energy pool shared by every skill. Skills spend it; it refills over time.
+@export var max_energy: int = 100
+## Energy restored per second while alive.
+@export var energy_regen: float = 12.0
+## Placeholder for the future evolution system. Tier 2 and 3 unlock the extra
+## Iron Will effects, so the data can be authored before the UI exists.
+@export var evolution_tier: int = 1
+
 @export_group("Audio")
 ## Optional voice: attack, hurt, idle and death sounds. Shared with enemies so the
 ## same data-driven playback path drives both.
