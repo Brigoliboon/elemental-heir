@@ -103,6 +103,16 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var inventory_panel: InventoryPanel = $HUD/UI/InventoryPanel
 @onready var stats_panel: StatsPanel = $HUD/UI/StatsPanel
 @onready var death_label: Label = $HUD/UI/DeathLabel
+@onready var skill_buttons: Array[SkillButton] = [
+	$HUD/UI/Skill1 as SkillButton,
+	$HUD/UI/Skill2 as SkillButton,
+	$HUD/UI/Skill3 as SkillButton,
+]
+@onready var energy_bar: TextureProgressBar = $HUD/UI/SkillEnergy/EnergyBar
+@onready var energy_label: Label = $HUD/UI/SkillEnergy/EnergyLabel
+
+## Iron Will lives on the existing passive button rather than a fourth slot.
+var _passive_skill: PlayerSkill
 
 var world_width := 0.0
 ## Screen-space y of the far and near edges of the walkable band (where feet touch).
@@ -137,6 +147,7 @@ func _ready() -> void:
 	area_label.text = area_name
 	_bind_player_health()
 	_bind_player_progress()
+	_bind_player_skills()
 	if safe_zone:
 		SpawnState.reset_all()
 	if spawn_handler != null:
@@ -169,6 +180,53 @@ func _bind_player_progress() -> void:
 	_update_player_progress()
 	player.experience_changed.connect(_on_player_experience_changed)
 	player.level_changed.connect(_on_player_level_changed)
+
+
+## Wires the three circular skill buttons and reuses the existing passive button
+## for Iron Will. Skills are data, so this code does not know any skill by name
+## except the one the HUD already has a dedicated slot for.
+func _bind_player_skills() -> void:
+	if player == null:
+		return
+	for i in skill_buttons.size():
+		var button := skill_buttons[i]
+		if button == null:
+			continue
+		button.bind(player, player.skill_in_slot(i), str(i + 1))
+
+	_passive_skill = player.skill_by_id(&"iron_will")
+	if passive_button != null:
+		passive_button.pressed.connect(_on_passive_pressed)
+		if _passive_skill != null:
+			passive_button.tooltip_text = "%s\n%s" % [
+				_passive_skill.display_name,
+				_passive_skill.description,
+			]
+
+	player.energy_changed.connect(_on_player_energy_changed)
+	_on_player_energy_changed(player.energy, player.max_energy)
+
+
+func _on_passive_pressed() -> void:
+	if player != null and _passive_skill != null:
+		player.cast_skill(_passive_skill)
+
+
+func _on_player_energy_changed(current: float, maximum: float) -> void:
+	if energy_bar != null:
+		energy_bar.max_value = maximum
+		energy_bar.value = current
+	if energy_label != null:
+		energy_label.text = "EN %d / %d" % [roundi(current), roundi(maximum)]
+
+
+## Dims the passive button while Iron Will is cooling down. The three circular
+## buttons draw their own sweep; the passive art keeps its original shape.
+func _sync_passive_button() -> void:
+	if passive_button == null or player == null or _passive_skill == null:
+		return
+	var ready := player.can_cast_skill(_passive_skill)
+	passive_button.modulate = Color.WHITE if ready else Color(0.55, 0.5, 0.45, 0.8)
 
 
 func _restore_player_progress() -> void:
@@ -417,6 +475,7 @@ func _process(delta: float) -> void:
 	if _leaving:
 		return
 	_sync_guard_button()
+	_sync_passive_button()
 	if _player_dead:
 		camera.position = _camera_target()
 		return
@@ -540,6 +599,10 @@ func _print_debug() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and not event.echo:
+		var slot: int = int(event.keycode) - KEY_1
+		if event.pressed and slot >= 0 and slot < 4:
+			player.use_skill(slot)
+			return
 		if event.keycode == KEY_J or event.keycode == KEY_Z:
 			if event.pressed:
 				player.attack()

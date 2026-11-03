@@ -56,6 +56,47 @@ func play_attack() -> void:
 	_play_variant(&"attack")
 
 
+## Plays the clip-specific sound for `animation`, falling back to the shared attack
+## slot when that clip has no dedicated streams.
+func play_animation(animation: StringName) -> void:
+	if muted:
+		return
+	var stream: AudioStream = null
+	if sfx_set != null:
+		stream = sfx_set.pick_animation(animation, _last_picked.get(animation))
+	if stream == null:
+		play_attack()
+		return
+	_last_picked[animation] = stream
+	_play(animation, stream, sfx_set.volume_db, sfx_set.pitch_jitter)
+
+
+## Plays a caller-owned list of variants, used by data that carries its own sound
+## instead of registering it on an [SfxSet]. Mixing follows the bound set when one
+## exists, so per-skill sounds still sit at the same volume and pitch spread.
+func play_streams(kind: StringName, streams: Array[AudioStream]) -> void:
+	if muted:
+		return
+	var options: Array[AudioStream] = []
+	for stream in streams:
+		if stream != null:
+			options.append(stream)
+	if options.is_empty():
+		_warn_missing(kind)
+		return
+	var avoid := _last_picked.get(kind) as AudioStream
+	if options.size() > 1 and avoid != null:
+		options.erase(avoid)
+	var chosen: AudioStream = options[randi() % options.size()]
+	_last_picked[kind] = chosen
+	_play(
+		kind,
+		chosen,
+		sfx_set.volume_db if sfx_set != null else 0.0,
+		sfx_set.pitch_jitter if sfx_set != null else 0.05,
+	)
+
+
 func play_hurt() -> void:
 	_play_variant(&"hurt")
 

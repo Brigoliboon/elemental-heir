@@ -16,6 +16,7 @@ func run(tree: SceneTree) -> Array[String]:
 	_check_variant_pick(failures)
 	_check_scene_footsteps(failures)
 	await _check_mob_triggers(tree, failures)
+	await _check_animation_sounds(tree, failures)
 	await _check_player_triggers(tree, failures)
 	await _check_combo_spam(tree, failures)
 	await _check_footsteps(tree, failures)
@@ -40,6 +41,15 @@ func _check_enemy_sets(failures: Array[String]) -> void:
 			for stream in data.sfx.get(kind):
 				if stream != null and stream.get_length() <= 0.0:
 					failures.append("%s: sfx %s stream has no audio" % [file, kind])
+		for entry in data.sfx.animation_sounds:
+			if entry == null:
+				failures.append("%s: sfx set has a null animation entry" % file)
+				continue
+			if entry.streams.is_empty():
+				failures.append("%s: sfx animation '%s' has no streams" % [file, entry.animation])
+			for stream in entry.streams:
+				if stream != null and stream.get_length() <= 0.0:
+					failures.append("%s: sfx animation '%s' stream has no audio" % [file, entry.animation])
 
 
 func _check_idle_bounds(failures: Array[String]) -> void:
@@ -128,6 +138,85 @@ func _check_mob_triggers(tree: SceneTree, failures: Array[String]) -> void:
 	_cleanup(dummy)
 	_cleanup(mob)
 	await tree.physics_frame
+
+
+## Clip-specific sounds are keyed by the animation actually played, so a shared
+## skill with a per-monster override gets its own audio without duplicating data.
+func _check_animation_sounds(tree: SceneTree, failures: Array[String]) -> void:
+	var first := AudioStreamWAV.new()
+	var second := AudioStreamWAV.new()
+	var clip := AnimationSfx.new()
+	clip.animation = &"root_charge"
+	clip.streams = [first, second]
+
+	var set := SfxSet.new()
+	set.attack = [first]
+	set.animation_sounds = [clip]
+
+	if not set.has_animation_sounds(&"root_charge"):
+		failures.append("a registered animation clip must report as having sound")
+	if set.pick_animation(&"root_charge") == null:
+		failures.append("pick_animation must return a stream for a registered clip")
+	if set.pick_animation(&"missing") != null:
+		failures.append("pick_animation must return null for an unregistered clip")
+
+	var seen: Dictionary = {}
+	var previous: AudioStream = null
+	for i in 20:
+		var picked := set.pick_animation(&"root_charge", previous)
+		if picked == previous:
+			failures.append("animation sounds must avoid repeating the previous variant")
+			break
+		seen[picked] = true
+		previous = picked
+	if seen.size() != 2:
+		failures.append("animation sounds must use every variant")
+
+	var scene := load("res://entities/enemies/rootbound.tscn") as PackedScene
+	if scene == null:
+		failures.append("rootbound scene did not load")
+		return
+	var mob := scene.instantiate() as Monster
+	tree.root.add_child(mob)
+	await tree.physics_frame
+	mob.set_physics_process(false)
+	mob.sfx.bind(set)
+	mob.sfx.muted = false
+
+	var events: Array[StringName] = []
+	mob.sfx.played.connect(func(kind: StringName) -> void: events.append(kind))
+
+	var data := mob.config as MonsterData
+	var charge := _find_skill(data, &"charge")
+	if charge == null:
+		failures.append("rootbound is missing its charge skill")
+	else:
+		events.clear()
+		mob._cast_skill(charge, false, null)
+		await tree.physics_frame
+		if not events.has(&"root_charge"):
+			failures.append("a clip-specific sound must play for the resolved animation")
+
+	# A clip with no dedicated entry falls back to the shared attack slot.
+	var slam := _find_skill(data, &"rootbound_slam")
+	if slam != null:
+		events.clear()
+		mob._cast_skill(slam, false, null)
+		await tree.physics_frame
+		if not events.has(&"attack"):
+			failures.append("an unregistered animation must fall back to the attack sound")
+
+	_cleanup(mob)
+	await tree.physics_frame
+
+
+func _find_skill(data: MonsterData, id: StringName) -> MonsterSkill:
+	if data == null:
+		return null
+	for skill in data.skills:
+		if skill != null and skill.id == id:
+			return skill
+	return null
 
 
 func _check_player_triggers(tree: SceneTree, failures: Array[String]) -> void:
