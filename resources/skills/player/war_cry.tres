@@ -1,18 +1,28 @@
-[gd_resource type="Resource" script_class="SelfBuffSkill" format=3]
+[gd_resource type="Resource" script_class="SelfBuffSkill" format=3 uid="uid://dyyrgtfdv485y"]
 
-[ext_resource type="Script" path="res://resources/skills/self_buff_skill.gd" id="1_skill"]
-[ext_resource type="Script" path="res://resources/skills/stat_buff.gd" id="2_buff"]
-[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_war_cry.png" id="3_icon"]
+[ext_resource type="Script" uid="uid://csptxsl3853j1" path="res://resources/skills/self_buff_skill.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://d07ors1dqxtcy" path="res://resources/skills/stat_buff.gd" id="2_buff"]
+[ext_resource type="Texture2D" uid="uid://xk83i2kstp7p" path="res://assets/skills/warrior/icon_war_cry.png" id="3_icon"]
 
 [sub_resource type="Resource" id="Resource_attack_buff"]
 script = ExtResource("2_buff")
-stat = &"attack"
 pct = 0.25
 seconds = 5.0
 tint = Color(1, 0.72, 0.5, 1)
 
 [resource]
 script = ExtResource("1_skill")
+buffs = Array[ExtResource("2_buff")]([SubResource("Resource_attack_buff")])
+duration = 5.0
+slow_radius = 220.0
+slow_factor = 0.5
+slow_seconds = 2.5
+pulse_color = Color(1, 0.55, 0.35, 1)
+display_name = "War Cry"
+description = "Shout for 25% more attack for 5 seconds and briefly slow nearby enemies."
+icon = ExtResource("3_icon")
+cooldown = 10.0
+energy_cost = 15
 id = &"war_cry"
 length = 0.72
 hit_start = 0.35
@@ -28,51 +38,51 @@ keys = Array[Dictionary]([{
 "t": 0.0
 }, {
 "arm": -15.0,
+"arm_l": -20.0,
 "fore": 8.0,
+"fore_l": -10.0,
 "hand": 3.0,
 "lean": 9.0,
 "px": 0.5,
 "py": 2.0,
 "sword": -12.0,
-"t": 0.18,
-"arm_l": -20.0,
-"fore_l": -10.0
+"t": 0.18
 }, {
 "arm": -120.0,
+"arm_l": -120.0,
 "fore": -12.0,
+"fore_l": -5.0,
 "hand": -5.0,
+"head": -8.0,
 "lean": -8.0,
 "px": -1.0,
 "py": -1.5,
 "sword": 18.0,
-"t": 0.35,
-"arm_l": -120.0,
-"fore_l": -5.0,
-"head": -8.0
+"t": 0.35
 }, {
 "arm": -130.0,
+"arm_l": -132.0,
 "fore": -14.0,
+"fore_l": -6.0,
 "hand": -6.0,
+"head": -10.0,
 "lean": -10.0,
 "px": -1.0,
 "py": -2.0,
 "sword": 22.0,
-"t": 0.55,
-"arm_l": -132.0,
-"fore_l": -6.0,
-"head": -10.0
+"t": 0.55
 }, {
 "arm": -45.0,
+"arm_l": -40.0,
 "fore": 5.0,
+"fore_l": -10.0,
 "hand": 2.0,
+"head": -3.0,
 "lean": 4.0,
 "px": 0.5,
 "py": 1.0,
 "sword": 8.0,
-"t": 0.78,
-"arm_l": -40.0,
-"fore_l": -10.0,
-"head": -3.0
+"t": 0.78
 }, {
 "arm": 0.0,
 "fore": 0.0,
@@ -83,18 +93,3 @@ keys = Array[Dictionary]([{
 "sword": 0.0,
 "t": 1.0
 }])
-display_name = "War Cry"
-description = "Shout for 25% more attack for 5 seconds and briefly slow nearby enemies."
-icon = ExtResource("3_icon")
-cooldown = 10.0
-energy_cost = 15
-animation_speed = 1.0
-uses_sword = false
-damage_multiplier = 1.0
-buffs = Array[ExtResource("2_buff")]([SubResource("Resource_attack_buff")])
-duration = 5.0
-damage_taken_multiplier = 1.0
-slow_radius = 220.0
-slow_factor = 0.5
-slow_seconds = 2.5
-pulse_color = Color(1, 0.55, 0.35, 1)

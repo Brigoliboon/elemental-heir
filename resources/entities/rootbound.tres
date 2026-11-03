@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://7l0jb0po42ni" path="res://resources/entities/monster_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://cw2kug3amsluc" path="res://resources/passives/monster_passive.gd" id="2_600gf"]
 [ext_resource type="Resource" uid="uid://nnqn2l2irn7i" path="res://resources/skills/gore.tres" id="2_gore"]
-[ext_resource type="Resource" path="res://resources/skills/charge.tres" id="3_charge"]
-[ext_resource type="Resource" path="res://resources/skills/enrage.tres" id="4_enrage"]
+[ext_resource type="Resource" uid="uid://dwpr4rpwcamnf" path="res://resources/skills/charge.tres" id="3_charge"]
+[ext_resource type="Resource" uid="uid://dnr7rv4xhwmf3" path="res://resources/skills/enrage.tres" id="4_enrage"]
 [ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="4_piseb"]
 [ext_resource type="Resource" uid="uid://dsp4oengfd4ui" path="res://resources/skills/rootbound_slam.tres" id="5_slam"]
-[ext_resource type="Resource" path="res://resources/skills/rootbound_call_herd.tres" id="6_herd"]
-[ext_resource type="Script" path="res://resources/entities/skill_animation_override.gd" id="7_anim"]
+[ext_resource type="Resource" uid="uid://ded6v0myoysm6" path="res://resources/skills/rootbound_call_herd.tres" id="6_herd"]
+[ext_resource type="Script" uid="uid://dyn1d8yq6oavl" path="res://resources/entities/skill_animation_override.gd" id="7_anim"]
 
 [sub_resource type="Resource" id="Resource_charge_override"]
 script = ExtResource("7_anim")

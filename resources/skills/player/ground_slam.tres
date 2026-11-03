@@ -1,10 +1,18 @@
-[gd_resource type="Resource" script_class="GroundSlamSkill" format=3]
+[gd_resource type="Resource" script_class="GroundSlamSkill" format=3 uid="uid://b2a04a168exvt"]
 
-[ext_resource type="Script" path="res://resources/skills/ground_slam_skill.gd" id="1_skill"]
-[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_ground_slam.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://cl77cm1wg1y7u" path="res://resources/skills/ground_slam_skill.gd" id="1_skill"]
+[ext_resource type="Texture2D" uid="uid://dsl0ubo2e178v" path="res://assets/skills/warrior/icon_ground_slam.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_skill")
+active_seconds = 0.14
+display_name = "Ground Slam"
+description = "Stomp the ground, damaging both sides and knocking down small enemies."
+icon = ExtResource("2_icon")
+cooldown = 6.0
+energy_cost = 20
+animation_speed = 0.95
+damage_multiplier = 1.4
 id = &"ground_slam"
 length = 0.7
 hit_start = 0.55
@@ -20,60 +28,60 @@ keys = Array[Dictionary]([{
 "t": 0.0
 }, {
 "arm": -140.0,
+"arm_l": -50.0,
 "fore": -8.0,
+"fore_l": -20.0,
 "hand": -4.0,
 "lean": -6.0,
 "px": -1.0,
 "py": -1.0,
 "sword": 25.0,
-"t": 0.2,
-"arm_l": -50.0,
-"fore_l": -20.0
+"t": 0.2
 }, {
 "arm": -160.0,
+"arm_l": -70.0,
 "fore": -12.0,
+"fore_l": -25.0,
 "hand": -6.0,
+"head": -2.0,
 "lean": -10.0,
 "px": -1.5,
 "py": -2.0,
 "sword": 38.0,
-"t": 0.38,
-"arm_l": -70.0,
-"fore_l": -25.0,
-"head": -2.0
+"t": 0.38
 }, {
 "arm": -30.0,
+"arm_l": 15.0,
 "fore": 15.0,
+"fore_l": 5.0,
 "hand": 8.0,
 "lean": 16.0,
 "px": 2.0,
 "py": 5.5,
 "sword": 90.0,
-"t": 0.55,
-"arm_l": 15.0,
-"fore_l": 5.0
+"t": 0.55
 }, {
 "arm": -18.0,
+"arm_l": 25.0,
 "fore": 18.0,
+"fore_l": 10.0,
 "hand": 10.0,
 "lean": 13.0,
 "px": 2.0,
 "py": 7.0,
 "sword": 96.0,
-"t": 0.7,
-"arm_l": 25.0,
-"fore_l": 10.0
+"t": 0.7
 }, {
 "arm": -8.0,
+"arm_l": 8.0,
 "fore": 6.0,
+"fore_l": 2.0,
 "hand": 3.0,
 "lean": 7.0,
 "px": 1.0,
 "py": 2.5,
 "sword": 20.0,
-"t": 0.85,
-"arm_l": 8.0,
-"fore_l": 2.0
+"t": 0.85
 }, {
 "arm": 0.0,
 "fore": 0.0,
@@ -84,18 +92,3 @@ keys = Array[Dictionary]([{
 "sword": 0.0,
 "t": 1.0
 }])
-display_name = "Ground Slam"
-description = "Stomp the ground, damaging both sides and knocking down small enemies."
-icon = ExtResource("2_icon")
-cooldown = 6.0
-energy_cost = 20
-animation_speed = 0.95
-uses_sword = false
-damage_multiplier = 1.4
-radius = 240.0
-active_seconds = 0.14
-knockback = 180.0
-hit_depth_tolerance = 46.0
-knockdown = true
-knockdown_seconds = 1.2
-pulse_color = Color(1, 0.72, 0.35, 1)

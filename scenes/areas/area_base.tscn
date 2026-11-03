@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ck6gfdaaeuhag" path="res://assets/ui/hud/block-btn.png" id="6_ck6g8"]
 [ext_resource type="Script" uid="uid://bap6cwhve1ff2" path="res://scripts/ui/inventory_panel.gd" id="6_inventory_panel"]
 [ext_resource type="Script" uid="uid://c6vu5yvbiavks" path="res://scripts/ui/virtual_joystick.gd" id="7_joystick"]
+[ext_resource type="Texture2D" uid="uid://bh75d28hoy7wf" path="res://assets/ui/hud/skill_frame.png" id="7_skill_frame"]
 [ext_resource type="Texture2D" uid="uid://o7whyoql47ea" path="res://assets/ui/hud/joystick_frame.png" id="8_joystick_frame"]
 [ext_resource type="Texture2D" uid="uid://dvnmweickwk2a" path="res://assets/ui/hud/joystick_btn.png" id="9_joystick_btn"]
 [ext_resource type="Texture2D" uid="uid://llylasbfxgjo" path="res://assets/ui/hud/bars/bar-container.png" id="10_bar_frame"]
@@ -17,9 +18,9 @@
 [ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="12_exp_bar"]
 [ext_resource type="Texture2D" uid="uid://551e72sjqgvn" path="res://assets/ui/hud/attack-btn.png" id="13_attack_btn"]
 [ext_resource type="Texture2D" uid="uid://bnhje6hllmvw4" path="res://assets/ui/hud/map-btn.png" id="14_map_btn"]
-[ext_resource type="Script" path="res://scripts/world/spawn_handler.gd" id="15_spawn_handler"]
-[ext_resource type="Script" path="res://scripts/ui/skill_button.gd" id="16_skill_button"]
-[ext_resource type="Texture2D" path="res://assets/ui/hud/bars/mana-bar.png" id="17_mana_bar"]
+[ext_resource type="Script" uid="uid://c5m5efkda380i" path="res://scripts/world/spawn_handler.gd" id="15_spawn_handler"]
+[ext_resource type="Script" uid="uid://dg5vpjertrwa6" path="res://scripts/ui/skill_button.gd" id="16_skill_button"]
+[ext_resource type="Texture2D" uid="uid://bmy150jtq0o52" path="res://assets/ui/hud/bars/mana-bar.png" id="17_mana_bar"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats_panel"]
 bg_color = Color(0.05, 0.05, 0.07, 0.96)
@@ -103,103 +104,296 @@ texture_normal = ExtResource("5_tdiep")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="SkillEnergy" type="TextureRect" parent="HUD/UI" unique_id=1900000001]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -520.0
-offset_top = -420.0
-offset_right = -178.0
-offset_bottom = -366.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_filter = 2
-texture = ExtResource("10_bar_frame")
-expand_mode = 1
-
-[node name="EnergyBar" type="TextureProgressBar" parent="HUD/UI/SkillEnergy" unique_id=1900000002]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 12.0
-offset_top = 10.0
-offset_right = 330.0
-offset_bottom = 44.0
-mouse_filter = 2
-value = 100.0
-nine_patch_stretch = true
-stretch_margin_left = 8
-stretch_margin_top = 8
-stretch_margin_right = 8
-stretch_margin_bottom = 8
-texture_progress = ExtResource("17_mana_bar")
-
-[node name="EnergyLabel" type="Label" parent="HUD/UI/SkillEnergy" unique_id=1900000003]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 4.0
-offset_right = 342.0
-offset_bottom = 54.0
-theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
-theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 18
-text = "EN 100 / 100"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Skill1" type="BaseButton" parent="HUD/UI" unique_id=1900000011]
 unique_name_in_owner = true
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+oversampling_with_scale = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
 custom_minimum_size = Vector2(92, 92)
+custom_maximum_size = Vector2(-1, -1)
+propagate_maximum_size = false
+clip_contents = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -520.0
-offset_top = -350.0
-offset_right = -428.0
-offset_bottom = -258.0
+offset_left = -201.0
+offset_top = -381.0
+offset_right = -75.0
+offset_bottom = -257.0
 grow_horizontal = 0
 grow_vertical = 0
+rotation = 0.0
+scale = Vector2(1, 1)
+pivot_offset = Vector2(0, 0)
+pivot_offset_ratio = Vector2(0, 0)
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+offset_transform_enabled = false
+offset_transform_position = Vector2(0, 0)
+offset_transform_position_ratio = Vector2(0, 0)
+offset_transform_scale = Vector2(1, 1)
+offset_transform_rotation = 0.0
+offset_transform_pivot = Vector2(0, 0)
+offset_transform_pivot_ratio = Vector2(0.5, 0.5)
+offset_transform_visual_only = true
+localize_numeral_system = true
+layout_direction = 0
+translation_context = &""
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = false
+button_pressed = false
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = null
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
 script = ExtResource("16_skill_button")
+frame_color = Color(0.8509804, 0.72156864, 0.5019608, 0)
+cooldown_color = Color(0.4509804, 0.38039216, 0.3019608, 0)
+frame_texture = ExtResource("7_skill_frame")
 
 [node name="Skill2" type="BaseButton" parent="HUD/UI" unique_id=1900000012]
 unique_name_in_owner = true
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+oversampling_with_scale = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
 custom_minimum_size = Vector2(92, 92)
+custom_maximum_size = Vector2(-1, -1)
+propagate_maximum_size = false
+clip_contents = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -520.0
-offset_top = -248.0
-offset_right = -428.0
-offset_bottom = -156.0
+offset_left = -336.0
+offset_top = -310.0
+offset_right = -208.0
+offset_bottom = -184.0
 grow_horizontal = 0
 grow_vertical = 0
+rotation = 0.0
+scale = Vector2(1, 1)
+pivot_offset = Vector2(0, 0)
+pivot_offset_ratio = Vector2(0, 0)
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+offset_transform_enabled = false
+offset_transform_position = Vector2(0, 0)
+offset_transform_position_ratio = Vector2(0, 0)
+offset_transform_scale = Vector2(1, 1)
+offset_transform_rotation = 0.0
+offset_transform_pivot = Vector2(0, 0)
+offset_transform_pivot_ratio = Vector2(0.5, 0.5)
+offset_transform_visual_only = true
+localize_numeral_system = true
+layout_direction = 0
+translation_context = &""
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = false
+button_pressed = false
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = null
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
 script = ExtResource("16_skill_button")
+frame_color = Color(0.8509804, 0.72156864, 0.5019608, 0)
+cooldown_color = Color(0.4509804, 0.38039216, 0.3019608, 0)
+frame_texture = ExtResource("7_skill_frame")
 
 [node name="Skill3" type="BaseButton" parent="HUD/UI" unique_id=1900000013]
 unique_name_in_owner = true
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+oversampling_with_scale = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
 custom_minimum_size = Vector2(92, 92)
+custom_maximum_size = Vector2(-1, -1)
+propagate_maximum_size = false
+clip_contents = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -520.0
-offset_top = -146.0
-offset_right = -428.0
-offset_bottom = -54.0
+offset_left = -425.0
+offset_top = -189.0
+offset_right = -307.0
+offset_bottom = -67.0
 grow_horizontal = 0
 grow_vertical = 0
+rotation = 0.0
+scale = Vector2(1, 1)
+pivot_offset = Vector2(0, 0)
+pivot_offset_ratio = Vector2(0, 0)
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+offset_transform_enabled = false
+offset_transform_position = Vector2(0, 0)
+offset_transform_position_ratio = Vector2(0, 0)
+offset_transform_scale = Vector2(1, 1)
+offset_transform_rotation = 0.0
+offset_transform_pivot = Vector2(0, 0)
+offset_transform_pivot_ratio = Vector2(0.5, 0.5)
+offset_transform_visual_only = true
+localize_numeral_system = true
+layout_direction = 0
+translation_context = &""
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 2
+focus_behavior_recursive = 0
+mouse_filter = 0
+mouse_behavior_recursive = 0
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+accessibility_name = ""
+accessibility_description = ""
+accessibility_live = 0
+accessibility_controls_nodes = Array[NodePath]([])
+accessibility_described_by_nodes = Array[NodePath]([])
+accessibility_labeled_by_nodes = Array[NodePath]([])
+accessibility_flow_to_nodes = Array[NodePath]([])
+theme = null
+theme_type_variation = &""
+disabled = false
+toggle_mode = false
+button_pressed = false
+action_mode = 1
+button_mask = 1
+keep_pressed_outside = false
+button_group = null
+shortcut = null
+shortcut_feedback = true
+shortcut_in_tooltip = true
 script = ExtResource("16_skill_button")
+frame_color = Color(0.8509804, 0.72156864, 0.5019608, 0)
+cooldown_color = Color(0.4509804, 0.38039216, 0.3019608, 0)
+frame_texture = ExtResource("7_skill_frame")
 
 [node name="BlockButton" type="TextureButton" parent="HUD/UI" unique_id=1092987463]
 unique_name_in_owner = true
@@ -300,10 +494,10 @@ mouse_filter = 2
 
 [node name="HealthFrame" type="TextureRect" parent="HUD/UI/PlayerHealth" unique_id=1763514046]
 layout_mode = 0
-offset_left = 91.0
-offset_top = -10.0
-offset_right = 451.0
-offset_bottom = 54.0
+offset_left = 83.0
+offset_top = -24.0
+offset_right = 443.0
+offset_bottom = 40.0
 mouse_filter = 2
 texture = ExtResource("10_bar_frame")
 expand_mode = 1
@@ -311,10 +505,10 @@ expand_mode = 1
 [node name="HealthBar" type="TextureProgressBar" parent="HUD/UI/PlayerHealth" unique_id=1763514044]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 126.0
-offset_top = 3.0
-offset_right = 415.0
-offset_bottom = 38.0
+offset_left = 118.0
+offset_top = -11.0
+offset_right = 407.0
+offset_bottom = 24.0
 mouse_filter = 2
 value = 100.0
 nine_patch_stretch = true
@@ -326,10 +520,10 @@ texture_progress = ExtResource("11_health_bar")
 
 [node name="HealthLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=1763514043]
 layout_mode = 0
-offset_left = 83.0
-offset_top = -11.0
-offset_right = 443.0
-offset_bottom = 53.0
+offset_left = 75.0
+offset_top = -25.0
+offset_right = 435.0
+offset_bottom = 39.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
 theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
 theme_override_constants/outline_size = 4
@@ -338,12 +532,59 @@ text = "HP 100 / 100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SkillEnergy" type="TextureRect" parent="HUD/UI/PlayerHealth" unique_id=2009360110]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -359.0
+offset_top = -129.0
+offset_right = -5.0
+offset_bottom = -65.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("10_bar_frame")
+expand_mode = 1
+
+[node name="EnergyBar" type="TextureProgressBar" parent="HUD/UI/PlayerHealth/SkillEnergy" unique_id=567644374]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 17.0
+offset_right = 316.0
+offset_bottom = 45.0
+mouse_filter = 2
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+texture_progress = ExtResource("17_mana_bar")
+
+[node name="EnergyLabel" type="Label" parent="HUD/UI/PlayerHealth/SkillEnergy" unique_id=834767562]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 16.0
+offset_right = 315.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 18
+text = "EN 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="XPFrame" type="TextureRect" parent="HUD/UI/PlayerHealth" unique_id=1763514047]
 layout_mode = 0
-offset_left = 91.0
-offset_top = 41.0
-offset_right = 451.0
-offset_bottom = 105.0
+offset_left = 58.0
+offset_top = 77.0
+offset_right = 443.0
+offset_bottom = 141.0
 mouse_filter = 2
 texture = ExtResource("10_bar_frame")
 expand_mode = 1
@@ -351,10 +592,10 @@ expand_mode = 1
 [node name="XPBar" type="TextureProgressBar" parent="HUD/UI/PlayerHealth" unique_id=213183900]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 127.0
-offset_top = 57.0
-offset_right = 412.0
-offset_bottom = 88.0
+offset_left = 94.0
+offset_top = 93.0
+offset_right = 402.0
+offset_bottom = 124.0
 mouse_filter = 2
 value = 100.0
 nine_patch_stretch = true
@@ -366,10 +607,10 @@ texture_progress = ExtResource("12_exp_bar")
 
 [node name="XPLabel" type="Label" parent="HUD/UI/PlayerHealth" unique_id=2129840377]
 layout_mode = 0
-offset_left = 68.0
-offset_top = 41.0
-offset_right = 428.0
-offset_bottom = 105.0
+offset_left = 95.0
+offset_top = 93.0
+offset_right = 400.0
+offset_bottom = 127.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
 theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
 theme_override_constants/outline_size = 4
@@ -563,5 +804,5 @@ columns = 7
 layout_mode = 2
 text = "Close"
 
-[node name="SpawnHandler" type="Node" parent="."]
+[node name="SpawnHandler" type="Node" parent="." unique_id=537851295]
 script = ExtResource("15_spawn_handler")

@@ -1,10 +1,20 @@
-[gd_resource type="Resource" script_class="PlayerSkill" format=3]
+[gd_resource type="Resource" script_class="PlayerSkill" format=3 uid="uid://s7gwo1qr8anp"]
 
-[ext_resource type="Script" path="res://resources/skills/player_skill.gd" id="1_skill"]
-[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_heavy_strike.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://ckgtj5jj2fk4f" path="res://resources/skills/player_skill.gd" id="1_skill"]
+[ext_resource type="Texture2D" uid="uid://crqwuym8knyca" path="res://assets/skills/warrior/icon_heavy_strike.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_skill")
+display_name = "Heavy Strike"
+description = "A slowed overhead swing with double damage and a white impact flash."
+icon = ExtResource("2_icon")
+cooldown = 4.0
+energy_cost = 15
+animation_speed = 0.9
+uses_sword = true
+damage_multiplier = 2.0
+hit_flash_color = Color(1, 1, 1, 1)
+hit_flash_seconds = 0.26
 id = &"heavy_strike"
 length = 0.62
 hit_start = 0.5
@@ -73,13 +83,3 @@ keys = Array[Dictionary]([{
 "sword": 0.0,
 "t": 1.0
 }])
-display_name = "Heavy Strike"
-description = "A slowed overhead swing with double damage and a white impact flash."
-icon = ExtResource("2_icon")
-cooldown = 4.0
-energy_cost = 15
-animation_speed = 0.9
-uses_sword = true
-damage_multiplier = 2.0
-hit_flash_color = Color(1, 1, 1, 1)
-hit_flash_seconds = 0.26
