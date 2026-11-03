@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://cxcobk0mjmxli"]
+
+[ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://da1ougfw830ek" path="res://assets/backgrounds/forest/forest_guardian_arena/guardian_arena_corrupted.png" id="2_bg"]
+[ext_resource type="AudioStream" uid="uid://l7g85tbjck7s" path="res://assets/audio/music/forest-bg_loop.wav" id="3_music"]
+[ext_resource type="Resource" path="res://resources/audio/footsteps_grass.tres" id="4_footsteps"]
+[ext_resource type="Resource" path="res://resources/spawning/forest_guardian_arena.tres" id="5_spawn"]
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+offsets = PackedFloat32Array(0, 0.6686747, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.042168677, 0.042168677, 0.042168677, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+fill = 1
+fill_from = Vector2(0.49565217, 0.526087)
+
+[node name="ForestGuardianArena" unique_id=1774130952 instance=ExtResource("1_base")]
+area_name = "Forest - Guardian Arena"
+background_texture = ExtResource("2_bg")
+background_music = ExtResource("3_music")
+footsteps = ExtResource("4_footsteps")
+spawn_data = ExtResource("5_spawn")
+ground_far_px = 520.0
+spawn_x_ratio = 0.12
+far_character_scale = 1.8
+near_character_scale = 3.0
+exit_left_scene = "res://scenes/areas/forest/forest_fight.tscn"
+
+[node name="Background" parent="." index="0" unique_id=1944799289]
+texture = ExtResource("2_bg")
+
+[node name="VoidOrb" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=1779167171]
+z_index = -100
+position = Vector2(1152, 105)
+color = Color(0.55, 0.25, 1, 1)
+energy = 1.4
+texture = SubResource("GradientTexture2D_glow")
+
+[node name="LeftTorch" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="1" unique_id=1079120584]
+z_index = -100
+position = Vector2(112, 540)
+color = Color(1, 0.52, 0.2, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_glow")
+
+[node name="RightTorch" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="2" unique_id=1281649361]
+z_index = -100
+position = Vector2(1972, 540)
+color = Color(1, 0.52, 0.2, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_glow")

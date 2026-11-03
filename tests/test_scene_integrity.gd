@@ -7,6 +7,7 @@ const SCENES := [
 	"res://scenes/areas/forest/forest_village_square.tscn",
 	"res://scenes/areas/forest/forest_entrance.tscn",
 	"res://scenes/areas/forest/forest_fight.tscn",
+	"res://scenes/areas/forest/forest_guardian_arena.tscn",
 ]
 
 

@@ -1,9 +1,8 @@
-[gd_resource type="Resource" script_class="AreaSpawnData" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="AreaSpawnData" format=3 uid="uid://cfa3g65rvs8of"]
 
-[ext_resource type="Script" path="res://resources/spawning/area_spawn_data.gd" id="1_data"]
-[ext_resource type="Script" path="res://resources/spawning/area_spawn_entry.gd" id="2_entry"]
-[ext_resource type="PackedScene" path="res://entities/enemies/mob.tscn" id="3_mob"]
-[ext_resource type="PackedScene" path="res://entities/enemies/guardian.tscn" id="4_guardian"]
+[ext_resource type="Script" uid="uid://b6hhv4n1qtya3" path="res://resources/spawning/area_spawn_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://d3hy67fanlxfh" path="res://resources/spawning/area_spawn_entry.gd" id="2_entry"]
+[ext_resource type="PackedScene" uid="uid://dognuqaltc7fd" path="res://entities/enemies/mob.tscn" id="3_mob"]
 
 [sub_resource type="Resource" id="Resource_mob"]
 script = ExtResource("2_entry")
@@ -11,21 +10,9 @@ monster_scene = ExtResource("3_mob")
 min_count = 3
 max_count = 4
 
-[sub_resource type="Resource" id="Resource_guardian"]
-script = ExtResource("2_entry")
-monster_scene = ExtResource("4_guardian")
-min_count = 1
-max_count = 1
-rarity_override = 0
-
 [resource]
 script = ExtResource("1_data")
 area_id = &"forest_fight"
-region = &"forest"
 stage = 2
 display_name = "Deepwood Clearing"
-entries = Array[ExtResource("2_entry")]([SubResource("Resource_mob"), SubResource("Resource_guardian")])
-normal_chance = 0.9
-epic_chance = 0.08
-legendary_chance = 0.015
-anomaly_chance = 0.005
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_mob")])

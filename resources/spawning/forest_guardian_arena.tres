@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AreaSpawnData" format=3 uid="uid://bacfmbsi3wx1j"]
+
+[ext_resource type="Script" uid="uid://b6hhv4n1qtya3" path="res://resources/spawning/area_spawn_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://d3hy67fanlxfh" path="res://resources/spawning/area_spawn_entry.gd" id="2_entry"]
+[ext_resource type="PackedScene" uid="uid://bidk6nyb7anv5" path="res://entities/enemies/guardian.tscn" id="3_guardian"]
+
+[sub_resource type="Resource" id="Resource_guardian"]
+script = ExtResource("2_entry")
+monster_scene = ExtResource("3_guardian")
+rarity_override = 0
+
+[resource]
+script = ExtResource("1_data")
+area_id = &"forest_guardian_arena"
+stage = 3
+display_name = "Guardian Arena"
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_guardian")])

@@ -5,9 +5,11 @@ extends RefCounted
 
 const ENTRANCE_SCENE := "res://scenes/areas/forest/forest_entrance.tscn"
 const FIGHT_SCENE := "res://scenes/areas/forest/forest_fight.tscn"
+const ARENA_SCENE := "res://scenes/areas/forest/forest_guardian_arena.tscn"
 const VILLAGE_SCENE := "res://scenes/areas/forest/forest_village_square.tscn"
 const ENTRANCE_DATA := "res://resources/spawning/forest_entrance.tres"
 const FIGHT_DATA := "res://resources/spawning/forest_fight.tres"
+const ARENA_DATA := "res://resources/spawning/forest_guardian_arena.tres"
 
 
 func run(tree: SceneTree) -> Array[String]:
@@ -20,13 +22,14 @@ func run(tree: SceneTree) -> Array[String]:
 	state.reset_all()
 	_check_tables(failures)
 	await _check_spawn_and_respawn_gate(tree, state, failures)
+	await _check_guardian_arena(tree, state, failures)
 	await _check_rarity_roll(tree, state, failures)
 	state.reset_all()
 	return failures
 
 
 func _check_tables(failures: Array[String]) -> void:
-	for path in [ENTRANCE_DATA, FIGHT_DATA]:
+	for path in [ENTRANCE_DATA, FIGHT_DATA, ARENA_DATA]:
 		var data := load(path) as AreaSpawnData
 		if data == null:
 			failures.append("%s must load as AreaSpawnData" % path)
@@ -45,8 +48,17 @@ func _check_tables(failures: Array[String]) -> void:
 
 	var entrance := load(ENTRANCE_DATA) as AreaSpawnData
 	var fight := load(FIGHT_DATA) as AreaSpawnData
+	var arena := load(ARENA_DATA) as AreaSpawnData
 	if entrance != null and fight != null and entrance.stage >= fight.stage:
 		failures.append("forest entrance must be an earlier stage than the clearing")
+	if fight != null and arena != null and fight.stage >= arena.stage:
+		failures.append("the guardian arena must come after the clearing")
+	if fight != null:
+		if fight.entries.size() != 1 or fight.entries[0].monster_scene.resource_path != "res://entities/enemies/mob.tscn":
+			failures.append("the clearing must spawn goblins only")
+	if arena != null:
+		if arena.entries.size() != 1 or arena.entries[0].monster_scene.resource_path != "res://entities/enemies/guardian.tscn":
+			failures.append("the guardian arena must spawn the guardian only")
 
 
 func _check_spawn_and_respawn_gate(
@@ -115,6 +127,36 @@ func _check_spawn_and_respawn_gate(
 			failures.append("monsters must respawn after visiting the village")
 		fresh.queue_free()
 		await tree.process_frame
+
+
+func _check_guardian_arena(
+	tree: SceneTree,
+	state: Node,
+	failures: Array[String]
+) -> void:
+	state.reset_all()
+	var arena := await _instantiate(tree, ARENA_SCENE, failures)
+	if arena == null:
+		return
+
+	if arena.spawn_data == null or arena.spawn_data.area_id != &"forest_guardian_arena":
+		failures.append("the guardian arena must wire its own spawn data")
+	if arena.exit_left_scene != FIGHT_SCENE:
+		failures.append("the guardian arena must return to the clearing")
+
+	var monsters: Array[Monster] = []
+	for child in arena.get_children():
+		if child is Monster:
+			monsters.append(child as Monster)
+	if monsters.size() != 1:
+		failures.append("the guardian arena must spawn exactly one guardian")
+	elif monsters[0].config == null or monsters[0].config.enemy_name != "Hollowhart Guardian":
+		failures.append("the guardian arena must spawn the Hollowhart Guardian")
+
+	arena.queue_free()
+	await tree.process_frame
+	await tree.process_frame
+	state.reset_all()
 
 
 func _check_rarity_roll(
