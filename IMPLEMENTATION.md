@@ -287,6 +287,8 @@ fields are consumed where the current runtime already exposes them.
   - `forest_entrance.tres` and `forest_fight.tres` replace the hand-placed
     monsters with spawn tables (boarlets in the entrance; goblins + Hollowhart
     Guardian in the clearing). The village is the reset point.
+  - `PlayerProgress` carries the player's current health across areas at
+    runtime; entering a `safe_zone` village restores it to full.
   - Note: the goblin and Hollowhart are stale demo content aimed at another
     region. Keep them wired for now; replace them when that region is authored.
   - Test: `tests/test_spawning.gd`.

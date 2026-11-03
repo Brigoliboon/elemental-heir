@@ -174,9 +174,14 @@ func _bind_player_progress() -> void:
 func _restore_player_progress() -> void:
 	if PlayerProgress.has_state:
 		player.apply_progress(PlayerProgress.level, PlayerProgress.experience)
+	if safe_zone:
+		PlayerProgress.reset_health()
+	elif PlayerProgress.has_health:
+		player.set_health(PlayerProgress.health)
 
 
 func _on_player_health_changed(current: int, maximum: int) -> void:
+	PlayerProgress.record_health(current)
 	health_bar.max_value = maximum
 	health_bar.value = current
 	health_label.text = "HP %d / %d" % [current, maximum]
