@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://7l0jb0po42ni" path="res://resources/entities/monster_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://cw2kug3amsluc" path="res://resources/passives/monster_passive.gd" id="2_ephdb"]
-[ext_resource type="Resource" path="res://resources/skills/gore.tres" id="2_gore"]
-[ext_resource type="Resource" path="res://resources/skills/charge.tres" id="3_charge"]
+[ext_resource type="Resource" uid="uid://nnqn2l2irn7i" path="res://resources/skills/gore.tres" id="2_gore"]
+[ext_resource type="Resource" uid="uid://dwpr4rpwcamnf" path="res://resources/skills/charge.tres" id="3_charge"]
 [ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="4_0tpdf"]
 
 [resource]

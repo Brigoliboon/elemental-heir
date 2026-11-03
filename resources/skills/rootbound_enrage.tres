@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="BuffSkill" format=3]
+[gd_resource type="Resource" script_class="BuffSkill" format=3 uid="uid://wonhcjb4v4p"]
 
-[ext_resource type="Script" path="res://resources/skills/buff_skill.gd" id="1_skill"]
-[ext_resource type="Script" path="res://resources/skills/stat_buff.gd" id="1_xc64v"]
-[ext_resource type="Resource" path="res://resources/skills/buffs/enrage_attack.tres" id="2_buff"]
+[ext_resource type="Script" uid="uid://dq3241btrgrp3" path="res://resources/skills/buff_skill.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://d07ors1dqxtcy" path="res://resources/skills/stat_buff.gd" id="1_xc64v"]
+[ext_resource type="Resource" uid="uid://cfwklbndwtye3" path="res://resources/skills/buffs/enrage_attack.tres" id="2_buff"]
 
 [resource]
 script = ExtResource("1_skill")

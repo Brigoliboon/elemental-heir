@@ -1,9 +1,8 @@
-[gd_resource type="Resource" script_class="StatBuff" format=3]
+[gd_resource type="Resource" script_class="StatBuff" format=3 uid="uid://boojteq5yu8o4"]
 
-[ext_resource type="Script" path="res://resources/skills/stat_buff.gd" id="1_buff"]
+[ext_resource type="Script" uid="uid://d07ors1dqxtcy" path="res://resources/skills/stat_buff.gd" id="1_buff"]
 
 [resource]
 script = ExtResource("1_buff")
-stat = &"attack"
 pct = 0.2
 tint = Color(1, 0.86, 0.35, 1)

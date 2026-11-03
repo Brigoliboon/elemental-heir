@@ -1,23 +1,17 @@
-[gd_resource type="Resource" script_class="GroundTargetSkill" format=3]
+[gd_resource type="Resource" script_class="GroundTargetSkill" format=3 uid="uid://dsp4oengfd4ui"]
 
-[ext_resource type="Script" path="res://resources/skills/ground_target_skill.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://dpg3iqisu6gcb" path="res://resources/skills/ground_target_skill.gd" id="1_skill"]
 
 [resource]
 script = ExtResource("1_skill")
-id = &"rootbound_slam"
-cooldown = 9.0
-min_range = 0.0
-max_range = 150.0
-priority = 2
-animation = &"attack"
-animation_speed = 0.9
-hit_start = 0.45
-hit_end = 0.7
 radius = 150.0
 active_seconds = 0.15
 damage_multiplier = 1.4
 knockback = 220.0
-hit_depth_tolerance = 40.0
-lock_at_cast = true
-show_marker = true
-marker_color = Color(1, 0.35, 0.2, 1)
+id = &"rootbound_slam"
+cooldown = 9.0
+max_range = 150.0
+priority = 2
+animation_speed = 0.9
+hit_start = 0.45
+hit_end = 0.7
