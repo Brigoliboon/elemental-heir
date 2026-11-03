@@ -43,6 +43,19 @@ enum Rank { NORMAL, GENERAL, GUARDIAN }
 @export_group("Animation")
 @export var idle_animation: StringName = &"default"
 @export var walk_animation: StringName = &"walk"
+## Per-monster skill animation swaps. Lets several monsters share one tuned skill
+## resource while each plays its own clip.
+@export var animation_overrides: Array[SkillAnimationOverride] = []
+
+
+## The override registered for `skill`, or null when the skill plays its own clip.
+func animation_override_for(skill: MonsterSkill) -> SkillAnimationOverride:
+	if skill == null:
+		return null
+	for entry in animation_overrides:
+		if entry != null and entry.skill_id == skill.id:
+			return entry
+	return null
 
 
 ## True when this monster can chase and fight. A monster without a basic attack
