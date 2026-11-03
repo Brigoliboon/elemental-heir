@@ -1,13 +1,14 @@
 [gd_resource type="Resource" script_class="MonsterData" format=3 uid="uid://c2rgw3x6hsdbt"]
 
 [ext_resource type="Script" uid="uid://7l0jb0po42ni" path="res://resources/entities/monster_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://cw2kug3amsluc" path="res://resources/passives/monster_passive.gd" id="2_pgw20"]
 [ext_resource type="Resource" uid="uid://c13qnot5lj7o6" path="res://resources/audio/goblin_sfx.tres" id="2_sfx"]
-[ext_resource type="Resource" path="res://resources/skills/bite.tres" id="3_bite"]
+[ext_resource type="Resource" uid="uid://nhx6dpl4rq55" path="res://resources/skills/bite.tres" id="3_bite"]
+[ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="5_gxl36"]
 
 [resource]
 script = ExtResource("1_data")
-enemy_name = "Goblin"
+basic_attack = ExtResource("3_bite")
 max_health = 60
 move_speed = 220.0
-basic_attack = ExtResource("3_bite")
 sfx = ExtResource("2_sfx")

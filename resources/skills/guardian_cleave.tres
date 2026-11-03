@@ -1,15 +1,14 @@
-[gd_resource type="Resource" script_class="MeleeSkill" format=3]
+[gd_resource type="Resource" script_class="MeleeSkill" format=3 uid="uid://tuh5w7xx6hlg"]
 
-[ext_resource type="Script" path="res://resources/skills/melee_skill.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://5ohqm3nqntdm" path="res://resources/skills/melee_skill.gd" id="1_skill"]
 
 [resource]
 script = ExtResource("1_skill")
-id = &"cleave"
-cooldown = 0.0
-max_range = 165.0
-animation = &"attack"
-animation_speed = 0.9
 damage_multiplier = 1.15
 knockback = 80.0
 hitbox_offset = Vector2(78, 12)
 hitbox_size = Vector2(210, 170)
+id = &"cleave"
+cooldown = 0.0
+max_range = 165.0
+animation_speed = 0.9

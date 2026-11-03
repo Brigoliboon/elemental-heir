@@ -1,19 +1,17 @@
-[gd_resource type="Resource" script_class="MeleeSkill" format=3]
+[gd_resource type="Resource" script_class="MeleeSkill" format=3 uid="uid://oxd15q0tg4y6"]
 
-[ext_resource type="Script" path="res://resources/skills/melee_skill.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://5ohqm3nqntdm" path="res://resources/skills/melee_skill.gd" id="1_skill"]
 
 [resource]
 script = ExtResource("1_skill")
-id = &"charge"
-cooldown = 7.0
-min_range = 0.0
-max_range = 320.0
-priority = 1
-animation = &"root_charge"
-animation_speed = 1.0
-hit_start = 0.3
-hit_end = 0.7
 damage_multiplier = 1.5
 knockback = 320.0
 hitbox_offset = Vector2(80, 10)
 hitbox_size = Vector2(210, 140)
+id = &"charge"
+cooldown = 7.0
+max_range = 320.0
+priority = 1
+animation = &"root_charge"
+hit_start = 0.3
+hit_end = 0.7

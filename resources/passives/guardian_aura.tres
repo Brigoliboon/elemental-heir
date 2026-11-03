@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="AuraPassive" format=3]
+[gd_resource type="Resource" script_class="AuraPassive" format=3 uid="uid://m0f7h072xiil"]
 
-[ext_resource type="Script" path="res://resources/passives/aura_passive.gd" id="1_passive"]
-[ext_resource type="Resource" path="res://resources/skills/buffs/guardian_aura_attack.tres" id="2_buff"]
+[ext_resource type="Script" uid="uid://d07ors1dqxtcy" path="res://resources/skills/stat_buff.gd" id="1_2hhe0"]
+[ext_resource type="Script" uid="uid://d2ek3yv3a21p5" path="res://resources/passives/aura_passive.gd" id="1_passive"]
+[ext_resource type="Resource" uid="uid://cji346hfb4hop" path="res://resources/skills/buffs/guardian_aura_attack.tres" id="2_buff"]
 
 [resource]
 script = ExtResource("1_passive")
+buffs = Array[ExtResource("1_2hhe0")]([ExtResource("2_buff")])
 id = &"guardian_aura"
-radius = 300.0
-tick_seconds = 0.5
-buffs = Array[Resource]([ExtResource("2_buff")])
