@@ -4,6 +4,7 @@ extends RefCounted
 
 const TEMP_SAVE := "user://test_player_progress.cfg"
 const AREA_SCENE := "res://scenes/areas/forest/forest_fight.tscn"
+const VILLAGE_SCENE := "res://scenes/areas/forest/forest_village_square.tscn"
 
 
 func run(tree: SceneTree) -> Array[String]:
@@ -68,6 +69,8 @@ func _check_area_transition(tree: SceneTree) -> Array[String]:
 	var xp_bar := first.get_node_or_null("HUD/UI/PlayerHealth/XPBar") as TextureProgressBar
 	if xp_bar == null or not is_equal_approx(xp_bar.value, 60.0):
 		failures.append("the HUD XP bar must show the restored experience")
+	first.player.set_health(40)
+	await tree.process_frame
 	first.queue_free()
 	await tree.process_frame
 
@@ -76,6 +79,8 @@ func _check_area_transition(tree: SceneTree) -> Array[String]:
 	await tree.process_frame
 	if second.player.level != 4 or second.player.experience != 60:
 		failures.append("a second area must keep the saved level and experience")
+	if second.player.current_health != 40:
+		failures.append("a second fighting area must keep the player's health")
 
 	second.player.add_experience(10)
 	await tree.process_frame
@@ -84,5 +89,28 @@ func _check_area_transition(tree: SceneTree) -> Array[String]:
 
 	second.queue_free()
 	await tree.process_frame
+
+	var village_packed := load(VILLAGE_SCENE) as PackedScene
+	if village_packed == null:
+		failures.append("%s did not load for the health reset test" % VILLAGE_SCENE)
+		progress.reset(false)
+		return failures
+
+	var village := village_packed.instantiate() as Area
+	tree.root.add_child(village)
+	await tree.process_frame
+	if village.player.current_health != village.player.max_health:
+		failures.append("entering the village must restore the player's health")
+	village.queue_free()
+	await tree.process_frame
+
+	var third := packed.instantiate() as Area
+	tree.root.add_child(third)
+	await tree.process_frame
+	if third.player.current_health != third.player.max_health:
+		failures.append("a fighting area after the village must start at full health")
+	third.queue_free()
+	await tree.process_frame
+
 	progress.reset(false)
 	return failures

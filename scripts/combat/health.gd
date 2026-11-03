@@ -50,6 +50,14 @@ func reset() -> void:
 	health_changed.emit(current_health, max_health)
 
 
+## Restores a saved value without resetting to full. Used when the player
+## carries their health into the next area.
+func set_current_health(value: int) -> void:
+	current_health = clampi(value, 1, max_health)
+	_dead = false
+	health_changed.emit(current_health, max_health)
+
+
 func is_alive() -> bool:
 	return current_health > 0
 

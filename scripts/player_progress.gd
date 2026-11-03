@@ -11,6 +11,9 @@ var persistence_enabled := true
 var has_state := false
 var level := 1
 var experience := 0
+## Runtime-only health carry-over between areas. Never written to the save file.
+var has_health := false
+var health := 0
 var equipped: Array[String] = ["", "", "", "", "", "", "", ""]
 
 
@@ -48,6 +51,18 @@ func record(new_level: int, new_experience: int) -> void:
 	save_progress()
 
 
+## Remembers health for the next area without persisting it across app restarts.
+func record_health(current: int) -> void:
+	has_health = true
+	health = maxi(1, current)
+
+
+## Clears carried health so the next area starts at full.
+func reset_health() -> void:
+	has_health = false
+	health = 0
+
+
 func save_progress() -> void:
 	if not persistence_enabled:
 		return
@@ -64,6 +79,7 @@ func reset(delete_save: bool = true) -> void:
 	level = 1
 	experience = 0
 	has_state = false
+	reset_health()
 	equipped = ["", "", "", "", "", "", "", ""]
 	if delete_save and persistence_enabled and FileAccess.file_exists(save_path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))

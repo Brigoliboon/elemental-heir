@@ -322,6 +322,12 @@ func is_dead() -> bool:
 	return _is_dead
 
 
+## Restores a health value carried over from the previous area.
+func set_health(value: int) -> void:
+	if health != null:
+		health.set_current_health(value)
+
+
 ## Restores full health and clears the death visual. Areas call this on respawn.
 func revive() -> void:
 	if health == null:
