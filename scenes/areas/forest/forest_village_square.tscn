@@ -18,14 +18,14 @@ fill = 1
 fill_from = Vector2(0.49565217, 0.526087)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_transition"]
-size = Vector2(80, 120)
+size = Vector2(65, 18)
 
 [node name="ForestVillageSquare" unique_id=280388306 instance=ExtResource("1_base")]
 area_name = "Forest - Village Square"
 background_music = ExtResource("6_music")
 footsteps = ExtResource("7_footsteps")
-spawn_x_ratio = 0.3
 safe_zone = true
+spawn_x_ratio = 0.3
 exit_right_scene = "res://scenes/areas/forest/forest_entrance.tscn"
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
@@ -162,5 +162,5 @@ script = ExtResource("8_transition")
 target_scene = "res://scenes/areas/forest/forest_inn.tscn"
 
 [node name="Inn" type="CollisionShape2D" parent="InnEntrance" index="0" unique_id=1166446282]
-position = Vector2(665, 258)
+position = Vector2(667, 199)
 shape = SubResource("RectangleShape2D_transition")
