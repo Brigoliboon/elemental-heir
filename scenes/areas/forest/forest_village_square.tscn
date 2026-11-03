@@ -26,7 +26,7 @@ background_music = ExtResource("6_music")
 footsteps = ExtResource("7_footsteps")
 safe_zone = true
 spawn_x_ratio = 0.3
-exit_right_scene = "res://scenes/areas/forest/forest_entrance.tscn"
+exit_right_scene = "uid://dyi8uv25cfrei"
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
 unique_name_in_owner = true
@@ -164,3 +164,4 @@ target_scene = "res://scenes/areas/forest/forest_inn.tscn"
 [node name="Inn" type="CollisionShape2D" parent="InnEntrance" index="0" unique_id=1166446282]
 position = Vector2(667, 199)
 shape = SubResource("RectangleShape2D_transition")
+disabled = true

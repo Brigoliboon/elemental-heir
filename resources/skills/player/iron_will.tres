@@ -1,18 +1,27 @@
-[gd_resource type="Resource" script_class="SelfBuffSkill" format=3]
+[gd_resource type="Resource" script_class="SelfBuffSkill" format=3 uid="uid://dqiwuo0m67cdg"]
 
-[ext_resource type="Script" path="res://resources/skills/self_buff_skill.gd" id="1_skill"]
-[ext_resource type="Script" path="res://resources/skills/stat_buff.gd" id="2_buff"]
-[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_iron_will.png" id="3_icon"]
+[ext_resource type="Script" uid="uid://csptxsl3853j1" path="res://resources/skills/self_buff_skill.gd" id="1_skill"]
+[ext_resource type="Script" uid="uid://d07ors1dqxtcy" path="res://resources/skills/stat_buff.gd" id="2_buff"]
+[ext_resource type="Texture2D" uid="uid://dv0w5af70qtyf" path="res://assets/skills/warrior/icon_iron_will.png" id="3_icon"]
 
 [sub_resource type="Resource" id="Resource_attack_buff"]
 script = ExtResource("2_buff")
-stat = &"attack"
 pct = 0.15
 seconds = 6.0
 tint = Color(1, 0.9, 0.55, 1)
 
 [resource]
 script = ExtResource("1_skill")
+buffs = Array[ExtResource("2_buff")]([SubResource("Resource_attack_buff")])
+damage_taken_multiplier = 0.6
+knockback_immune = true
+tier2_heal_fraction = 0.05
+tier3_reflect_fraction = 0.25
+pulse_color = Color(1, 0.88, 0.45, 0.9)
+display_name = "Iron Will"
+description = "Brace for 6 seconds: 40% less damage, no knockback, and a little more attack. Tier 2 heals; tier 3 reflects."
+icon = ExtResource("3_icon")
+cooldown = 40.0
 id = &"iron_will"
 length = 0.6
 hit_start = 0.0
@@ -28,38 +37,38 @@ keys = Array[Dictionary]([{
 "t": 0.0
 }, {
 "arm": -25.0,
+"arm_l": -40.0,
 "fore": 18.0,
+"fore_l": -40.0,
 "hand": 8.0,
 "lean": 8.0,
 "px": 0.5,
 "py": 2.5,
 "sword": -18.0,
-"t": 0.22,
-"arm_l": -40.0,
-"fore_l": -40.0
+"t": 0.22
 }, {
 "arm": -30.0,
+"arm_l": -50.0,
 "fore": 22.0,
+"fore_l": -50.0,
 "hand": 9.0,
+"head": 1.0,
 "lean": 10.0,
 "px": 0.5,
 "py": 3.0,
 "sword": -22.0,
-"t": 0.5,
-"arm_l": -50.0,
-"fore_l": -50.0,
-"head": 1.0
+"t": 0.5
 }, {
 "arm": -12.0,
+"arm_l": -20.0,
 "fore": 8.0,
+"fore_l": -20.0,
 "hand": 4.0,
 "lean": 6.0,
 "px": 0.2,
 "py": 1.5,
 "sword": -8.0,
-"t": 0.78,
-"arm_l": -20.0,
-"fore_l": -20.0
+"t": 0.78
 }, {
 "arm": 0.0,
 "fore": 0.0,
@@ -70,18 +79,3 @@ keys = Array[Dictionary]([{
 "sword": 0.0,
 "t": 1.0
 }])
-display_name = "Iron Will"
-description = "Brace for 6 seconds: 40% less damage, no knockback, and a little more attack. Tier 2 heals; tier 3 reflects."
-icon = ExtResource("3_icon")
-cooldown = 40.0
-energy_cost = 0
-animation_speed = 1.0
-uses_sword = false
-damage_multiplier = 1.0
-buffs = Array[ExtResource("2_buff")]([SubResource("Resource_attack_buff")])
-duration = 6.0
-damage_taken_multiplier = 0.6
-knockback_immune = true
-tier2_heal_fraction = 0.05
-tier3_reflect_fraction = 0.25
-pulse_color = Color(1, 0.88, 0.45, 0.9)

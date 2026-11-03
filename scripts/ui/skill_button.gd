@@ -12,6 +12,8 @@ extends BaseButton
 @export var frame_color := Color(0.85, 0.72, 0.5, 1.0)
 ## Frame colour while on cooldown.
 @export var cooldown_color := Color(0.45, 0.38, 0.3, 1.0)
+## Optional frame texture drawn behind the skill icon.
+@export var frame_texture: Texture2D
 
 var skill: PlayerSkill
 var character: Character
@@ -86,10 +88,14 @@ func _draw() -> void:
 	var ready := _is_ready()
 	var darkened := not ready and character != null and skill != null
 
-	draw_circle(center, radius, Color(0.055, 0.045, 0.035, 0.92))
+	if frame_texture != null:
+		var frame_rect := Rect2(Vector2.ZERO, size)
+		draw_texture_rect(frame_texture, frame_rect, false)
+	else:
+		draw_circle(center, radius, Color(0.055, 0.045, 0.035, 0.92))
 
 	if _icon != null:
-		var icon_size := radius * 1.28
+		var icon_size := radius * 2.0
 		var icon_rect := Rect2(center - Vector2(icon_size, icon_size) * 0.5, Vector2(icon_size, icon_size))
 		var tint := Color(1.0, 1.0, 1.0, 1.0 if ready else 0.42)
 		draw_texture_rect(_icon, icon_rect, false, tint)

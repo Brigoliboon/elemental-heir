@@ -108,8 +108,8 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 	$HUD/UI/Skill2 as SkillButton,
 	$HUD/UI/Skill3 as SkillButton,
 ]
-@onready var energy_bar: TextureProgressBar = $HUD/UI/SkillEnergy/EnergyBar
-@onready var energy_label: Label = $HUD/UI/SkillEnergy/EnergyLabel
+@onready var energy_bar: TextureProgressBar = get_node_or_null("HUD/UI/PlayerHealth/SkillEnergy/EnergyBar")
+@onready var energy_label: Label = get_node_or_null("HUD/UI/PlayerHealth/SkillEnergy/EnergyLabel")
 
 ## Iron Will lives on the existing passive button rather than a fourth slot.
 var _passive_skill: PlayerSkill
