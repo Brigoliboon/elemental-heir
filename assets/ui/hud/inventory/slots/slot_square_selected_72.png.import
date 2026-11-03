@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bh8gsxkcm1sv"
-path="res://.godot/imported/iron_will.svg-aeba40442cdb9cf5b606f430b25cda05.ctex"
+uid="uid://c3tbydqqgq8uc"
+path="res://.godot/imported/slot_square_selected_72.png-7fbe652bee1adbadd168522bea32f5b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/skills/iron_will.svg"
-dest_files=["res://.godot/imported/iron_will.svg-aeba40442cdb9cf5b606f430b25cda05.ctex"]
+source_file="res://assets/ui/hud/inventory/slots/slot_square_selected_72.png"
+dest_files=["res://.godot/imported/slot_square_selected_72.png-7fbe652bee1adbadd168522bea32f5b1.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

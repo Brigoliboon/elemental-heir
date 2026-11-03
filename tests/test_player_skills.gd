@@ -43,6 +43,8 @@ func _check_data(failures: Array[String]) -> void:
 			failures.append("%s is invalid: %s" % [skill.id, problem])
 		if skill.icon == null:
 			failures.append("%s has no HUD icon" % skill.id)
+		elif skill.icon.resource_path != "res://assets/skills/warrior/icon_%s.png" % skill.id:
+			failures.append("%s must use its warrior icon art" % skill.id)
 		if skill.keys.is_empty():
 			failures.append("%s has no baked key poses" % skill.id)
 	if data.max_energy <= 0 or data.energy_regen <= 0.0:

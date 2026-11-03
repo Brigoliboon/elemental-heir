@@ -163,7 +163,9 @@ func _draw_hint(center: Vector2, radius: float) -> void:
 	)
 
 
-## Cuts the source icon into a circle so a square SVG cannot poke out of the frame.
+## Cuts the source icon into a circle so a square image cannot poke out of the
+## frame. Icons that are already circular on a transparent background are used
+## as-is, which avoids copying a large texture on every HUD build.
 func _circular_icon(texture: Texture2D) -> Texture2D:
 	if texture == null:
 		return null
@@ -175,6 +177,14 @@ func _circular_icon(texture: Texture2D) -> Texture2D:
 	image.convert(Image.FORMAT_RGBA8)
 	var w := image.get_width()
 	var h := image.get_height()
+	var corners := [Vector2i(0, 0), Vector2i(w - 1, 0), Vector2i(0, h - 1), Vector2i(w - 1, h - 1)]
+	var transparent_corners := true
+	for corner in corners:
+		if image.get_pixel(corner.x, corner.y).a > 0.05:
+			transparent_corners = false
+			break
+	if transparent_corners:
+		return texture
 	var center := Vector2(w, h) * 0.5
 	var radius := minf(center.x, center.y)
 	for y in h:

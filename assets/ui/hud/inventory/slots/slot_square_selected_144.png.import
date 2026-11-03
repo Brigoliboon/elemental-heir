@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccfdfyss4qiv7"
-path="res://.godot/imported/heavy_strike.svg-2934dd68895316dbadad7631ed9b6c56.ctex"
+uid="uid://1g2o365wk6ep"
+path="res://.godot/imported/slot_square_selected_144.png-e3611461d9d47dd5309f1bacf2837030.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/skills/heavy_strike.svg"
-dest_files=["res://.godot/imported/heavy_strike.svg-2934dd68895316dbadad7631ed9b6c56.ctex"]
+source_file="res://assets/ui/hud/inventory/slots/slot_square_selected_144.png"
+dest_files=["res://.godot/imported/slot_square_selected_144.png-e3611461d9d47dd5309f1bacf2837030.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

@@ -22,6 +22,12 @@ var _stats: Stats
 var _equipped: Array = [null, null, null, null, null, null, null, null]
 const _EQUIP_GROUPS := ["helmet", "chest_armour", "pants", "boots", "necklace", "ring", "sword", "shield"]
 
+const SLOT_ART := preload("res://assets/ui/hud/inventory/slots/slot_square_144.png")
+const SLOT_ART_SELECTED := preload("res://assets/ui/hud/inventory/slots/slot_square_selected_144.png")
+const SLOT_ART_SMALL := preload("res://assets/ui/hud/inventory/slots/slot_square_72.png")
+const SLOT_ART_SMALL_SELECTED := preload("res://assets/ui/hud/inventory/slots/slot_square_selected_72.png")
+const POTION_ART := preload("res://assets/ui/hud/inventory/slots/slot_potion_72.png")
+
 
 func _ready() -> void:
 	close_button.pressed.connect(hide_panel)
@@ -112,19 +118,19 @@ func _refresh() -> void:
 
 	# Create equipment slots.
 	for i in range(4):
-		var b := _add_slot(left_slots, equip_slot_size)
+		var b := _add_slot(left_slots, equip_slot_size, SLOT_ART_SMALL, SLOT_ART_SMALL_SELECTED)
 		b.slot_index = left_slots.get_child_count() - 1 + 0
 
 	for i in range(4):
-		_add_slot(right_slots, equip_slot_size)
+		_add_slot(right_slots, equip_slot_size, SLOT_ART_SMALL, SLOT_ART_SMALL_SELECTED)
 
 	# Create potion slots.
 	for i in range(potion_slots):
-		_add_slot(potions_row, equip_slot_size)
+		_add_slot(potions_row, equip_slot_size, POTION_ART, POTION_ART)
 
 	# Create general inventory slots.
 	for i in range(28):
-		_add_slot(general_grid, slot_size)
+		_add_slot(general_grid, slot_size, SLOT_ART, SLOT_ART_SELECTED)
 
 	# Stop if no inventory is bound.
 	if _inventory == null:
@@ -306,7 +312,7 @@ class SlotButton extends Button:
 
 
 
-func _add_slot(parent: Control, size: Vector2) -> Button:
+func _add_slot(parent: Control, size: Vector2, normal_art: Texture2D, selected_art: Texture2D) -> Button:
 	var btn := SlotButton.new()
 	btn.panel = self
 
@@ -315,6 +321,19 @@ func _add_slot(parent: Control, size: Vector2) -> Button:
 	btn.expand_icon = false
 	btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	btn.add_theme_stylebox_override("normal", _slot_style(normal_art))
+	btn.add_theme_stylebox_override("hover", _slot_style(selected_art))
+	btn.add_theme_stylebox_override("pressed", _slot_style(selected_art))
+	btn.add_theme_stylebox_override("focus", _slot_style(selected_art))
 
 	parent.add_child(btn)
 	return btn
+
+
+## Stretches a slot frame over the button. The content margin keeps an item icon
+## inside the painted border instead of covering it.
+func _slot_style(texture: Texture2D) -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = texture
+	style.set_content_margin_all(4.0)
+	return style

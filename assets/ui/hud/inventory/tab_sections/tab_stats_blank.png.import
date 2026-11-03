@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvtnvivx11t1d"
-path="res://.godot/imported/ground_slam.svg-929257de75952dc53beed3177ff11203.ctex"
+uid="uid://dqkwv7s0q4c0i"
+path="res://.godot/imported/tab_stats_blank.png-94fb951e21e5fe25e59fcc4dd41f3558.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/skills/ground_slam.svg"
-dest_files=["res://.godot/imported/ground_slam.svg-929257de75952dc53beed3177ff11203.ctex"]
+source_file="res://assets/ui/hud/inventory/tab_sections/tab_stats_blank.png"
+dest_files=["res://.godot/imported/tab_stats_blank.png-94fb951e21e5fe25e59fcc4dd41f3558.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

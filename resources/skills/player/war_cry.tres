@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://resources/skills/self_buff_skill.gd" id="1_skill"]
 [ext_resource type="Script" path="res://resources/skills/stat_buff.gd" id="2_buff"]
-[ext_resource type="Texture2D" path="res://assets/ui/skills/war_cry.svg" id="3_icon"]
+[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_war_cry.png" id="3_icon"]
 
 [sub_resource type="Resource" id="Resource_attack_buff"]
 script = ExtResource("2_buff")
