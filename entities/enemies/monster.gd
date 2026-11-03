@@ -63,6 +63,11 @@ var health: Health
 var sfx: SfxComponent
 ## Impulse velocity applied by the player's sword and decayed each physics frame.
 var knockback_velocity := Vector2.ZERO
+## Movement multiplier from a slow pulse. 1.0 is normal speed.
+var _slow_factor := 1.0
+var _slow_left := 0.0
+## Seconds left face-down after a ground slam. AI and movement pause while > 0.
+var _knockdown_left := 0.0
 ## +1 facing right, -1 facing left.
 var facing_sign := 1.0
 ## True for monsters created by a SummonSkill; they award no experience.
@@ -290,6 +295,12 @@ func _physics_process(delta: float) -> void:
 
 	_tick_timers(delta)
 
+	if _knockdown_left > 0.0:
+		velocity = knockback_velocity
+		_move_with_knockback(delta)
+		_apply_depth()
+		return
+
 	if is_attacking:
 		_update_cast_hit()
 		_update_cast_marker()
@@ -320,14 +331,14 @@ func _physics_process(delta: float) -> void:
 		elif in_depth and dist_x < min_attack_space:
 			# Too close to the player: back up to maintain attack space
 			var back_dir := -facing_sign
-			velocity = Vector2(back_dir * move_speed * 0.6, 0.0) + knockback_velocity
+			velocity = Vector2(back_dir * move_speed * 0.6 * _slow_factor, 0.0) + knockback_velocity
 			_play_move_animation()
 		else:
 			# Navigate towards the attack space point in front of the target
 			var target_x := target.global_position.x - facing_sign * attack_space
 			var move_dx := target_x - global_position.x
 			var direction := Vector2(move_dx, delta_y).normalized()
-			velocity = direction * move_speed + knockback_velocity
+			velocity = direction * move_speed * _slow_factor + knockback_velocity
 			_play_move_animation()
 	else:
 		velocity = knockback_velocity
@@ -345,6 +356,13 @@ func _tick_timers(delta: float) -> void:
 
 	for skill in _skill_cooldowns.keys():
 		_skill_cooldowns[skill] = maxf(0.0, float(_skill_cooldowns[skill]) - delta)
+
+	if _slow_left > 0.0:
+		_slow_left = maxf(0.0, _slow_left - delta)
+		if _slow_left <= 0.0:
+			_slow_factor = 1.0
+	if _knockdown_left > 0.0:
+		_knockdown_left = maxf(0.0, _knockdown_left - delta)
 
 	_tick_buffs(delta)
 	_tick_passives(delta)
@@ -1108,6 +1126,66 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
 		amount = Damage.final_damage(float(amount), stats.get_stat(Stats.DEFENCE))
 	if health.take_damage(amount) and not _is_dead and knockback != Vector2.ZERO:
 		knockback_velocity += knockback
+
+
+## Source-aware entry point used by [Hitbox]. The monster does not reflect yet, but
+## sharing the signature keeps every damage target interchangeable.
+func take_hit(amount: int, knockback: Vector2 = Vector2.ZERO, _source: Node = null) -> void:
+	take_damage(amount, knockback)
+
+
+## Public impact flash so a skill can paint a white hit without reusing the red
+## damage flash. Falls back to the active buff tint when it ends.
+func flash_impact(color: Color = Color.WHITE, seconds := 0.18) -> void:
+	if animated_sprite == null or _is_dead:
+		return
+	if _flash_tween != null and _flash_tween.is_valid():
+		_flash_tween.kill()
+	animated_sprite.modulate = color
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(animated_sprite, "modulate", _active_tint, maxf(0.02, seconds))
+
+
+## Slows movement for a moment. Repeated pulses refresh the timer without stacking.
+func apply_slow(factor: float, seconds: float) -> void:
+	if _is_dead or seconds <= 0.0:
+		return
+	_slow_factor = clampf(factor, 0.05, 1.0)
+	_slow_left = maxf(_slow_left, seconds)
+
+
+## Generals and Guardians shrug off knockdowns. Normal mobs are the "small
+## enemies" a ground slam sends to the floor.
+func can_be_knocked_down() -> bool:
+	var data := config as MonsterData
+	if data == null:
+		return true
+	return data.rank == MonsterData.Rank.NORMAL and not data.knockdown_immune
+
+
+## Interrupts the current cast and drops the monster for `seconds`, with a short
+## tilt so the state reads on screen. The AI resumes automatically.
+func knock_down(seconds: float) -> void:
+	if _is_dead or seconds <= 0.0 or not can_be_knocked_down():
+		return
+	_knockdown_left = maxf(_knockdown_left, seconds)
+	is_attacking = false
+	_casting_skill = null
+	_casting_animation = &""
+	_cast_effect_done = false
+	_clear_cast_marker()
+	attack_hitbox.deactivate()
+	_reset_hitbox_geometry()
+	knockback_velocity = Vector2.ZERO
+	velocity = Vector2.ZERO
+	if animated_sprite != null:
+		animated_sprite.speed_scale = 1.0
+	_play_idle_animation()
+	if animated_sprite != null:
+		var tween := create_tween()
+		tween.tween_property(animated_sprite, "rotation", -0.22, 0.12)
+		tween.tween_interval(maxf(0.05, seconds - 0.18))
+		tween.tween_property(animated_sprite, "rotation", 0.0, 0.15)
 
 
 func is_alive() -> bool:

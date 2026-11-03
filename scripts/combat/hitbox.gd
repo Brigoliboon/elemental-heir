@@ -27,6 +27,10 @@ signal hit_landed(target: Node2D)
 @export var depth_origin: Node2D
 ## Draw the hitbox in the editor/debug runs.
 @export var debug_draw := false
+## Optional impact flash applied to a target that supports `flash_impact`. A
+## transparent colour leaves the target's own hit feedback untouched.
+@export var flash_color := Color(0.0, 0.0, 0.0, 0.0)
+@export var flash_seconds := 0.22
 
 var _active := false
 var _hit_targets: Dictionary = {}
@@ -107,9 +111,17 @@ func _try_hit(node: Node) -> void:
 		if att != null and not DepthSort.is_in_depth(att, node, depth_tolerance):
 			return
 	_hit_targets[id] = true
-	if node.has_method("take_damage"):
-		node.take_damage(_resolve_attack(), _knockback_toward(node))
-		hit_landed.emit(node as Node2D)
+	var amount := _resolve_attack()
+	var force := _knockback_toward(node)
+	# `take_hit` is the source-aware variant; plain `take_damage` keeps test
+	# doubles and simple targets working without a forced signature change.
+	if node.has_method("take_hit"):
+		node.take_hit(amount, force, _get_attacker())
+	elif node.has_method("take_damage"):
+		node.take_damage(amount, force)
+	if flash_color.a > 0.0 and node.has_method("flash_impact"):
+		node.flash_impact(flash_color, flash_seconds)
+	hit_landed.emit(node as Node2D)
 
 
 ## Resolves the outgoing attack from the attacker's Stats. The target applies its

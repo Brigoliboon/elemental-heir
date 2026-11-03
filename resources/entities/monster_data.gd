@@ -27,6 +27,9 @@ enum Rank { NORMAL, GENERAL, GUARDIAN }
 ## Once the monster reaches attack range, keep chasing even when the player leaves
 ## aggro_radius. Disable to leash the monster at its notice radius.
 @export var chase_after_engage := true
+## Generals and Guardians already resist knockdown by rank; set this on a normal
+## mob that should also stay on its feet.
+@export var knockdown_immune := false
 ## Minimum gap between any two special casts, so skills do not fire back to back.
 @export var global_cooldown: float = 0.8
 

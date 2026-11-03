@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="PlayerSkill" format=3]
+
+[ext_resource type="Script" path="res://resources/skills/player_skill.gd" id="1_skill"]
+[ext_resource type="Texture2D" path="res://assets/ui/skills/heavy_strike.svg" id="2_icon"]
+
+[resource]
+script = ExtResource("1_skill")
+id = &"heavy_strike"
+length = 0.62
+hit_start = 0.5
+hit_end = 0.72
+keys = Array[Dictionary]([{
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 0.0
+}, {
+"arm": 30.0,
+"fore": -18.0,
+"hand": -6.0,
+"lean": -8.0,
+"px": -2.0,
+"py": 0.5,
+"sword": -60.0,
+"t": 0.18
+}, {
+"arm": 40.0,
+"fore": -24.0,
+"hand": -8.0,
+"lean": -11.0,
+"px": -2.5,
+"py": 0.5,
+"sword": -78.0,
+"t": 0.34
+}, {
+"arm": -60.0,
+"fore": 0.0,
+"hand": 2.0,
+"lean": 6.0,
+"px": 1.5,
+"py": 1.5,
+"sword": 35.0,
+"t": 0.5
+}, {
+"arm": -105.0,
+"fore": 8.0,
+"hand": 6.0,
+"lean": 12.0,
+"px": 3.0,
+"py": 4.0,
+"sword": 82.0,
+"t": 0.64
+}, {
+"arm": -55.0,
+"fore": 10.0,
+"hand": 7.0,
+"lean": 8.0,
+"px": 2.0,
+"py": 3.0,
+"sword": 68.0,
+"t": 0.82
+}, {
+"arm": 0.0,
+"fore": 0.0,
+"hand": 0.0,
+"lean": 0.0,
+"px": 0.0,
+"py": 0.0,
+"sword": 0.0,
+"t": 1.0
+}])
+display_name = "Heavy Strike"
+description = "A slowed overhead swing with double damage and a white impact flash."
+icon = ExtResource("2_icon")
+cooldown = 4.0
+energy_cost = 15
+animation_speed = 0.9
+uses_sword = true
+damage_multiplier = 2.0
+hit_flash_color = Color(1, 1, 1, 1)
+hit_flash_seconds = 0.26
