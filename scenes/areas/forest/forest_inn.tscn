@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b3pgqfi73aa73"]
 
 [ext_resource type="PackedScene" uid="uid://bfspin43dhjid" path="res://scenes/areas/area_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://b2hkmehmytwvk" path="res://assets/backgrounds/forest/forest_inn/forest_inn.png" id="2_bg"]
@@ -9,16 +9,13 @@
 [ext_resource type="AudioStream" uid="uid://bymn2dx58v8nr" path="res://assets/audio/sfx/environment/fire-crackling.mp3" id="7_fire"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
-size = Vector2(100, 160)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hearth"]
-size = Vector2(255, 80)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tree"]
-size = Vector2(540, 200)
+size = Vector2(833, 145)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_table"]
 size = Vector2(240, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tree"]
+size = Vector2(540, 200)
 
 [sub_resource type="Gradient" id="Gradient_lantern"]
 offsets = PackedFloat32Array(0, 0.6686747, 1)
@@ -29,7 +26,7 @@ gradient = SubResource("Gradient_lantern")
 fill = 1
 fill_from = Vector2(0.49565217, 0.526087)
 
-[node name="ForestInn" instance=ExtResource("1_base")]
+[node name="ForestInn" unique_id=1905900773 instance=ExtResource("1_base")]
 area_name = "Forest - Inn"
 background_texture = ExtResource("2_bg")
 background_music = ExtResource("3_music")
@@ -41,34 +38,31 @@ spawn_x_ratio = 0.3
 far_character_scale = 1.8
 near_character_scale = 3.0
 
-[node name="Background" parent="." index="0"]
+[node name="Background" parent="." index="0" unique_id=1944799289]
 texture = ExtResource("2_bg")
 
-[node name="SceneTransition" type="Area2D" parent="BackgroundProps"]
+[node name="SceneTransition" type="Area2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="0" unique_id=1360549485]
 position = Vector2(330, 820)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("6_transition")
 target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition" index="0" unique_id=1737787889]
+position = Vector2(947.5, 259.5)
 shape = SubResource("RectangleShape2D_exit")
 
-[node name="Obstacles" type="StaticBody2D" parent="BackgroundProps"]
+[node name="Obstacles" type="StaticBody2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="1" unique_id=1078676110]
 
-[node name="Hearth" type="CollisionShape2D" parent="BackgroundProps/Obstacles"]
-position = Vector2(577, 790)
-shape = SubResource("RectangleShape2D_hearth")
-
-[node name="Table" type="CollisionShape2D" parent="BackgroundProps/Obstacles"]
-position = Vector2(800, 790)
+[node name="Table" type="CollisionShape2D" parent="BackgroundProps/Obstacles" index="0" unique_id=493419312]
+position = Vector2(750, 699)
 shape = SubResource("RectangleShape2D_table")
 
-[node name="TreePlanter" type="CollisionShape2D" parent="BackgroundProps/Obstacles"]
-position = Vector2(1357, 850)
+[node name="TreePlanter" type="CollisionShape2D" parent="BackgroundProps/Obstacles" index="1" unique_id=1200449067]
+position = Vector2(1405, 766)
 shape = SubResource("RectangleShape2D_tree")
 
-[node name="FireplaceLight" type="PointLight2D" parent="BackgroundProps"]
+[node name="FireplaceLight" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="2" unique_id=1454029603]
 z_index = -100
 position = Vector2(585, 760)
 color = Color(1, 0.6, 0.25, 1)
@@ -78,7 +72,7 @@ script = ExtResource("5_flicker")
 min_energy = 0.6
 max_energy = 1.4
 
-[node name="LeftLantern" type="PointLight2D" parent="BackgroundProps"]
+[node name="LeftLantern" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="3" unique_id=501481776]
 z_index = -100
 position = Vector2(127, 420)
 color = Color(0.6666667, 0.46666667, 0.18431373, 1)
@@ -86,7 +80,7 @@ energy = 1.2
 texture = SubResource("GradientTexture2D_lantern")
 script = ExtResource("5_flicker")
 
-[node name="WallLantern" type="PointLight2D" parent="BackgroundProps"]
+[node name="WallLantern" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="4" unique_id=1653010593]
 z_index = -100
 position = Vector2(855, 495)
 color = Color(0.6666667, 0.46666667, 0.18431373, 1)
@@ -94,14 +88,17 @@ energy = 1.2
 texture = SubResource("GradientTexture2D_lantern")
 script = ExtResource("5_flicker")
 
-[node name="TreeGlow" type="PointLight2D" parent="BackgroundProps"]
+[node name="TreeGlow" type="PointLight2D" parent="BackgroundProps" parent_id_path=PackedInt32Array(208302050) index="5" unique_id=1990929970]
 z_index = -100
 position = Vector2(1410, 525)
 color = Color(0.3, 0.9, 0.6, 1)
 energy = 0.5
 texture = SubResource("GradientTexture2D_lantern")
 
-[node name="FireCrackling" type="AudioStreamPlayer" parent="."]
+[node name="HUD" parent="." index="4" unique_id=1894165697]
+visible = false
+
+[node name="FireCrackling" type="AudioStreamPlayer" parent="." index="6" unique_id=1804386293]
 stream = ExtResource("7_fire")
 volume_db = -14.0
 autoplay = true
