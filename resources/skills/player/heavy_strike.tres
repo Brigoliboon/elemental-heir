@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PlayerSkill" format=3]
 
 [ext_resource type="Script" path="res://resources/skills/player_skill.gd" id="1_skill"]
-[ext_resource type="Texture2D" path="res://assets/ui/skills/heavy_strike.svg" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_heavy_strike.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_skill")

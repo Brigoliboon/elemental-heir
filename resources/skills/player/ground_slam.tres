@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GroundSlamSkill" format=3]
 
 [ext_resource type="Script" path="res://resources/skills/ground_slam_skill.gd" id="1_skill"]
-[ext_resource type="Texture2D" path="res://assets/ui/skills/ground_slam.svg" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/skills/warrior/icon_ground_slam.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_skill")
