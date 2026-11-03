@@ -284,9 +284,11 @@ fields are consumed where the current runtime already exposes them.
   - `Area.safe_zone` (set on the village) clears `SpawnState` on entry.
   - While moving between fighting areas, killed slots stay defeated and are not
     respawned when the scene reloads.
-  - `forest_entrance.tres` and `forest_fight.tres` replace the hand-placed
-    monsters with spawn tables (boarlets in the entrance; goblins + Hollowhart
-    Guardian in the clearing). The village is the reset point.
+  - `forest_entrance.tres`, `forest_fight.tres` and
+    `forest_guardian_arena.tres` replace the hand-placed monsters with spawn
+    tables: boarlets in the entrance, goblins in the clearing, and the
+    Hollowhart Guardian in the corrupted arena reached from the clearing's right
+    exit. The village is the reset point.
   - `PlayerProgress` carries the player's current health across areas at
     runtime; entering a `safe_zone` village restores it to full.
   - Note: the goblin and Hollowhart are stale demo content aimed at another

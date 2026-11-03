@@ -28,6 +28,7 @@ ground_far_px = 420.0
 ground_near_px = 680.0
 spawn_x_ratio = 0.1
 exit_left_scene = "res://scenes/areas/forest/forest_entrance.tscn"
+exit_right_scene = "res://scenes/areas/forest/forest_guardian_arena.tscn"
 
 [node name="Background" parent="." index="0" unique_id=1944799289]
 unique_name_in_owner = true
