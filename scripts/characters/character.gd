@@ -534,6 +534,9 @@ func revive() -> void:
 		_death_tween.kill()
 	if skeleton != null:
 		skeleton.modulate = Color.WHITE
+	var shadow := get_node_or_null("Shadow") as EntityShadow
+	if shadow != null:
+		shadow.modulate = Color.WHITE
 	_manual_animation = "idle"
 	if anim_player.has_animation("idle"):
 		anim_player.play("idle")
@@ -709,6 +712,9 @@ func _play_death_fade() -> void:
 		_death_tween.kill()
 	_death_tween = create_tween()
 	_death_tween.tween_property(skeleton, "modulate", Color(1.0, 1.0, 1.0, 0.25), 0.45)
+	var shadow := get_node_or_null("Shadow") as EntityShadow
+	if shadow != null:
+		_death_tween.parallel().tween_property(shadow, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.45)
 
 
 ## Hands the surface over from the scene. Steps stay silent until a set arrives.
