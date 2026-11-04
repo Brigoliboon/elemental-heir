@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cflx0defitjua" path="res://scripts/combat/health.gd" id="8_health"]
 [ext_resource type="Script" uid="uid://2krryjgb84f2" path="res://scripts/ui/world_health_bar.gd" id="9_healthbar"]
 [ext_resource type="Script" uid="uid://dpm7uuok3hdmp" path="res://scripts/combat/stats.gd" id="10_stats"]
+[ext_resource type="Script" uid="uid://dsik5l03u3o7t" path="res://scripts/world/entity_shadow.gd" id="11_shadow"]
 
 [sub_resource type="AtlasTexture" id="Atlas_attack_0"]
 atlas = ExtResource("6_attack")
@@ -201,3 +202,9 @@ shape = SubResource("RectangleShape2D_attack")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1690329029]
 position = Vector2(0, -34)
 shape = SubResource("CapsuleShape2D_body")
+
+[node name="Shadow" type="Node2D" parent="." unique_id=860756383]
+z_index = -1
+position = Vector2(6, 56)
+script = ExtResource("11_shadow")
+shadow_size = Vector2(150, 35)

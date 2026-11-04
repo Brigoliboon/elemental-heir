@@ -462,6 +462,19 @@ fields are consumed where the current runtime already exposes them.
     frame, so a dropped `button_up` on touch input cannot keep the guard stuck.
   - Test: `tests/test_attack_block_lock.gd`.
 
+## Fix - Entity ground shadows
+
+- [x] SH1 - Give the player and enemies a ground shadow
+  - Add `EntityShadow` (`scripts/world/entity_shadow.gd`), a soft black radial
+    gradient ellipse that sits at the entity's feet.
+  - Attach it to `warrior.tscn`, `mob.tscn`, `boarlet.tscn` and
+    `hollowhart.tscn`; the guardian and rootbound scenes inherit theirs.
+  - The shadow uses `z_index = -1` relative to the entity, so depth sorting and
+    facing keep working without scene-authored world z-indices.
+  - The player shadow fades with the death sequence and returns on revive; the
+    mob root fade already covers its shadow.
+  - Test: `tests/test_entity_shadow.gd`.
+
 ## Next milestones
 
 > Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept

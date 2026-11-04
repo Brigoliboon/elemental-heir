@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cdvk47fqad5cp" path="res://scripts/characters/character.gd" id="1_character"]
 [ext_resource type="Resource" uid="uid://di2wxqv05g1vg" path="res://resources/characters/warrior.tres" id="2_config"]
-[ext_resource type="Script" path="res://scripts/combat/health.gd" id="3_health"]
+[ext_resource type="Script" uid="uid://cflx0defitjua" path="res://scripts/combat/health.gd" id="3_health"]
 [ext_resource type="Script" uid="uid://dpm7uuok3hdmp" path="res://scripts/combat/stats.gd" id="4_stats"]
+[ext_resource type="Script" uid="uid://dsik5l03u3o7t" path="res://scripts/world/entity_shadow.gd" id="5_shadow"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_awfs0"]
 radius = 24.0
@@ -16,10 +17,9 @@ config = ExtResource("2_config")
 
 [node name="Health" type="Node" parent="." unique_id=1934801327]
 script = ExtResource("3_health")
-max_health = 100
 invulnerability_seconds = 0.5
 
-[node name="Stats" type="Node" parent="."]
+[node name="Stats" type="Node" parent="." unique_id=1090124923]
 script = ExtResource("4_stats")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=482147045]
@@ -31,3 +31,10 @@ unique_name_in_owner = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=209699277]
 unique_name_in_owner = true
+
+[node name="Shadow" type="Node2D" parent="." unique_id=360191774]
+z_index = -1
+position = Vector2(1, 135)
+script = ExtResource("5_shadow")
+shadow_size = Vector2(55, 15)
+opacity = 0.32
