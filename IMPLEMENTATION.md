@@ -475,6 +475,26 @@ fields are consumed where the current runtime already exposes them.
     mob root fade already covers its shadow.
   - Test: `tests/test_entity_shadow.gd`.
 
+## UI - Inventory stats tab
+
+- [x] IV1 - Replace the inventory panel with the stats tab
+  - Use `tab_stats_blank.png` as a full 1920x1080 frame scaled to fit the HUD.
+  - Add invisible Stats/Skills/Items buttons over the painted tabs; implement the
+    stats content now and keep Skills/Items as placeholders.
+  - Show level, HP, XP and energy, transparent equipment slots over the painted
+    silhouettes, and the six combat stats on the right.
+  - Preserve profile toggling and equipment persistence.
+  - Test: `tests/test_inventory_stats.gd`.
+- [x] IV2 - Add the virtualized items grid
+  - Add the items page with the bag grid on the right side of the art.
+  - Use a `ScrollContainer` with a fixed pool of reusable slot controls; map
+    pooled slots to the visible inventory indexes and reposition them while
+    scrolling. Off-screen slots are clipped, not kept visible behind the page.
+  - Show item icons, stack counts and tooltips; hide empty pool slots when the
+    inventory is shorter than the pool.
+  - Wire the painted Sort button to the inventory type sort.
+  - Test: `tests/test_inventory_items.gd`.
+
 ## Next milestones
 
 > Superseded by `docs/DESIGN_ROADMAP.md` (see the Phase 2 section above). Kept

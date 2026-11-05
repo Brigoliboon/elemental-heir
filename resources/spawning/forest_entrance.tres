@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="AreaSpawnData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="AreaSpawnData" format=3 uid="uid://cr3jlvlv8ydyt"]
 
-[ext_resource type="Script" path="res://resources/spawning/area_spawn_data.gd" id="1_data"]
-[ext_resource type="Script" path="res://resources/spawning/area_spawn_entry.gd" id="2_entry"]
-[ext_resource type="PackedScene" path="res://entities/enemies/boarlet.tscn" id="3_boarlet"]
+[ext_resource type="Script" uid="uid://b6hhv4n1qtya3" path="res://resources/spawning/area_spawn_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://d3hy67fanlxfh" path="res://resources/spawning/area_spawn_entry.gd" id="2_entry"]
+[ext_resource type="PackedScene" uid="uid://cxmhl8foksgb5" path="res://entities/enemies/boarlet.tscn" id="3_boarlet"]
 
 [sub_resource type="Resource" id="Resource_boarlet"]
 script = ExtResource("2_entry")
@@ -13,11 +13,5 @@ max_count = 5
 [resource]
 script = ExtResource("1_data")
 area_id = &"forest_entrance"
-region = &"forest"
-stage = 1
 display_name = "Forest Entrance"
 entries = Array[ExtResource("2_entry")]([SubResource("Resource_boarlet")])
-normal_chance = 0.9
-epic_chance = 0.08
-legendary_chance = 0.015
-anomaly_chance = 0.005

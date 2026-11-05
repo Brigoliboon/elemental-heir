@@ -1,0 +1,809 @@
+[gd_scene format=3 uid="uid://cej5ug0shv6fg"]
+
+[ext_resource type="Script" uid="uid://bap6cwhve1ff2" path="res://scripts/ui/inventory_panel.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dqkwv7s0q4c0i" path="res://assets/ui/hud/inventory/tab_sections/tab_stats_blank.png" id="2_stats_bg"]
+[ext_resource type="Texture2D" uid="uid://dnlou210sbo74" path="res://assets/ui/hud/player-profile.png" id="3_portrait"]
+[ext_resource type="Texture2D" uid="uid://c465rkgj8ynv5" path="res://assets/ui/hud/bars/health-bar.png" id="4_health"]
+[ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="5_xp"]
+[ext_resource type="Texture2D" uid="uid://bmy150jtq0o52" path="res://assets/ui/hud/bars/mana-bar.png" id="6_energy"]
+[ext_resource type="Script" uid="uid://dcy2733c87dvw" path="res://scripts/ui/inventory_equip_slot.gd" id="7_equip_slot"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_empty"]
+
+[node name="InventoryPanel" type="Control" unique_id=1399274303]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Scrim" type="ColorRect" parent="." unique_id=773195486]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.01, 0.015, 0.72)
+
+[node name="Frame" type="Control" parent="." unique_id=851922788]
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Frame" unique_id=1178596928]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("2_stats_bg")
+expand_mode = 1
+
+[node name="StatsPage" type="Control" parent="Frame" unique_id=684304247]
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+
+[node name="Portrait" type="TextureRect" parent="Frame/StatsPage" unique_id=1599647010]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 73.0
+offset_right = 515.0
+offset_bottom = 476.0
+mouse_filter = 2
+texture = ExtResource("3_portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="Frame/StatsPage" unique_id=1269217633]
+layout_mode = 0
+offset_left = 157.0
+offset_top = 574.0
+offset_right = 228.0
+offset_bottom = 648.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 54
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="Frame/StatsPage" unique_id=754046001]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 704.0
+offset_right = 540.0
+offset_bottom = 755.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("4_health")
+
+[node name="HealthLabel" type="Label" parent="Frame/StatsPage" unique_id=282996326]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 708.0
+offset_right = 530.0
+offset_bottom = 745.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "HP 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnergyBar" type="TextureProgressBar" parent="Frame/StatsPage" unique_id=1575655475]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 785.0
+offset_right = 535.0
+offset_bottom = 824.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("6_energy")
+
+[node name="EnergyLabel" type="Label" parent="Frame/StatsPage" unique_id=1582060953]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 787.0
+offset_right = 530.0
+offset_bottom = 821.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "EN 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XPBar" type="TextureProgressBar" parent="Frame/StatsPage" unique_id=1551357040]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 860.0
+offset_right = 534.0
+offset_bottom = 901.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("5_xp")
+
+[node name="XPLabel" type="Label" parent="Frame/StatsPage" unique_id=1818761747]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 861.0
+offset_right = 530.0
+offset_bottom = 903.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "XP 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EquipHelmet" type="Button" parent="Frame/StatsPage" unique_id=2058216151]
+layout_mode = 0
+offset_left = 693.0
+offset_top = 259.0
+offset_right = 779.0
+offset_bottom = 346.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipChest" type="Button" parent="Frame/StatsPage" unique_id=2002610087]
+layout_mode = 0
+offset_left = 692.0
+offset_top = 405.0
+offset_right = 780.0
+offset_bottom = 492.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipPrimary" type="Button" parent="Frame/StatsPage" unique_id=167732491]
+layout_mode = 0
+offset_left = 691.0
+offset_top = 549.0
+offset_right = 781.0
+offset_bottom = 638.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipPants" type="Button" parent="Frame/StatsPage" unique_id=1932518591]
+layout_mode = 0
+offset_left = 692.0
+offset_top = 698.0
+offset_right = 779.0
+offset_bottom = 784.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipNecklace" type="Button" parent="Frame/StatsPage" unique_id=559568184]
+layout_mode = 0
+offset_left = 1139.0
+offset_top = 258.0
+offset_right = 1226.0
+offset_bottom = 346.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipCape" type="Button" parent="Frame/StatsPage" unique_id=1973273984]
+layout_mode = 0
+offset_left = 1139.0
+offset_top = 406.0
+offset_right = 1225.0
+offset_bottom = 492.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipSecondary" type="Button" parent="Frame/StatsPage" unique_id=887969340]
+layout_mode = 0
+offset_left = 1138.0
+offset_top = 552.0
+offset_right = 1225.0
+offset_bottom = 637.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipRing" type="Button" parent="Frame/StatsPage" unique_id=1563156133]
+layout_mode = 0
+offset_left = 1141.0
+offset_top = 699.0
+offset_right = 1223.0
+offset_bottom = 782.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="EquipBoots" type="Button" parent="Frame/StatsPage" unique_id=541610886]
+layout_mode = 0
+offset_left = 915.0
+offset_top = 801.0
+offset_right = 1002.0
+offset_bottom = 890.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="StatAttackName" type="Label" parent="Frame/StatsPage" unique_id=381725008]
+layout_mode = 0
+offset_left = 1368.0
+offset_top = 238.0
+offset_right = 1588.0
+offset_bottom = 272.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "ATTACK"
+vertical_alignment = 1
+
+[node name="StatAttack" type="Label" parent="Frame/StatsPage" unique_id=1048896028]
+layout_mode = 0
+offset_left = 1588.0
+offset_top = 238.0
+offset_right = 1808.0
+offset_bottom = 272.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatDefenceName" type="Label" parent="Frame/StatsPage" unique_id=787806997]
+layout_mode = 0
+offset_left = 1368.0
+offset_top = 358.0
+offset_right = 1588.0
+offset_bottom = 392.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "DEFENCE"
+vertical_alignment = 1
+
+[node name="StatDefence" type="Label" parent="Frame/StatsPage" unique_id=728645541]
+layout_mode = 0
+offset_left = 1588.0
+offset_top = 358.0
+offset_right = 1808.0
+offset_bottom = 392.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatMoveSpeedName" type="Label" parent="Frame/StatsPage" unique_id=1163479333]
+layout_mode = 0
+offset_left = 1368.0
+offset_top = 478.0
+offset_right = 1588.0
+offset_bottom = 513.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "MOVE SPEED"
+vertical_alignment = 1
+
+[node name="StatMoveSpeed" type="Label" parent="Frame/StatsPage" unique_id=1848639322]
+layout_mode = 0
+offset_left = 1588.0
+offset_top = 478.0
+offset_right = 1808.0
+offset_bottom = 512.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatCritRateName" type="Label" parent="Frame/StatsPage" unique_id=1257180395]
+layout_mode = 0
+offset_left = 1368.0
+offset_top = 598.0
+offset_right = 1588.0
+offset_bottom = 632.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "CRIT RATE"
+vertical_alignment = 1
+
+[node name="StatCritRate" type="Label" parent="Frame/StatsPage" unique_id=1248331198]
+layout_mode = 0
+offset_left = 1588.0
+offset_top = 598.0
+offset_right = 1808.0
+offset_bottom = 632.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatCritDamageName" type="Label" parent="Frame/StatsPage" unique_id=580994563]
+layout_mode = 0
+offset_left = 1368.0
+offset_top = 718.0
+offset_right = 1588.0
+offset_bottom = 752.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "CRIT DAMAGE"
+vertical_alignment = 1
+
+[node name="StatCritDamage" type="Label" parent="Frame/StatsPage" unique_id=562235683]
+layout_mode = 0
+offset_left = 1588.0
+offset_top = 718.0
+offset_right = 1808.0
+offset_bottom = 752.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="StatCooldownName" type="Label" parent="Frame/StatsPage" unique_id=1910406984]
+layout_mode = 0
+offset_left = 1368.0
+offset_top = 838.0
+offset_right = 1588.0
+offset_bottom = 872.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "COOLDOWN"
+vertical_alignment = 1
+
+[node name="StatCooldown" type="Label" parent="Frame/StatsPage" unique_id=70672799]
+layout_mode = 0
+offset_left = 1588.0
+offset_top = 838.0
+offset_right = 1808.0
+offset_bottom = 872.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ItemsPage" type="Control" parent="Frame" unique_id=1836028574]
+visible = false
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+
+[node name="ItemEquipHelmet" type="Button" parent="Frame/ItemsPage" unique_id=289860381]
+layout_mode = 0
+offset_left = 693.0
+offset_top = 259.0
+offset_right = 779.0
+offset_bottom = 346.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipChest" type="Button" parent="Frame/ItemsPage" unique_id=1185616064]
+layout_mode = 0
+offset_left = 692.0
+offset_top = 405.0
+offset_right = 780.0
+offset_bottom = 492.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipPrimary" type="Button" parent="Frame/ItemsPage"]
+layout_mode = 0
+offset_left = 691.0
+offset_top = 549.0
+offset_right = 781.0
+offset_bottom = 638.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipPants" type="Button" parent="Frame/ItemsPage" unique_id=344848466]
+layout_mode = 0
+offset_left = 692.0
+offset_top = 698.0
+offset_right = 779.0
+offset_bottom = 784.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipNecklace" type="Button" parent="Frame/ItemsPage" unique_id=1924610511]
+layout_mode = 0
+offset_left = 1139.0
+offset_top = 258.0
+offset_right = 1226.0
+offset_bottom = 346.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipCape" type="Button" parent="Frame/ItemsPage" unique_id=1589265145]
+layout_mode = 0
+offset_left = 1139.0
+offset_top = 406.0
+offset_right = 1225.0
+offset_bottom = 492.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipSecondary" type="Button" parent="Frame/ItemsPage" unique_id=433157031]
+layout_mode = 0
+offset_left = 1138.0
+offset_top = 552.0
+offset_right = 1225.0
+offset_bottom = 637.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipRing" type="Button" parent="Frame/ItemsPage" unique_id=1777158203]
+layout_mode = 0
+offset_left = 1141.0
+offset_top = 699.0
+offset_right = 1223.0
+offset_bottom = 782.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemEquipBoots" type="Button" parent="Frame/ItemsPage" unique_id=1339925498]
+layout_mode = 0
+offset_left = 915.0
+offset_top = 801.0
+offset_right = 1002.0
+offset_bottom = 890.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("7_equip_slot")
+
+[node name="ItemHealthBar" type="TextureProgressBar" parent="Frame/ItemsPage" unique_id=1585661046]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 704.0
+offset_right = 540.0
+offset_bottom = 755.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("4_health")
+
+[node name="ItemHealthLabel" type="Label" parent="Frame/ItemsPage" unique_id=1342633950]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 708.0
+offset_right = 530.0
+offset_bottom = 745.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "HP 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemEnergyBar" type="TextureProgressBar" parent="Frame/ItemsPage" unique_id=563451949]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 785.0
+offset_right = 535.0
+offset_bottom = 824.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("6_energy")
+
+[node name="ItemEnergyLabel" type="Label" parent="Frame/ItemsPage" unique_id=586483868]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 787.0
+offset_right = 530.0
+offset_bottom = 821.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "EN 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemXPBar" type="TextureProgressBar" parent="Frame/ItemsPage" unique_id=1149978148]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 860.0
+offset_right = 534.0
+offset_bottom = 901.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("5_xp")
+
+[node name="ItemXPLabel" type="Label" parent="Frame/ItemsPage" unique_id=2128785351]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 861.0
+offset_right = 530.0
+offset_bottom = 903.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "XP 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BagViewport" type="ScrollContainer" parent="Frame/ItemsPage" unique_id=1976203418]
+layout_mode = 0
+offset_left = 1070.0
+offset_top = 228.0
+offset_right = 1658.0
+offset_bottom = 780.0
+mouse_filter = 0
+
+[node name="BagContent" type="Control" parent="Frame/ItemsPage/BagViewport" unique_id=1142177493]
+custom_minimum_size = Vector2(552, 1096)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SortButton" type="Button" parent="Frame/ItemsPage" unique_id=2024825278]
+layout_mode = 0
+offset_left = 1505.0
+offset_top = 790.0
+offset_right = 1640.0
+offset_bottom = 842.0
+tooltip_text = "Sort"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+
+[node name="Placeholder" type="Label" parent="Frame" unique_id=717163618]
+visible = false
+layout_mode = 0
+offset_left = 660.0
+offset_top = 360.0
+offset_right = 1260.0
+offset_bottom = 580.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 0.55)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatsTab" type="Button" parent="Frame" unique_id=916576652]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 975.0
+offset_right = 830.0
+offset_bottom = 1054.0
+tooltip_text = "Stats"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+
+[node name="SkillsTab" type="Button" parent="Frame" unique_id=956183240]
+layout_mode = 0
+offset_left = 862.0
+offset_top = 975.0
+offset_right = 1057.0
+offset_bottom = 1051.0
+tooltip_text = "Skills"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+
+[node name="ItemsTab" type="Button" parent="Frame" unique_id=1159381786]
+layout_mode = 0
+offset_left = 1086.0
+offset_top = 983.0
+offset_right = 1280.0
+offset_bottom = 1049.0
+tooltip_text = "Items"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+
+[node name="CloseButton" type="Button" parent="Frame" unique_id=736518673]
+layout_mode = 0
+offset_left = 1728.0
+offset_top = 93.0
+offset_right = 1846.0
+offset_bottom = 179.0
+tooltip_text = "Close"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_pressed_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_hover_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+text = "X"
+flat = true

@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://blhw1q86j7n4x" path="res://scripts/ui/stats_panel.gd" id="5_stats_panel"]
 [ext_resource type="Texture2D" uid="uid://buylna3m0qe01" path="res://assets/ui/hud/passive-btn.png" id="5_tdiep"]
 [ext_resource type="Texture2D" uid="uid://ck6gfdaaeuhag" path="res://assets/ui/hud/block-btn.png" id="6_ck6g8"]
-[ext_resource type="Script" uid="uid://bap6cwhve1ff2" path="res://scripts/ui/inventory_panel.gd" id="6_inventory_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="6_inventory_panel"]
 [ext_resource type="Script" uid="uid://c6vu5yvbiavks" path="res://scripts/ui/virtual_joystick.gd" id="7_joystick"]
 [ext_resource type="Texture2D" uid="uid://bh75d28hoy7wf" path="res://assets/ui/hud/skill_frame.png" id="7_skill_frame"]
 [ext_resource type="Texture2D" uid="uid://o7whyoql47ea" path="res://assets/ui/hud/joystick_frame.png" id="8_joystick_frame"]
@@ -705,104 +705,14 @@ autowrap_mode = 2
 layout_mode = 2
 text = "Close"
 
-[node name="InventoryPanel" type="PanelContainer" parent="HUD/UI" unique_id=779569506]
+[node name="InventoryPanel" parent="HUD/UI" instance=ExtResource("6_inventory_panel")]
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -250.0
-offset_right = 420.0
-offset_bottom = 250.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("6_inventory_panel")
-
-[node name="Margin" type="MarginContainer" parent="HUD/UI/InventoryPanel" unique_id=2023275181]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="VBox" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin" unique_id=1893012240]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Title" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=1853052117]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
-theme_override_font_sizes/font_size = 32
-text = "Inventory"
-
-[node name="TopRow" type="HBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=452098965]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 16
-
-[node name="LeftSlots" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=362529294]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="CharacterPreview" type="TextureRect" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=59623880]
-layout_mode = 2
-size_flags_horizontal = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RightSlots" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=373649609]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="DescriptionPanel" type="PanelContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow" unique_id=2045061198]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="DescMargin" type="MarginContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel" unique_id=296686748]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="DescVBox" type="VBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel/DescMargin" unique_id=1915618098]
-layout_mode = 2
-
-[node name="DescTitle" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel/DescMargin/DescVBox" unique_id=1685948905]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Item"
-
-[node name="DescBody" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox/TopRow/DescriptionPanel/DescMargin/DescVBox" unique_id=855256850]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Select an item."
-autowrap_mode = 2
-
-[node name="PotionsRow" type="HBoxContainer" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=1369632023]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="ItemsHeader" type="Label" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=100575230]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
-theme_override_font_sizes/font_size = 24
-text = "Items"
-
-[node name="GeneralInventory" type="GridContainer" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=1593550769]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-columns = 7
-
-[node name="Close" type="Button" parent="HUD/UI/InventoryPanel/Margin/VBox" unique_id=200197597]
-layout_mode = 2
-text = "Close"
 
 [node name="SpawnHandler" type="Node" parent="." unique_id=537851295]
 script = ExtResource("15_spawn_handler")
