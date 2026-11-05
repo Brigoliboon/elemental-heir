@@ -142,7 +142,7 @@ func _ready() -> void:
 	_place_player()
 	player.set_footsteps(footsteps)
 	if inventory_panel != null and player != null and player.inventory != null:
-		inventory_panel.bind(player.inventory, player.stats)
+		inventory_panel.bind(player.inventory, player.stats, player)
 	_restore_player_progress()
 	area_label.text = area_name
 	_bind_player_health()
@@ -328,7 +328,7 @@ func _respawn_after_delay() -> void:
 	player.revive()
 	_place_player()
 	if inventory_panel != null and player != null and player.inventory != null:
-		inventory_panel.bind(player.inventory, player.stats)
+		inventory_panel.bind(player.inventory, player.stats, player)
 	_player_dead = false
 	death_label.visible = false
 

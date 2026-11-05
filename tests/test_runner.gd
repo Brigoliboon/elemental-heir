@@ -45,6 +45,9 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_player_skills.gd"),
 	preload("res://tests/test_entity_shadow.gd"),
 	preload("res://tests/test_spawning.gd"),
+	preload("res://tests/test_inventory_stats.gd"),
+	preload("res://tests/test_inventory_items.gd"),
+	preload("res://tests/test_inventory_equipment.gd"),
 ]
 
 
