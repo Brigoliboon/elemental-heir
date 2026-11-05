@@ -29,6 +29,8 @@ var _bag_pool_rows := 0
 
 @onready var _frame: Control = $Frame
 @onready var _background: TextureRect = $Frame/Background
+@onready var _stats_page_bg: TextureRect = $Frame/StatsPage/Background
+@onready var _items_page_bg: TextureRect = $Frame/ItemsPage/Background
 @onready var _stats_page: Control = $Frame/StatsPage
 @onready var _items_page: Control = $Frame/ItemsPage
 @onready var _bag_viewport: ScrollContainer = $Frame/ItemsPage/BagViewport
@@ -157,12 +159,16 @@ func _set_tab(tab: StringName) -> void:
 	match tab:
 		&"skills":
 			_background.texture = SKILLS_BG
+			_stats_page_bg.visible = false
+			_items_page_bg.visible = false
 			_stats_page.visible = false
 			_items_page.visible = false
 			_placeholder.text = "SKILLS\n\nCOMING SOON"
 			_placeholder.visible = true
 		&"items":
 			_background.texture = ITEMS_BG
+			_stats_page_bg.visible = false
+			_items_page_bg.visible = true
 			_stats_page.visible = false
 			_items_page.visible = true
 			_placeholder.visible = false
@@ -170,6 +176,8 @@ func _set_tab(tab: StringName) -> void:
 		_:
 			current_tab = &"stats"
 			_background.texture = STATS_BG
+			_stats_page_bg.visible = true
+			_items_page_bg.visible = false
 			_stats_page.visible = true
 			_items_page.visible = false
 			_placeholder.visible = false
