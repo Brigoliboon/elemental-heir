@@ -14,6 +14,8 @@ signal level_changed(level: int, experience: int, to_next: int)
 signal energy_changed(current: float, maximum: float)
 ## Fires when a skill actually starts, after cost and cooldown checks.
 signal skill_started(skill: PlayerSkill)
+## Fires after the primary-skill order changes, so HUD buttons can rebind.
+signal skill_loadout_changed
 
 ## Horizontal center of the rig in source-art pixels. The skeleton is shifted by this so the
 ## body center sits on the Character origin; facing flips mirror `scale.x`, so without it
@@ -244,6 +246,24 @@ func skill_by_id(id: StringName) -> PlayerSkill:
 		if skill != null and skill.id == id:
 			return skill
 	return null
+
+
+## Moves an owned skill into a primary slot (0-2) by reordering the loadout.
+## The first slots feed the HUD buttons and number keys, so swapping a skill in
+## pushes the previous occupant down the list rather than losing it.
+func equip_skill_at(skill: PlayerSkill, slot: int) -> bool:
+	if config == null or skill == null:
+		return false
+	var from := config.skills.find(skill)
+	if from < 0:
+		return false
+	var target := clampi(slot, 0, config.skills.size() - 1)
+	if from == target:
+		return true
+	config.skills.remove_at(from)
+	config.skills.insert(target, skill)
+	skill_loadout_changed.emit()
+	return true
 
 
 ## Casts the skill equipped in `slot`. Returns false when the slot is empty or the

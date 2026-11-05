@@ -188,11 +188,8 @@ func _bind_player_progress() -> void:
 func _bind_player_skills() -> void:
 	if player == null:
 		return
-	for i in skill_buttons.size():
-		var button := skill_buttons[i]
-		if button == null:
-			continue
-		button.bind(player, player.skill_in_slot(i), str(i + 1))
+	_refresh_skill_bindings()
+	player.skill_loadout_changed.connect(_refresh_skill_bindings)
 
 	_passive_skill = player.skill_by_id(&"iron_will")
 	if passive_button != null:
@@ -205,6 +202,18 @@ func _bind_player_skills() -> void:
 
 	player.energy_changed.connect(_on_player_energy_changed)
 	_on_player_energy_changed(player.energy, player.max_energy)
+
+
+## Rebinds the three circular buttons after the loadout order changes without
+## reconnecting the energy/passive signals owned by [method _bind_player_skills].
+func _refresh_skill_bindings() -> void:
+	if player == null:
+		return
+	for i in skill_buttons.size():
+		var button := skill_buttons[i]
+		if button == null:
+			continue
+		button.bind(player, player.skill_in_slot(i), str(i + 1))
 
 
 func _on_passive_pressed() -> void:

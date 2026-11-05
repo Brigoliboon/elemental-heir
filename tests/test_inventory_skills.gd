@@ -84,6 +84,54 @@ func run(tree: SceneTree) -> Array[String]:
 		if slot.icon == null:
 			failures.append("%s must show its skill icon" % slot.skill.display_name)
 
+	# The three primary slots mirror the first three loadout entries.
+	var primary: Array[SkillEquipSlot] = []
+	for i in range(1, 4):
+		var primary_slot := _find(panel, "PrimarySkill%d" % i) as SkillEquipSlot
+		if primary_slot == null:
+			failures.append("the skills page needs PrimarySkill%d" % i)
+		else:
+			primary.append(primary_slot)
+	if primary.size() == 3:
+		for i in primary.size():
+			var expected := area.player.skill_in_slot(i)
+			if primary[i].icon != (expected.icon if expected != null else null):
+				failures.append("PrimarySkill%d must show slot %d's skill" % [i + 1, i + 1])
+
+	# Dragging a skill onto a primary slot reorders the loadout and rebinds the HUD.
+	var iron_slot: InventorySkillSlot = null
+	for slot in slots:
+		if slot.skill.id == &"iron_will":
+			iron_slot = slot
+	if iron_slot == null:
+		failures.append("the owned skills grid needs Iron Will")
+	elif primary.size() == 3:
+		var original: Array[PlayerSkill] = []
+		for skill in area.player.config.skills:
+			original.append(skill)
+		var iron_skill := iron_slot.skill
+		var drag_data: Variant = iron_slot._get_drag_data(Vector2.ZERO)
+		if drag_data == null or drag_data.get("type") != InventorySkillSlot.DRAG_TYPE:
+			failures.append("a skill tile must produce skill drag data")
+		elif not primary[0]._can_drop_data(Vector2.ZERO, drag_data):
+			failures.append("PrimarySkill1 must accept a dragged skill")
+		else:
+			primary[0]._drop_data(Vector2.ZERO, drag_data)
+			await tree.process_frame
+			if area.player.skill_in_slot(0).id != &"iron_will":
+				failures.append("dropping on PrimarySkill1 must equip that skill")
+			if primary[0].icon != iron_skill.icon:
+				failures.append("PrimarySkill1 must show the equipped skill icon")
+			var hud_slot := area.get_node_or_null("HUD/UI/Skill1") as SkillButton
+			if hud_slot == null or hud_slot.skill == null or hud_slot.skill.id != &"iron_will":
+				failures.append("the HUD must rebind after a primary slot changes")
+		# Restore the authored order so later suites see the default kit.
+		for i in original.size():
+			area.player.equip_skill_at(original[i], i)
+		panel._save_skill_loadout()
+		panel._refresh_skills()
+		await tree.process_frame
+
 	var detail_name := _find(panel, "SkillDetailName") as Label
 	var detail_meta := _find(panel, "SkillDetailMeta") as Label
 	var detail_description := _find(panel, "SkillDetailDescription") as Label
