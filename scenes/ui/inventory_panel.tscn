@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://c465rkgj8ynv5" path="res://assets/ui/hud/bars/health-bar.png" id="4_health"]
 [ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="5_xp"]
 [ext_resource type="Texture2D" uid="uid://bmy150jtq0o52" path="res://assets/ui/hud/bars/mana-bar.png" id="6_energy"]
-[ext_resource type="Texture2D" uid="uid://cfmv374cf2xuk" path="res://assets/ui/hud/inventory/tab_sections/tab_items_blank.png" id="8_items_bg"]
 [ext_resource type="Script" uid="uid://dcy2733c87dvw" path="res://scripts/ui/inventory_equip_slot.gd" id="7_equip_slot"]
+[ext_resource type="Texture2D" uid="uid://cfmv374cf2xuk" path="res://assets/ui/hud/inventory/tab_sections/tab_items_blank.png" id="8_items_bg"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_empty"]
 
@@ -50,7 +50,7 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 
-[node name="Background" type="TextureRect" parent="Frame/StatsPage"]
+[node name="Background" type="TextureRect" parent="Frame/StatsPage" unique_id=1615237134]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
@@ -476,7 +476,7 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 
-[node name="Background" type="TextureRect" parent="Frame/ItemsPage"]
+[node name="Background" type="TextureRect" parent="Frame/ItemsPage" unique_id=124274739]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
@@ -486,10 +486,10 @@ expand_mode = 1
 
 [node name="ItemEquipHelmet" type="Button" parent="Frame/ItemsPage" unique_id=289860381]
 layout_mode = 0
-offset_left = 693.0
-offset_top = 259.0
-offset_right = 779.0
-offset_bottom = 346.0
+offset_left = 676.0
+offset_top = 255.0
+offset_right = 737.0
+offset_bottom = 313.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -503,10 +503,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipChest" type="Button" parent="Frame/ItemsPage" unique_id=1185616064]
 layout_mode = 0
-offset_left = 692.0
-offset_top = 405.0
-offset_right = 780.0
-offset_bottom = 492.0
+offset_left = 678.0
+offset_top = 349.0
+offset_right = 736.0
+offset_bottom = 404.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -518,12 +518,12 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("7_equip_slot")
 
-[node name="ItemEquipPrimary" type="Button" parent="Frame/ItemsPage"]
+[node name="ItemEquipPrimary" type="Button" parent="Frame/ItemsPage" unique_id=886224837]
 layout_mode = 0
-offset_left = 691.0
-offset_top = 549.0
-offset_right = 781.0
-offset_bottom = 638.0
+offset_left = 679.0
+offset_top = 441.0
+offset_right = 736.0
+offset_bottom = 496.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -537,10 +537,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipPants" type="Button" parent="Frame/ItemsPage" unique_id=344848466]
 layout_mode = 0
-offset_left = 692.0
-offset_top = 698.0
-offset_right = 779.0
-offset_bottom = 784.0
+offset_left = 681.0
+offset_top = 550.0
+offset_right = 768.0
+offset_bottom = 636.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -554,10 +554,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipNecklace" type="Button" parent="Frame/ItemsPage" unique_id=1924610511]
 layout_mode = 0
-offset_left = 1139.0
-offset_top = 258.0
-offset_right = 1226.0
-offset_bottom = 346.0
+offset_left = 941.0
+offset_top = 256.0
+offset_right = 998.0
+offset_bottom = 311.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -571,10 +571,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipCape" type="Button" parent="Frame/ItemsPage" unique_id=1589265145]
 layout_mode = 0
-offset_left = 1139.0
-offset_top = 406.0
-offset_right = 1225.0
-offset_bottom = 492.0
+offset_left = 942.0
+offset_top = 349.0
+offset_right = 996.0
+offset_bottom = 402.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -588,10 +588,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipSecondary" type="Button" parent="Frame/ItemsPage" unique_id=433157031]
 layout_mode = 0
-offset_left = 1138.0
-offset_top = 552.0
-offset_right = 1225.0
-offset_bottom = 637.0
+offset_left = 943.0
+offset_top = 443.0
+offset_right = 998.0
+offset_bottom = 495.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -605,10 +605,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipRing" type="Button" parent="Frame/ItemsPage" unique_id=1777158203]
 layout_mode = 0
-offset_left = 1141.0
-offset_top = 699.0
-offset_right = 1223.0
-offset_bottom = 782.0
+offset_left = 942.0
+offset_top = 547.0
+offset_right = 999.0
+offset_bottom = 604.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
@@ -622,10 +622,10 @@ script = ExtResource("7_equip_slot")
 
 [node name="ItemEquipBoots" type="Button" parent="Frame/ItemsPage" unique_id=1339925498]
 layout_mode = 0
-offset_left = 915.0
-offset_top = 801.0
-offset_right = 1002.0
-offset_bottom = 890.0
+offset_left = 808.0
+offset_top = 670.0
+offset_right = 868.0
+offset_bottom = 727.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
