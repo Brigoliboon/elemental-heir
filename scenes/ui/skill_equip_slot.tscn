@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/skill_equip_slot.gd" id="1_script"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_empty"]
+
+[node name="SkillEquipSlot" type="Button"]
+custom_minimum_size = Vector2(96, 96)
+offset_right = 96.0
+offset_bottom = 96.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_empty")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_empty")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_script")

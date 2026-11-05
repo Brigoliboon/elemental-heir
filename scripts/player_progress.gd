@@ -15,6 +15,8 @@ var experience := 0
 var has_health := false
 var health := 0
 var equipped: Array[String] = ["", "", "", "", "", "", "", ""]
+## Resource paths of the three primary skills, in slot order.
+var equipped_skills: Array[String] = ["", "", ""]
 
 
 func _ready() -> void:
@@ -36,6 +38,13 @@ func load_progress() -> bool:
 			equipped.append(str(v))
 	while equipped.size() < 8:
 		equipped.append("")
+	var eq_skills = config.get_value(SECTION, "equipped_skills", equipped_skills)
+	if eq_skills is Array:
+		equipped_skills = []
+		for v in eq_skills:
+			equipped_skills.append(str(v))
+	while equipped_skills.size() < 3:
+		equipped_skills.append("")
 	has_state = true
 	return true
 
@@ -70,6 +79,7 @@ func save_progress() -> void:
 	config.set_value(SECTION, "level", level)
 	config.set_value(SECTION, "experience", experience)
 	config.set_value(SECTION, "equipped", equipped)
+	config.set_value(SECTION, "equipped_skills", equipped_skills)
 	var err := config.save(save_path)
 	if err != OK:
 		push_warning("PlayerProgress could not save to %s (error %d)" % [save_path, err])
@@ -81,5 +91,6 @@ func reset(delete_save: bool = true) -> void:
 	has_state = false
 	reset_health()
 	equipped = ["", "", "", "", "", "", "", ""]
+	equipped_skills = ["", "", ""]
 	if delete_save and persistence_enabled and FileAccess.file_exists(save_path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))

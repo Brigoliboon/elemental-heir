@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cfmv374cf2xuk" path="res://assets/ui/hud/inventory/tab_sections/tab_items_blank.png" id="8_items_bg"]
 [ext_resource type="Texture2D" uid="uid://du1oi4v35bcop" path="res://assets/ui/hud/inventory/tab_sections/tab_skills_blank.png" id="9_skills_bg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_skill_slot.tscn" id="10_skill_slot"]
+[ext_resource type="PackedScene" path="res://scenes/ui/skill_equip_slot.tscn" id="11_skill_equip_slot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_empty"]
 
@@ -485,6 +486,27 @@ offset_bottom = 1080.0
 mouse_filter = 2
 texture = ExtResource("9_skills_bg")
 expand_mode = 1
+
+[node name="PrimarySkill1" parent="Frame/SkillsPage" instance=ExtResource("11_skill_equip_slot")]
+layout_mode = 0
+offset_left = 689.0
+offset_top = 262.0
+offset_right = 785.0
+offset_bottom = 358.0
+
+[node name="PrimarySkill2" parent="Frame/SkillsPage" instance=ExtResource("11_skill_equip_slot")]
+layout_mode = 0
+offset_left = 874.0
+offset_top = 262.0
+offset_right = 970.0
+offset_bottom = 358.0
+
+[node name="PrimarySkill3" parent="Frame/SkillsPage" instance=ExtResource("11_skill_equip_slot")]
+layout_mode = 0
+offset_left = 1059.0
+offset_top = 262.0
+offset_right = 1155.0
+offset_bottom = 358.0
 
 [node name="SkillHealthBar" type="TextureProgressBar" parent="Frame/SkillsPage" unique_id=1545732860]
 layout_mode = 0

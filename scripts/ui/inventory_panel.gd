@@ -53,6 +53,11 @@ var _selected_skill: PlayerSkill
 @onready var _skill_detail_name: Label = $Frame/SkillsPage/SkillDetailName
 @onready var _skill_detail_meta: Label = $Frame/SkillsPage/SkillDetailMeta
 @onready var _skill_detail_description: Label = $Frame/SkillsPage/SkillDetailDescription
+@onready var _primary_skill_slots: Array[SkillEquipSlot] = [
+	$Frame/SkillsPage/PrimarySkill1,
+	$Frame/SkillsPage/PrimarySkill2,
+	$Frame/SkillsPage/PrimarySkill3,
+]
 @onready var _placeholder: Label = $Frame/Placeholder
 @onready var _level_label: Label = $Frame/StatsPage/LevelLabel
 @onready var _health_bar: TextureProgressBar = $Frame/StatsPage/HealthBar
@@ -122,6 +127,9 @@ func _ready() -> void:
 	_bag_viewport.resized.connect(_layout_bag)
 	_skill_viewport.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_skill_viewport.resized.connect(_layout_skill_grid)
+	for i in _primary_skill_slots.size():
+		_primary_skill_slots[i].slot_index = i
+		_primary_skill_slots[i].skill_dropped.connect(_on_primary_skill_dropped)
 	for i in _equip_buttons.size():
 		var btn = _equip_buttons[i]
 		btn.slot_index = i
@@ -144,6 +152,7 @@ func bind(inventory: Inventory, stats: Stats = null, player: Character = null) -
 	_bind_stats(stats)
 	_bind_player(player)
 	_restore_equipped()
+	_restore_skill_loadout()
 	_layout_bag()
 	_layout_skill_grid()
 	refresh()
@@ -346,7 +355,62 @@ func _refresh_skills() -> void:
 			slot.set_selected(_selected_skill == skills[i])
 		else:
 			slot.bind_skill(-1, null)
+	_refresh_primary_skills()
 	_show_skill_details(_selected_skill)
+
+
+func _refresh_primary_skills() -> void:
+	if _player == null:
+		return
+	for i in _primary_skill_slots.size():
+		_primary_skill_slots[i].bind_skill(i, _player.skill_in_slot(i))
+
+
+func _on_primary_skill_dropped(slot_index: int, skill: PlayerSkill) -> void:
+	if _player == null or skill == null:
+		return
+	if _player.equip_skill_at(skill, slot_index):
+		_save_skill_loadout()
+		_refresh_skills()
+
+
+func _save_skill_loadout() -> void:
+	var progress := get_node_or_null("/root/PlayerProgress")
+	if progress == null or _player == null:
+		return
+	var paths: Array[String] = []
+	for i in _primary_skill_slots.size():
+		var skill := _player.skill_in_slot(i)
+		paths.append(skill.resource_path if skill != null else "")
+	progress.equipped_skills = paths
+	progress.save_progress()
+
+
+## Reorders the character's loadout so the saved primary skills come first.
+## Skills that no longer exist (or belong to another character) are ignored.
+func _restore_skill_loadout() -> void:
+	if _player == null or _player.config == null:
+		return
+	var progress := get_node_or_null("/root/PlayerProgress")
+	if progress == null:
+		return
+	var skills := _player.config.skills
+	if skills.is_empty():
+		return
+	var ordered: Array[PlayerSkill] = []
+	for path in progress.equipped_skills:
+		if str(path).is_empty():
+			continue
+		var saved := load(str(path)) as PlayerSkill
+		if saved == null or not skills.has(saved) or ordered.has(saved):
+			continue
+		ordered.append(saved)
+	if ordered.is_empty():
+		return
+	for skill in skills:
+		if skill != null and not ordered.has(skill):
+			ordered.append(skill)
+	skills.assign(ordered)
 
 
 func _owned_skills() -> Array[PlayerSkill]:
