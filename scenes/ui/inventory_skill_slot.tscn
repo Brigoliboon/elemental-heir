@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_skill_slot.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/inventory/slots/slot_square_144.png" id="2_slot"]
+[ext_resource type="Texture2D" path="res://assets/ui/hud/inventory/slots/slot_square_selected_144.png" id="3_selected"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_normal"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+texture = ExtResource("2_slot")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_selected"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+texture = ExtResource("3_selected")
+
+[node name="InventorySkillSlot" type="Button"]
+custom_minimum_size = Vector2(128, 128)
+offset_right = 128.0
+offset_bottom = 128.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxTexture_selected")
+theme_override_styles/hover = SubResource("StyleBoxTexture_selected")
+theme_override_styles/normal = SubResource("StyleBoxTexture_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_selected")
+icon_alignment = 1
+vertical_icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_script")

@@ -6,12 +6,20 @@ const STATS_BG := preload("res://assets/ui/hud/inventory/tab_sections/tab_stats_
 const SKILLS_BG := preload("res://assets/ui/hud/inventory/tab_sections/tab_skills_blank.png")
 const ITEMS_BG := preload("res://assets/ui/hud/inventory/tab_sections/tab_items_blank.png")
 const BAG_SLOT_SCENE := preload("res://scenes/ui/inventory_bag_slot.tscn")
+const SKILL_SLOT_SCENE := preload("res://scenes/ui/inventory_skill_slot.tscn")
 
 const BAG_COLUMNS := 4
 const BAG_SLOT_SIZE := 128.0
 const BAG_GAP := 8.0
 const BAG_PADDING := 8.0
 const BAG_STRIDE := 136.0
+
+const SKILL_COLUMNS := 3
+const SKILL_SLOT_SIZE := 128.0
+const SKILL_GAP := 16.0
+const SKILL_PADDING := 8.0
+const SKILL_STRIDE := 144.0
+const SKILL_MIN_ROWS := 4
 
 const EQUIP_GROUPS := ["helmet", "chest_armour", "pants", "boots", "necklace", "ring", "sword", "shield"]
 const EQUIP_STORAGE := [0, 1, 6, 2, 4, -1, 7, 5, 3]
@@ -26,16 +34,25 @@ var _player: Character
 var _equipped: Array = [null, null, null, null, null, null, null, null]
 var _bag_slots: Array[InventoryBagSlot] = []
 var _bag_pool_rows := 0
+var _skill_slots: Array[InventorySkillSlot] = []
+var _selected_skill: PlayerSkill
 
 @onready var _frame: Control = $Frame
 @onready var _background: TextureRect = $Frame/Background
 @onready var _stats_page_bg: TextureRect = $Frame/StatsPage/Background
+@onready var _skills_page_bg: TextureRect = $Frame/SkillsPage/Background
 @onready var _items_page_bg: TextureRect = $Frame/ItemsPage/Background
 @onready var _stats_page: Control = $Frame/StatsPage
+@onready var _skills_page: Control = $Frame/SkillsPage
 @onready var _items_page: Control = $Frame/ItemsPage
 @onready var _bag_viewport: ScrollContainer = $Frame/ItemsPage/BagViewport
 @onready var _bag_content: Control = $Frame/ItemsPage/BagViewport/BagContent
 @onready var _sort_button: Button = $Frame/ItemsPage/SortButton
+@onready var _skill_viewport: ScrollContainer = $Frame/SkillsPage/SkillViewport
+@onready var _skill_content: Control = $Frame/SkillsPage/SkillViewport/SkillContent
+@onready var _skill_detail_name: Label = $Frame/SkillsPage/SkillDetailName
+@onready var _skill_detail_meta: Label = $Frame/SkillsPage/SkillDetailMeta
+@onready var _skill_detail_description: Label = $Frame/SkillsPage/SkillDetailDescription
 @onready var _placeholder: Label = $Frame/Placeholder
 @onready var _level_label: Label = $Frame/StatsPage/LevelLabel
 @onready var _health_bar: TextureProgressBar = $Frame/StatsPage/HealthBar
@@ -44,6 +61,12 @@ var _bag_pool_rows := 0
 @onready var _xp_label: Label = $Frame/StatsPage/XPLabel
 @onready var _energy_bar: TextureProgressBar = $Frame/StatsPage/EnergyBar
 @onready var _energy_label: Label = $Frame/StatsPage/EnergyLabel
+@onready var _skill_health_bar: TextureProgressBar = $Frame/SkillsPage/SkillHealthBar
+@onready var _skill_health_label: Label = $Frame/SkillsPage/SkillHealthLabel
+@onready var _skill_energy_bar: TextureProgressBar = $Frame/SkillsPage/SkillEnergyBar
+@onready var _skill_energy_label: Label = $Frame/SkillsPage/SkillEnergyLabel
+@onready var _skill_xp_bar: TextureProgressBar = $Frame/SkillsPage/SkillXPBar
+@onready var _skill_xp_label: Label = $Frame/SkillsPage/SkillXPLabel
 @onready var _equip_buttons: Array[Button] = [
 	$Frame/StatsPage/EquipHelmet,
 	$Frame/StatsPage/EquipChest,
@@ -97,6 +120,8 @@ func _ready() -> void:
 	_bag_viewport.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_bag_viewport.get_v_scroll_bar().value_changed.connect(_on_bag_scrolled)
 	_bag_viewport.resized.connect(_layout_bag)
+	_skill_viewport.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_skill_viewport.resized.connect(_layout_skill_grid)
 	for i in _equip_buttons.size():
 		var btn = _equip_buttons[i]
 		btn.slot_index = i
@@ -110,6 +135,7 @@ func _ready() -> void:
 	resized.connect(_layout_frame)
 	_layout_frame.call_deferred()
 	_layout_bag.call_deferred()
+	_layout_skill_grid.call_deferred()
 	hide_panel()
 
 
@@ -119,6 +145,7 @@ func bind(inventory: Inventory, stats: Stats = null, player: Character = null) -
 	_bind_player(player)
 	_restore_equipped()
 	_layout_bag()
+	_layout_skill_grid()
 	refresh()
 
 
@@ -146,6 +173,7 @@ func refresh() -> void:
 	_refresh_progress()
 	_refresh_stats()
 	_refresh_bag()
+	_refresh_skills()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -160,16 +188,20 @@ func _set_tab(tab: StringName) -> void:
 		&"skills":
 			_background.texture = SKILLS_BG
 			_stats_page_bg.visible = false
+			_skills_page_bg.visible = true
 			_items_page_bg.visible = false
 			_stats_page.visible = false
+			_skills_page.visible = true
 			_items_page.visible = false
-			_placeholder.text = "SKILLS\n\nCOMING SOON"
-			_placeholder.visible = true
+			_placeholder.visible = false
+			_layout_skill_grid()
 		&"items":
 			_background.texture = ITEMS_BG
 			_stats_page_bg.visible = false
+			_skills_page_bg.visible = false
 			_items_page_bg.visible = true
 			_stats_page.visible = false
+			_skills_page.visible = false
 			_items_page.visible = true
 			_placeholder.visible = false
 			_layout_bag()
@@ -177,8 +209,10 @@ func _set_tab(tab: StringName) -> void:
 			current_tab = &"stats"
 			_background.texture = STATS_BG
 			_stats_page_bg.visible = true
+			_skills_page_bg.visible = false
 			_items_page_bg.visible = false
 			_stats_page.visible = true
+			_skills_page.visible = false
 			_items_page.visible = false
 			_placeholder.visible = false
 	if current_tab == &"stats":
@@ -268,6 +302,92 @@ func _on_sort_pressed() -> void:
 	_layout_bag()
 
 
+func _layout_skill_grid() -> void:
+	if not is_node_ready() or _skill_content == null:
+		return
+	var skills := _owned_skills()
+	var rows := maxi(SKILL_MIN_ROWS, ceili(float(skills.size()) / float(SKILL_COLUMNS)))
+	var width := SKILL_PADDING * 2.0 + SKILL_COLUMNS * SKILL_SLOT_SIZE + (SKILL_COLUMNS - 1) * SKILL_GAP
+	var height := SKILL_PADDING * 2.0 + rows * SKILL_SLOT_SIZE + maxi(0, rows - 1) * SKILL_GAP
+	_skill_content.custom_minimum_size = Vector2(width, height)
+	_ensure_skill_pool(rows * SKILL_COLUMNS)
+	_refresh_skills()
+
+
+func _ensure_skill_pool(size: int) -> void:
+	if _skill_slots.size() == size:
+		return
+	for slot in _skill_slots:
+		slot.free()
+	_skill_slots.clear()
+	for i in size:
+		var slot := SKILL_SLOT_SCENE.instantiate() as InventorySkillSlot
+		_skill_content.add_child(slot)
+		slot.skill_selected.connect(_on_skill_selected)
+		_skill_slots.append(slot)
+
+
+func _refresh_skills() -> void:
+	if _skill_content == null:
+		return
+	var skills := _owned_skills()
+	if _selected_skill != null and not skills.has(_selected_skill):
+		_selected_skill = null
+	for i in _skill_slots.size():
+		var slot := _skill_slots[i]
+		var local_row := floori(float(i) / float(SKILL_COLUMNS))
+		var column := i % SKILL_COLUMNS
+		slot.position = Vector2(
+			SKILL_PADDING + column * SKILL_STRIDE,
+			SKILL_PADDING + local_row * SKILL_STRIDE,
+		)
+		if i < skills.size():
+			slot.bind_skill(i, skills[i])
+			slot.set_selected(_selected_skill == skills[i])
+		else:
+			slot.bind_skill(-1, null)
+	_show_skill_details(_selected_skill)
+
+
+func _owned_skills() -> Array[PlayerSkill]:
+	var skills: Array[PlayerSkill] = []
+	if _player == null or _player.config == null:
+		return skills
+	for skill in _player.config.skills:
+		if skill != null:
+			skills.append(skill)
+	return skills
+
+
+func _on_skill_selected(skill: PlayerSkill) -> void:
+	_selected_skill = skill
+	_refresh_skills()
+
+
+func _show_skill_details(skill: PlayerSkill) -> void:
+	if _skill_detail_name == null:
+		return
+	if skill == null:
+		_skill_detail_name.text = "SELECT A SKILL"
+		_skill_detail_meta.text = ""
+		_skill_detail_description.text = "Choose a skill from Owned Skills to see its details."
+		return
+	var reduction := 0.0
+	if _stats != null:
+		reduction = _stats.get_stat(Stats.COOLDOWN_REDUCTION)
+	var cooldown := skill.effective_cooldown(reduction)
+	var kind := "STRIKE"
+	if skill is GroundSlamSkill:
+		kind = "AREA"
+	elif skill is SelfBuffSkill:
+		kind = "BUFF"
+	_skill_detail_name.text = skill.display_name.to_upper()
+	_skill_detail_meta.text = "%s   |   COOLDOWN %.1fs   |   ENERGY %d" % [kind, cooldown, skill.energy_cost]
+	_skill_detail_description.text = skill.description
+	if _player != null and _player.level < skill.unlock_level:
+		_skill_detail_description.text += "\n\nRequires level %d." % skill.unlock_level
+
+
 func _bind_stats(stats: Stats) -> void:
 	if _stats != null and _stats.stats_changed.is_connected(_on_stats_changed):
 		_stats.stats_changed.disconnect(_on_stats_changed)
@@ -319,12 +439,21 @@ func _refresh_progress() -> void:
 	if _player == null:
 		return
 	_level_label.text = "LV %d" % _player.level
-	_apply_progress_bars(_health_bar, _health_label, _item_health_bar, _item_health_label)
-	_apply_progress_bars(_energy_bar, _energy_label, _item_energy_bar, _item_energy_label)
-	_apply_progress_bars(_xp_bar, _xp_label, _item_xp_bar, _item_xp_label)
+	_apply_progress_bars(_health_bar, _health_label, [
+		[_item_health_bar, _item_health_label],
+		[_skill_health_bar, _skill_health_label],
+	])
+	_apply_progress_bars(_energy_bar, _energy_label, [
+		[_item_energy_bar, _item_energy_label],
+		[_skill_energy_bar, _skill_energy_label],
+	])
+	_apply_progress_bars(_xp_bar, _xp_label, [
+		[_item_xp_bar, _item_xp_label],
+		[_skill_xp_bar, _skill_xp_label],
+	])
 
 
-func _apply_progress_bars(stats_bar: TextureProgressBar, stats_label: Label, item_bar: TextureProgressBar, item_label: Label) -> void:
+func _apply_progress_bars(stats_bar: TextureProgressBar, stats_label: Label, mirrors: Array) -> void:
 	if stats_bar == null or stats_label == null:
 		return
 	var is_health := stats_bar == _health_bar
@@ -343,11 +472,15 @@ func _apply_progress_bars(stats_bar: TextureProgressBar, stats_label: Label, ite
 		stats_bar.max_value = maxf(1.0, float(to_next))
 		stats_bar.value = float(_player.experience) if to_next > 0 else 0.0
 		stats_label.text = "XP %d / %d" % [_player.experience, to_next] if to_next > 0 else "XP MAX"
-	# mirror to items page
-	if item_bar != null and item_label != null:
-		item_bar.max_value = stats_bar.max_value
-		item_bar.value = stats_bar.value
-		item_label.text = stats_label.text
+	# mirror to the items and skills pages
+	for mirror in mirrors:
+		var bar = mirror[0] as TextureProgressBar
+		var label = mirror[1] as Label
+		if bar == null or label == null:
+			continue
+		bar.max_value = stats_bar.max_value
+		bar.value = stats_bar.value
+		label.text = stats_label.text
 
 
 func _refresh_stats() -> void:

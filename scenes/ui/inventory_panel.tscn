@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://bmy150jtq0o52" path="res://assets/ui/hud/bars/mana-bar.png" id="6_energy"]
 [ext_resource type="Script" uid="uid://dcy2733c87dvw" path="res://scripts/ui/inventory_equip_slot.gd" id="7_equip_slot"]
 [ext_resource type="Texture2D" uid="uid://cfmv374cf2xuk" path="res://assets/ui/hud/inventory/tab_sections/tab_items_blank.png" id="8_items_bg"]
+[ext_resource type="Texture2D" uid="uid://du1oi4v35bcop" path="res://assets/ui/hud/inventory/tab_sections/tab_skills_blank.png" id="9_skills_bg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_skill_slot.tscn" id="10_skill_slot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_empty"]
 
@@ -469,6 +471,150 @@ theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 26
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="SkillsPage" type="Control" parent="Frame" unique_id=1875184420]
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Frame/SkillsPage" unique_id=1248297914]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("9_skills_bg")
+expand_mode = 1
+
+[node name="SkillHealthBar" type="TextureProgressBar" parent="Frame/SkillsPage" unique_id=1545732860]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 704.0
+offset_right = 540.0
+offset_bottom = 755.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("4_health")
+
+[node name="SkillHealthLabel" type="Label" parent="Frame/SkillsPage" unique_id=1926756348]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 708.0
+offset_right = 530.0
+offset_bottom = 745.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "HP 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkillEnergyBar" type="TextureProgressBar" parent="Frame/SkillsPage" unique_id=1664913015]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 785.0
+offset_right = 535.0
+offset_bottom = 824.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("6_energy")
+
+[node name="SkillEnergyLabel" type="Label" parent="Frame/SkillsPage" unique_id=1021775833]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 787.0
+offset_right = 530.0
+offset_bottom = 821.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "EN 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkillXPBar" type="TextureProgressBar" parent="Frame/SkillsPage" unique_id=2005586420]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 860.0
+offset_right = 534.0
+offset_bottom = 901.0
+mouse_filter = 2
+max_value = 1.0
+value = 1.0
+nine_patch_stretch = true
+texture_progress = ExtResource("5_xp")
+
+[node name="SkillXPLabel" type="Label" parent="Frame/SkillsPage" unique_id=2040499627]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 861.0
+offset_right = 530.0
+offset_bottom = 903.0
+theme_override_colors/font_color = Color(0.94, 0.89, 0.79, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+text = "XP 0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkillDetailName" type="Label" parent="Frame/SkillsPage" unique_id=1275660002]
+layout_mode = 0
+offset_left = 678.0
+offset_top = 622.0
+offset_right = 1188.0
+offset_bottom = 672.0
+theme_override_colors/font_color = Color(0.85, 0.72, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 30
+text = "SELECT A SKILL"
+vertical_alignment = 1
+
+[node name="SkillDetailMeta" type="Label" parent="Frame/SkillsPage" unique_id=1672849726]
+layout_mode = 0
+offset_left = 678.0
+offset_top = 678.0
+offset_right = 1188.0
+offset_bottom = 708.0
+theme_override_colors/font_color = Color(0.78, 0.7, 0.56, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="SkillDetailDescription" type="Label" parent="Frame/SkillsPage" unique_id=1429754301]
+layout_mode = 0
+offset_left = 678.0
+offset_top = 718.0
+offset_right = 1188.0
+offset_bottom = 900.0
+theme_override_colors/font_color = Color(0.9, 0.86, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.02, 0.02, 0.95)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "Choose a skill from Owned Skills to see its details."
+autowrap_mode = 3
+vertical_alignment = 0
+
+[node name="SkillViewport" type="ScrollContainer" parent="Frame/SkillsPage" unique_id=1180653026]
+layout_mode = 0
+offset_left = 1256.0
+offset_top = 296.0
+offset_right = 1712.0
+offset_bottom = 900.0
+mouse_filter = 0
+
+[node name="SkillContent" type="Control" parent="Frame/SkillsPage/SkillViewport" unique_id=1681370387]
+custom_minimum_size = Vector2(432, 576)
+layout_mode = 2
+mouse_filter = 2
 
 [node name="ItemsPage" type="Control" parent="Frame" unique_id=1836028574]
 anchors_preset = 0
