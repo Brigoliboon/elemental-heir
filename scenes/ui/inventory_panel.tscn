@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c465rkgj8ynv5" path="res://assets/ui/hud/bars/health-bar.png" id="4_health"]
 [ext_resource type="Texture2D" uid="uid://c1bfvsncsonf3" path="res://assets/ui/hud/bars/exp-bar.png" id="5_xp"]
 [ext_resource type="Texture2D" uid="uid://bmy150jtq0o52" path="res://assets/ui/hud/bars/mana-bar.png" id="6_energy"]
+[ext_resource type="Texture2D" uid="uid://cfmv374cf2xuk" path="res://assets/ui/hud/inventory/tab_sections/tab_items_blank.png" id="8_items_bg"]
 [ext_resource type="Script" uid="uid://dcy2733c87dvw" path="res://scripts/ui/inventory_equip_slot.gd" id="7_equip_slot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_empty"]
@@ -48,6 +49,14 @@ anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Frame/StatsPage"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("2_stats_bg")
+expand_mode = 1
 
 [node name="Portrait" type="TextureRect" parent="Frame/StatsPage" unique_id=1599647010]
 layout_mode = 0
@@ -466,6 +475,14 @@ anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Frame/ItemsPage"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("8_items_bg")
+expand_mode = 1
 
 [node name="ItemEquipHelmet" type="Button" parent="Frame/ItemsPage" unique_id=289860381]
 layout_mode = 0
