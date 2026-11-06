@@ -33,6 +33,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_guild_scene.gd"),
 	preload("res://tests/test_guild_ambient.gd"),
 	preload("res://tests/test_inn_scene.gd"),
+	preload("res://tests/test_scene_transition_depth.gd"),
 	preload("res://tests/test_hud_layout.gd"),
 	preload("res://tests/test_hud_click_masks.gd"),
 	preload("res://tests/test_title_layout.gd"),

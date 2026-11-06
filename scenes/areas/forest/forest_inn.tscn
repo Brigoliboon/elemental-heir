@@ -47,6 +47,7 @@ collision_layer = 0
 collision_mask = 2
 script = ExtResource("6_transition")
 target_scene = "res://scenes/areas/forest/forest_village_square.tscn"
+depth_ratio = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundProps/SceneTransition" index="0" unique_id=1737787889]
 position = Vector2(947.5, 259.5)
