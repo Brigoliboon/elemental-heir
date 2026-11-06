@@ -164,4 +164,3 @@ target_scene = "res://scenes/areas/forest/forest_inn.tscn"
 [node name="Inn" type="CollisionShape2D" parent="InnEntrance" index="0" unique_id=1166446282]
 position = Vector2(667, 199)
 shape = SubResource("RectangleShape2D_transition")
-disabled = true
