@@ -10,6 +10,15 @@ extends Node2D
 
 ## Which edge the player should appear at in the next area ("left", "right" or "").
 static var _entry_side := ""
+## Doorway node path (inside the next scene) set by the transition that changed
+## scenes, so the player appears at the door they came out of instead of that
+## area's own spawn point. Empty keeps the next area's default spawn.
+static var _entry_spawn_path := ""
+
+
+## Tells the next area to place the player at a doorway node inside itself.
+static func set_entry_spawn(node_path: String) -> void:
+	_entry_spawn_path = node_path
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
 const ATTACK_PRESSED_ALPHA := 0.55
@@ -465,6 +474,11 @@ func depth_ratio() -> float:
 
 func _place_player() -> void:
 	var x := world_width * spawn_x_ratio
+	if not _entry_spawn_path.is_empty():
+		var door := get_node_or_null(_entry_spawn_path) as Node2D
+		if door != null:
+			x = door.global_position.x
+		_entry_spawn_path = ""
 	if _entry_side == "left":
 		x = edge_margin * 2.0
 	elif _entry_side == "right":

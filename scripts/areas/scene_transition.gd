@@ -12,6 +12,10 @@ extends Area2D
 ## How far the feet may be from the doorway depth, in 1920x1080 world pixels.
 ## Scales with the background. 0 disables the depth check.
 @export var depth_tolerance := 56.0
+## Node path inside the target scene of the doorway this exit returns to, e.g.
+## "InnEntrance/Inn". The player appears at that door instead of the target
+## area's default spawn. Empty keeps the default spawn.
+@export var entry_spawn_path := ""
 
 var _armed := false
 var _player: Node2D
@@ -79,4 +83,6 @@ func _on_body_exited(body: Node) -> void:
 func _trigger() -> void:
 	_armed = false
 	_player = null
+	if not entry_spawn_path.is_empty():
+		Area.set_entry_spawn(entry_spawn_path)
 	get_tree().change_scene_to_file.call_deferred(target_scene)
