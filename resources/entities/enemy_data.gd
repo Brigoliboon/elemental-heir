@@ -29,6 +29,12 @@ const RARITY_TINTS := [
 
 @export_group("Rewards")
 @export var xp_reward: int = 10
+## Bosses get a dedicated health bar and are expected to carry the best drops.
+@export var is_boss: bool = false
+
+@export_group("Loot")
+## Rows rolled by [LootRoller] when this enemy dies. Empty means no item drops.
+@export var loot_table: Array[LootEntry] = []
 
 @export_group("Audio")
 ## Optional voice: attack, hurt, idle and death sounds. Leave unset for a silent

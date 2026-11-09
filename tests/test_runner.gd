@@ -50,6 +50,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_inventory_items.gd"),
 	preload("res://tests/test_inventory_equipment.gd"),
 	preload("res://tests/test_inventory_skills.gd"),
+	preload("res://tests/test_loot_tables.gd"),
 ]
 
 

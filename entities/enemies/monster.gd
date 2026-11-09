@@ -38,6 +38,11 @@ signal skill_cast(skill: MonsterSkill, animation: StringName)
 @export var death_fade_seconds: float = 0.35
 ## Presentation tint restored after damage flashes and used as the base for buffs.
 @export var base_tint := Color.WHITE
+## Seed used for loot and gold rolls. 0 randomises; any other value makes the
+## roll reproducible (tests, QA bug reports, seeded encounters).
+@export var loot_seed: int = 0
+## Print every loot roll in debug builds and keep the lines in `loot_log`.
+@export var log_loot := true
 
 @export_group("Attack")
 ## Fraction of the attack clip where the default hitbox is live.
@@ -80,6 +85,8 @@ var current_health: int:
 	get: return health.current_health if health != null else 0
 
 var _is_dead := false
+## Human-readable lines from the most recent loot roll, kept for QA and tests.
+var loot_log: Array[String] = []
 var _flash_tween: Tween
 var _legacy_skill: MeleeSkill
 var _casting_skill: MonsterSkill = null
@@ -1246,10 +1253,51 @@ func _on_health_died() -> void:
 	_clear_auras()
 	_despawn_summons()
 	_award_experience()
+	_drop_loot()
 	if sfx != null:
 		sfx.play_death()
 	died.emit()
 	_play_death_fade()
+
+
+## Rolls this monster's loot table and spawns the results as walk-over pickups
+## around its feet. Summons never drop loot so a summoner cannot be farmed
+## indirectly.
+func _drop_loot() -> void:
+	if summoned or config == null:
+		return
+	var roller := _make_loot_roller(loot_seed)
+	roller.source_name = config.enemy_name
+	roller.verbose = log_loot
+	var drops := roller.roll(config.loot_table, effective_rarity())
+	loot_log = roller.log_lines
+	if drops.is_empty():
+		return
+	var parent := get_parent()
+	if parent == null:
+		return
+	var feet := Vector2(global_position.x, get_feet_y())
+	LootSpawner.spawn_drops(parent, feet, drops, roller.rng)
+
+
+## Rolls the loot table without spawning anything. `seed_value` <= 0 falls back
+## to [member loot_seed]; a positive value reproduces that exact roll.
+func roll_loot(seed_value: int = -1) -> Array[Dictionary]:
+	if config == null:
+		return []
+	var roller := _make_loot_roller(seed_value)
+	roller.source_name = config.enemy_name
+	roller.verbose = log_loot
+	var drops := roller.roll(config.loot_table, effective_rarity())
+	loot_log = roller.log_lines.duplicate()
+	return drops
+
+
+func _make_loot_roller(seed_value: int) -> LootRoller:
+	var effective := seed_value
+	if effective <= 0:
+		effective = loot_seed
+	return LootRoller.new(effective if effective > 0 else -1)
 
 
 ## Grants EnemyData.xp_reward to the player when this monster dies. Summons are

@@ -53,6 +53,35 @@ func add_item(item: ItemData, count: int = 1) -> int:
 	return leftover
 
 
+## Total number of `item` across every stack. Used by tests and by consumables.
+func count_of(item: ItemData) -> int:
+	_ensure_slots()
+	if item == null:
+		return 0
+	var total := 0
+	for slot in _slots:
+		if slot["item"] == item:
+			total += int(slot["count"])
+	return total
+
+
+## True when `count` of `item` would fit without overflowing the bag. Used by
+## pickups so a full bag can leave the drop on the ground untouched.
+func can_add(item: ItemData, count: int = 1) -> bool:
+	_ensure_slots()
+	if item == null or count <= 0:
+		return false
+	var room := 0
+	for slot in _slots:
+		if slot["item"] == null:
+			room += maxi(1, item.max_stack)
+		elif slot["item"] == item and item.max_stack > 1:
+			room += maxi(0, item.max_stack - int(slot["count"]))
+		if room >= count:
+			return true
+	return false
+
+
 func remove_item(slot_index: int, count: int = 1) -> bool:
 	_ensure_slots()
 	if slot_index < 0 or slot_index >= _slots.size():
