@@ -5,6 +5,24 @@
 [ext_resource type="Resource" uid="uid://nnqn2l2irn7i" path="res://resources/skills/gore.tres" id="2_gore"]
 [ext_resource type="Resource" uid="uid://dwpr4rpwcamnf" path="res://resources/skills/charge.tres" id="3_charge"]
 [ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="4_0tpdf"]
+[ext_resource type="Script" path="res://resources/items/loot_entry.gd" id="5_loot"]
+[ext_resource type="Resource" path="res://resources/items/materials/boar_hide.tres" id="6_hide"]
+[ext_resource type="Resource" path="res://resources/items/consumables/small_health_potion.tres" id="7_potion"]
+
+[sub_resource type="Resource" id="LootEntry_hide"]
+script = ExtResource("5_loot")
+item = ExtResource("6_hide")
+min_count = 1
+max_count = 2
+drop_chance = 0.4
+
+[sub_resource type="Resource" id="LootEntry_potion"]
+script = ExtResource("5_loot")
+item = ExtResource("7_potion")
+weight = 1.0
+min_count = 1
+max_count = 1
+drop_chance = 0.15
 
 [resource]
 script = ExtResource("1_data")
@@ -18,3 +36,6 @@ max_health = 50
 move_speed = 240.0
 attack_damage = 8
 xp_reward = 8
+loot_table = Array[ExtResource("5_loot")]([SubResource("LootEntry_hide"), SubResource("LootEntry_potion")])
+gold_min = 1
+gold_max = 3

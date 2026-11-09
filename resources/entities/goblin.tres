@@ -5,6 +5,16 @@
 [ext_resource type="Resource" uid="uid://c13qnot5lj7o6" path="res://resources/audio/goblin_sfx.tres" id="2_sfx"]
 [ext_resource type="Resource" uid="uid://nhx6dpl4rq55" path="res://resources/skills/bite.tres" id="3_bite"]
 [ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="5_gxl36"]
+[ext_resource type="Script" path="res://resources/items/loot_entry.gd" id="6_loot"]
+[ext_resource type="Resource" path="res://resources/items/consumables/small_health_potion.tres" id="7_potion"]
+
+[sub_resource type="Resource" id="LootEntry_potion"]
+script = ExtResource("6_loot")
+item = ExtResource("7_potion")
+weight = 1.0
+min_count = 1
+max_count = 1
+drop_chance = 0.18
 
 [resource]
 script = ExtResource("1_data")
@@ -12,3 +22,6 @@ basic_attack = ExtResource("3_bite")
 max_health = 60
 move_speed = 220.0
 sfx = ExtResource("2_sfx")
+loot_table = Array[ExtResource("6_loot")]([SubResource("LootEntry_potion")])
+gold_min = 2
+gold_max = 6

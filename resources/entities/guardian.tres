@@ -8,6 +8,35 @@
 [ext_resource type="Resource" uid="uid://dnr7rv4xhwmf3" path="res://resources/skills/enrage.tres" id="5_enrage"]
 [ext_resource type="Script" uid="uid://gijmkt8g77oi" path="res://resources/skills/monster_skill.gd" id="5_smyus"]
 [ext_resource type="Resource" uid="uid://m0f7h072xiil" path="res://resources/passives/guardian_aura.tres" id="6_aura"]
+[ext_resource type="Script" path="res://resources/items/loot_entry.gd" id="7_loot"]
+[ext_resource type="Resource" path="res://resources/items/materials/heartwood.tres" id="8_heartwood"]
+[ext_resource type="Resource" path="res://resources/items/materials/bark.tres" id="9_bark"]
+[ext_resource type="Resource" path="res://resources/items/consumables/small_health_potion.tres" id="10_potion"]
+
+[sub_resource type="Resource" id="LootEntry_heartwood"]
+script = ExtResource("7_loot")
+item = ExtResource("8_heartwood")
+weight = 1.0
+min_count = 1
+max_count = 1
+drop_chance = 1.0
+unique = true
+
+[sub_resource type="Resource" id="LootEntry_bark"]
+script = ExtResource("7_loot")
+item = ExtResource("9_bark")
+weight = 1.0
+min_count = 1
+max_count = 2
+drop_chance = 0.3
+
+[sub_resource type="Resource" id="LootEntry_potion"]
+script = ExtResource("7_loot")
+item = ExtResource("10_potion")
+weight = 1.0
+min_count = 1
+max_count = 1
+drop_chance = 0.2
 
 [resource]
 script = ExtResource("1_data")
@@ -28,3 +57,7 @@ move_speed = 150.0
 attack_damage = 22
 defence = 8
 xp_reward = 250
+is_boss = true
+loot_table = Array[ExtResource("7_loot")]([SubResource("LootEntry_heartwood"), SubResource("LootEntry_bark"), SubResource("LootEntry_potion")])
+gold_min = 50
+gold_max = 80

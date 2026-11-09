@@ -24,6 +24,18 @@ func get_slots() -> Array:
 	return _slots
 
 
+## Total number of `item` across every stack. Used by tests and by consumables.
+func count_of(item: ItemData) -> int:
+	_ensure_slots()
+	if item == null:
+		return 0
+	var total := 0
+	for slot in _slots:
+		if slot["item"] == item:
+			total += int(slot["count"])
+	return total
+
+
 func add_item(item: ItemData, count: int = 1) -> int:
 	_ensure_slots()
 	if item == null or count <= 0:
@@ -53,18 +65,6 @@ func add_item(item: ItemData, count: int = 1) -> int:
 	return leftover
 
 
-## Total number of `item` across every stack. Used by tests and by consumables.
-func count_of(item: ItemData) -> int:
-	_ensure_slots()
-	if item == null:
-		return 0
-	var total := 0
-	for slot in _slots:
-		if slot["item"] == item:
-			total += int(slot["count"])
-	return total
-
-
 ## True when `count` of `item` would fit without overflowing the bag. Used by
 ## pickups so a full bag can leave the drop on the ground untouched.
 func can_add(item: ItemData, count: int = 1) -> bool:
@@ -79,6 +79,18 @@ func can_add(item: ItemData, count: int = 1) -> bool:
 			room += maxi(0, item.max_stack - int(slot["count"]))
 		if room >= count:
 			return true
+	return false
+
+
+## Removes one instance of `item` from the first stack that holds it. Used when
+## a consumable is used.
+func remove_one(item: ItemData) -> bool:
+	_ensure_slots()
+	if item == null:
+		return false
+	for i in range(_slots.size()):
+		if _slots[i]["item"] == item:
+			return remove_item(i, 1)
 	return false
 
 

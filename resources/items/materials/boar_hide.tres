@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://resources/items/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"boar_hide"
+display_name = "Boar Hide"
+item_type = 4
+item_group = &"material"
+max_stack = 99
+description = "A rough hide from a boarlet. Used for early crafting."

@@ -263,6 +263,7 @@ func _ensure_bag_pool() -> void:
 	for i in range(BAG_COLUMNS * needed_rows):
 		var slot := BAG_SLOT_SCENE.instantiate() as InventoryBagSlot
 		_bag_content.add_child(slot)
+		slot.pressed.connect(_on_bag_slot_pressed.bind(slot))
 		_bag_slots.append(slot)
 
 
@@ -309,6 +310,19 @@ func _on_sort_pressed() -> void:
 	_inventory.sort_by_type()
 	_bag_viewport.scroll_vertical = 0
 	_layout_bag()
+
+
+## Tapping a bag slot uses a consumable. Equipment is still equipped by dragging
+## onto an equipment slot, so a stray tap never equips something by accident.
+func _on_bag_slot_pressed(slot: InventoryBagSlot) -> void:
+	if _player == null or slot == null or slot.item == null:
+		return
+	if _player.use_item(slot.item):
+		refresh()
+		return
+	var toast := get_tree().get_first_node_in_group("hud_toast")
+	if toast != null and toast.has_method("show_message"):
+		toast.call("show_message", "Cannot use %s" % slot.item.display_name)
 
 
 func _layout_skill_grid() -> void:

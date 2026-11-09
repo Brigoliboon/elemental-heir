@@ -52,6 +52,8 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_inventory_skills.gd"),
 	preload("res://tests/test_loot_tables.gd"),
 	preload("res://tests/test_loot_pickup.gd"),
+	preload("res://tests/test_gold.gd"),
+	preload("res://tests/test_forest_loot.gd"),
 ]
 
 

@@ -265,6 +265,8 @@ enum DamageType  { PHYSICAL, FIRE, WATER, WIND, EARTH, SHADOW }
 @export var is_boss: bool = false
 @export var xp_reward: int = 10
 @export var loot_table: Array[LootEntry] = []
+@export var gold_min: int = 0                # inclusive gold range rolled on death
+@export var gold_max: int = 0
 
 # Rarity stat multipliers applied at runtime:
 const RARITY_MULTIPLIER := [1.0, 1.5, 2.5, 4.0]
@@ -275,10 +277,16 @@ const RARITY_MULTIPLIER := [1.0, 1.5, 2.5, 4.0]
 ```gdscript
 class_name LootEntry extends Resource
 @export var item: ItemData
-@export var weight: float = 1.0
+@export var weight: float = 1.0              # used by guaranteed single-pick rolls
 @export var min_count: int = 1
 @export var max_count: int = 1
+@export var drop_chance: float = 1.0         # independent chance on each table pass
+@export var unique: bool = false             # satisfies the Anomaly unique roll
 ```
+
+Drops are rolled by `LootRoller` (seedable, with a per-roll debug log) and spawn
+as walk-over `LootPickup` areas that despawn after a timeout. Gold uses the same
+pickup path and persists in `PlayerProgress.gold`.
 
 ---
 

@@ -523,6 +523,30 @@ func heal(amount: int) -> int:
 	return health.heal(amount) if health != null else 0
 
 
+## Uses a consumable from the bag: heals, restores energy and removes one from
+## the inventory. Returns false when the item is not usable right now, so a
+## potion is never wasted at full health.
+func use_item(item: ItemData) -> bool:
+	if _is_dead or item == null or inventory == null:
+		return false
+	var consumable := item as ConsumableData
+	if consumable == null:
+		return false
+	if inventory.count_of(consumable) <= 0:
+		return false
+	var used := false
+	if consumable.heal_amount > 0:
+		used = heal(consumable.heal_amount) > 0 or used
+	if consumable.energy_amount > 0.0 and energy + 0.001 < max_energy:
+		energy = minf(max_energy, energy + consumable.energy_amount)
+		energy_changed.emit(energy, max_energy)
+		used = true
+	if not used:
+		return false
+	inventory.remove_one(consumable)
+	return true
+
+
 func is_alive() -> bool:
 	return health != null and health.is_alive()
 
