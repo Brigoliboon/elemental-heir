@@ -5,7 +5,7 @@ extends RefCounted
 
 const GUILD_SCENE := "res://scenes/areas/forest/forest_guild.tscn"
 const GUILD_BACKGROUND_PATH := "res://assets/backgrounds/forest/forest_guild/forest_guild_interior.png"
-const LARA_SHEET_PATH := "res://assets/characters/npcs/Lara/animation/lara_idle/lara_idle_sheet.png"
+const LARA_SHEET_PATH := "res://assets/characters/npcs/lara/idle/lara_idle_sheet.png"
 const SIZES := [Vector2i(1920, 1080), Vector2i(2400, 1080), Vector2i(1280, 720)]
 
 

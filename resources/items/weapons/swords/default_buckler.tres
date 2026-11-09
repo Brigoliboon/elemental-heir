@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="EquipmentData" format=3]
 
-[ext_resource type="Texture2D" path="res://assets/characters/warrior/t1_side/warrior_t1_side/warrior_t1_side_buckler.png" id="1_v2uhu"]
+[ext_resource type="Texture2D" path="res://assets/characters/warrior/t1_side/rig/buckler.png" id="1_v2uhu"]
 [ext_resource type="Script" path="res://resources/items/equipment_data.gd" id="2_8g0hq"]
 [ext_resource type="Script" path="res://resources/items/stat_modifier.gd" id="3_fi3cn"]
 

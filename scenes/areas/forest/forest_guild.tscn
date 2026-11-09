@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dgyqnq158c38m" path="res://scenes/areas/forest/light_flicker.gd" id="4_g1pyl"]
 [ext_resource type="Script" uid="uid://utg16wrqb5o3" path="res://scripts/areas/scene_transition.gd" id="4_transition"]
 [ext_resource type="Texture2D" uid="uid://br4jjxh0vrpw2" path="res://assets/backgrounds/forest/forest_guild/forest_guild_overlay.png" id="5_h8rfs"]
-[ext_resource type="Texture2D" uid="uid://ks0vlfgii4r1" path="res://assets/characters/npcs/Lara/animation/lara_idle/lara_idle_sheet.png" id="5_lara"]
+[ext_resource type="Texture2D" uid="uid://ks0vlfgii4r1" path="res://assets/characters/npcs/lara/idle/lara_idle_sheet.png" id="5_lara"]
 [ext_resource type="Texture2D" uid="uid://bkghps3b5ejou" path="res://assets/backgrounds/forest/forest_guild/forest_guild_rails_overlay.png" id="7_3btxc"]
 [ext_resource type="AudioStream" uid="uid://bymn2dx58v8nr" path="res://assets/audio/sfx/environment/fire-crackling.mp3" id="8_fire"]
 [ext_resource type="Resource" path="res://resources/audio/footsteps_stone.tres" id="8_footsteps"]

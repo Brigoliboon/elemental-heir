@@ -164,8 +164,8 @@ keys = Array[Dictionary]([{
 [resource]
 script = ExtResource("1_data")
 character_name = "Sol"
-pivots_path = "res://assets/characters/warrior/t1_side/warrior_t1_side/pivots.json"
-part_dir = "res://assets/characters/warrior/t1_side/warrior_t1_side/"
+pivots_path = "res://assets/characters/warrior/t1_side/rig/pivots.json"
+part_dir = "res://assets/characters/warrior/t1_side/rig/"
 thigh_length_scale = 1.25
 draw_order = {
 "buckler": 3,
