@@ -108,6 +108,7 @@ const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
 @onready var xp_label: Label = $HUD/UI/PlayerHealth/XPLabel
 @onready var profile_button: TextureButton = $HUD/UI/PlayerHealth/Profile
 @onready var level_label: Label = $HUD/UI/PlayerHealth/LevelLabel
+@onready var gold_label: Label = $HUD/UI/PlayerHealth/GoldLabel
 @onready var map_button: TextureButton = $HUD/UI/MapButton
 @onready var inventory_panel: InventoryPanel = $HUD/UI/InventoryPanel
 @onready var stats_panel: StatsPanel = $HUD/UI/StatsPanel
@@ -156,6 +157,7 @@ func _ready() -> void:
 	area_label.text = area_name
 	_bind_player_health()
 	_bind_player_progress()
+	_bind_gold()
 	_bind_player_skills()
 	if safe_zone:
 		SpawnState.reset_all()
@@ -189,6 +191,19 @@ func _bind_player_progress() -> void:
 	_update_player_progress()
 	player.experience_changed.connect(_on_player_experience_changed)
 	player.level_changed.connect(_on_player_level_changed)
+
+
+## Mirrors the shared gold total into the HUD. Gold is persisted by
+## [PlayerProgress], so pickups only need to call `add_gold`.
+func _bind_gold() -> void:
+	_on_gold_changed(PlayerProgress.gold)
+	if not PlayerProgress.gold_changed.is_connected(_on_gold_changed):
+		PlayerProgress.gold_changed.connect(_on_gold_changed)
+
+
+func _on_gold_changed(total: int) -> void:
+	if gold_label != null:
+		gold_label.text = "Gold %d" % total
 
 
 ## Wires the three circular skill buttons and reuses the existing passive button

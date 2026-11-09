@@ -1260,9 +1260,9 @@ func _on_health_died() -> void:
 	_play_death_fade()
 
 
-## Rolls this monster's loot table and spawns the results as walk-over pickups
-## around its feet. Summons never drop loot so a summoner cannot be farmed
-## indirectly.
+## Rolls this monster's loot table and gold range, then spawns the results as
+## walk-over pickups around its feet. Summons never drop loot so a summoner
+## cannot be farmed indirectly.
 func _drop_loot() -> void:
 	if summoned or config == null:
 		return
@@ -1270,14 +1270,17 @@ func _drop_loot() -> void:
 	roller.source_name = config.enemy_name
 	roller.verbose = log_loot
 	var drops := roller.roll(config.loot_table, effective_rarity())
+	var gold := roller.roll_gold(config.gold_min, config.gold_max)
 	loot_log = roller.log_lines
-	if drops.is_empty():
+	if drops.is_empty() and gold <= 0:
 		return
 	var parent := get_parent()
 	if parent == null:
 		return
 	var feet := Vector2(global_position.x, get_feet_y())
 	LootSpawner.spawn_drops(parent, feet, drops, roller.rng)
+	if gold > 0:
+		LootSpawner.spawn_gold(parent, feet, gold, roller.rng)
 
 
 ## Rolls the loot table without spawning anything. `seed_value` <= 0 falls back

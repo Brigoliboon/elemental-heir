@@ -35,6 +35,9 @@ const RARITY_TINTS := [
 @export_group("Loot")
 ## Rows rolled by [LootRoller] when this enemy dies. Empty means no item drops.
 @export var loot_table: Array[LootEntry] = []
+## Inclusive gold range rolled alongside the loot table. 0/0 drops no gold.
+@export var gold_min: int = 0
+@export var gold_max: int = 0
 
 @export_group("Audio")
 ## Optional voice: attack, hurt, idle and death sounds. Leave unset for a silent

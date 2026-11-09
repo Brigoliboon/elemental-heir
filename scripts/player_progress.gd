@@ -5,12 +5,17 @@ extends Node
 const DEFAULT_SAVE_PATH := "user://player_progress.cfg"
 const SECTION := "player"
 
+## Emitted whenever the gold total changes. HUD elements bind to this so they do
+## not have to poll on every frame.
+signal gold_changed(total: int)
+
 var save_path := DEFAULT_SAVE_PATH
 ## Tests disable this so they never touch the player's real save file.
 var persistence_enabled := true
 var has_state := false
 var level := 1
 var experience := 0
+var gold := 0
 ## Runtime-only health carry-over between areas. Never written to the save file.
 var has_health := false
 var health := 0
@@ -31,6 +36,7 @@ func load_progress() -> bool:
 		return false
 	level = maxi(1, int(config.get_value(SECTION, "level", 1)))
 	experience = maxi(0, int(config.get_value(SECTION, "experience", 0)))
+	gold = maxi(0, int(config.get_value(SECTION, "gold", 0)))
 	var eq = config.get_value(SECTION, "equipped", equipped)
 	if eq is Array:
 		equipped = []
@@ -66,6 +72,26 @@ func record_health(current: int) -> void:
 	health = maxi(1, current)
 
 
+## Adds gold and persists the new total. Returns the total after the change.
+func add_gold(amount: int) -> int:
+	if amount > 0:
+		gold += amount
+		gold_changed.emit(gold)
+		save_progress()
+	return gold
+
+
+## Spends gold when the player can afford it. Returns false and changes nothing
+## when the total is too low.
+func spend_gold(amount: int) -> bool:
+	if amount < 0 or gold < amount:
+		return false
+	gold -= amount
+	gold_changed.emit(gold)
+	save_progress()
+	return true
+
+
 ## Clears carried health so the next area starts at full.
 func reset_health() -> void:
 	has_health = false
@@ -78,6 +104,7 @@ func save_progress() -> void:
 	var config := ConfigFile.new()
 	config.set_value(SECTION, "level", level)
 	config.set_value(SECTION, "experience", experience)
+	config.set_value(SECTION, "gold", gold)
 	config.set_value(SECTION, "equipped", equipped)
 	config.set_value(SECTION, "equipped_skills", equipped_skills)
 	var err := config.save(save_path)
@@ -88,9 +115,11 @@ func save_progress() -> void:
 func reset(delete_save: bool = true) -> void:
 	level = 1
 	experience = 0
+	gold = 0
 	has_state = false
 	reset_health()
 	equipped = ["", "", "", "", "", "", "", ""]
 	equipped_skills = ["", "", ""]
+	gold_changed.emit(gold)
 	if delete_save and persistence_enabled and FileAccess.file_exists(save_path):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))

@@ -79,6 +79,17 @@ func roll(table: Array, rarity: int = EnemyData.Rarity.NORMAL) -> Array[Dictiona
 	return drops
 
 
+## Rolls a gold amount in `[min_amount, max_amount]`. 0 when the range is empty.
+func roll_gold(min_amount: int, max_amount: int) -> int:
+	var low := maxi(0, min_amount)
+	var high := maxi(low, max_amount)
+	if high <= 0:
+		return 0
+	var amount := rng.randi_range(low, high)
+	_log("gold: %d (%d-%d)" % [amount, low, high])
+	return amount
+
+
 static func passes_for_rarity(rarity: int) -> int:
 	if rarity >= EnemyData.Rarity.EPIC:
 		return 2

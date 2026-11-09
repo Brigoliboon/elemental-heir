@@ -1,6 +1,6 @@
 class_name LootPickup
 extends Area2D
-## A dropped item on the ground.
+## A dropped item or pile of gold on the ground.
 ##
 ## The player collects it by walking over it (Boon's walk-over auto-pickup
 ## decision). Full inventories leave the pickup on the ground and show a short
@@ -20,9 +20,11 @@ const WORLD_ICON_PIXELS := 28.0
 @export var bob_height := 5.0
 @export var bob_seconds := 0.9
 
-## Item carried by this pickup.
+## Item carried by this pickup. Null for gold pickups.
 var item: ItemData
 var count := 1
+## Gold amount. 0 for item pickups.
+var gold := 0
 
 var _collected := false
 var _elapsed := 0.0
@@ -43,6 +45,15 @@ func _ready() -> void:
 func setup_item(new_item: ItemData, new_count: int = 1) -> void:
 	item = new_item
 	count = maxi(1, new_count)
+	gold = 0
+	if is_node_ready():
+		_refresh_visuals()
+
+
+func setup_gold(amount: int) -> void:
+	gold = maxi(1, amount)
+	item = null
+	count = 1
 	if is_node_ready():
 		_refresh_visuals()
 
@@ -53,6 +64,13 @@ func setup_item(new_item: ItemData, new_count: int = 1) -> void:
 func collect_by(character: Character) -> bool:
 	if _collected or character == null:
 		return false
+	if gold > 0:
+		var progress := get_node_or_null("/root/PlayerProgress")
+		if progress == null:
+			return false
+		progress.add_gold(gold)
+		_finish()
+		return true
 	if item == null:
 		return false
 	var inventory := character.inventory
@@ -85,6 +103,11 @@ func _on_body_entered(body: Node2D) -> void:
 
 func _refresh_visuals() -> void:
 	if _icon == null or _label == null:
+		return
+	if gold > 0:
+		_icon.visible = false
+		_label.text = "%dg" % gold
+		_label.add_theme_color_override("font_color", Color(1.0, 0.83, 0.3))
 		return
 	if item == null:
 		_label.text = ""

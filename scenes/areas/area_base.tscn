@@ -642,6 +642,20 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="GoldLabel" type="Label" parent="HUD/UI/PlayerHealth"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 145.0
+offset_right = 300.0
+offset_bottom = 185.0
+theme_override_colors/font_color = Color(1, 0.83, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.03, 0.02, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 22
+text = "Gold 0"
+horizontal_alignment = 0
+vertical_alignment = 1
+
 [node name="DeathLabel" type="Label" parent="HUD/UI" unique_id=1763514045]
 unique_name_in_owner = true
 visible = false

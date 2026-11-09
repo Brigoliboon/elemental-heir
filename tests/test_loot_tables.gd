@@ -1,6 +1,7 @@
 extends RefCounted
 ## Validates loot tables: per-entry drop chances, stack sizes, rarity bonuses,
 ## seeded reproducibility, the debug log, and spawning drops on death.
+
 const BOARLET_DATA := "res://resources/entities/boarlet.tres"
 const BOARLET_SCENE := "res://entities/enemies/boarlet.tscn"
 
@@ -169,6 +170,8 @@ func _check_death_spawns_drops(tree: SceneTree) -> Array[String]:
 		failures.append("%s did not load" % BOARLET_DATA)
 		return failures
 	data.loot_table = [_entry(_item(&"test_hide"), 1.0, 1, 1)]
+	data.gold_min = 5
+	data.gold_max = 5
 
 	var container := Node2D.new()
 	tree.root.add_child(container)
@@ -189,14 +192,20 @@ func _check_death_spawns_drops(tree: SceneTree) -> Array[String]:
 	await tree.process_frame
 
 	var items_found := 0
+	var gold_found := 0
 	for child in container.get_children():
 		var pickup := child as LootPickup
 		if pickup == null:
+			continue
+		if pickup.gold > 0:
+			gold_found += pickup.gold
 			continue
 		if pickup.item != null and pickup.item.id == &"test_hide":
 			items_found += pickup.count
 	if items_found != 1:
 		failures.append("killing a monster with a loot table must spawn its drop (got %d)" % items_found)
+	if gold_found != 5:
+		failures.append("killing a monster with a gold range must spawn that gold (got %d)" % gold_found)
 
 	container.queue_free()
 	await tree.process_frame

@@ -47,6 +47,18 @@ func _check_collection(tree: SceneTree, area: Area) -> Array[String]:
 	if player.inventory.count_of(item) != 3:
 		failures.append("collecting twice must not duplicate items")
 	await tree.process_frame
+
+	PlayerProgress.reset(false)
+	var gold_pickup := _spawn(area, player.global_position + Vector2(40, 70))
+	gold_pickup.setup_gold(7)
+	if not gold_pickup.collect_by(player):
+		failures.append("a gold pickup must collect")
+	if PlayerProgress.gold != 7:
+		failures.append("gold pickup must add its amount to PlayerProgress, got %d" % PlayerProgress.gold)
+	var gold_label := area.get_node_or_null("HUD/UI/PlayerHealth/GoldLabel") as Label
+	if gold_label == null or gold_label.text != "Gold 7":
+		failures.append("the HUD must show the collected gold total")
+	await tree.process_frame
 	return failures
 
 

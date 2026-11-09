@@ -36,6 +36,22 @@ static func spawn_drops(
 	return spawned
 
 
+## Spawns a single gold pickup.
+static func spawn_gold(
+	parent: Node,
+	origin: Vector2,
+	amount: int,
+	rng: RandomNumberGenerator,
+) -> LootPickup:
+	if parent == null or amount <= 0:
+		return null
+	var pickup := _spawn(parent, origin, rng)
+	if pickup == null:
+		return null
+	pickup.setup_gold(amount)
+	return pickup
+
+
 static func _spawn(parent: Node, origin: Vector2, rng: RandomNumberGenerator) -> LootPickup:
 	var pickup := PICKUP_SCENE.instantiate() as LootPickup
 	if pickup == null:
