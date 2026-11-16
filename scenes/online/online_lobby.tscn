@@ -1,0 +1,192 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq8online1obby"]
+
+[ext_resource type="Theme" uid="uid://bwm7tx1gkabmg" path="res://themes/cinzel_dark_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/online/online_lobby.gd" id="2_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+bg_color = Color(0.07, 0.08, 0.11, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.45, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="OnlineLobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+script = ExtResource("2_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.03, 0.045, 1)
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 160.0
+offset_top = 48.0
+offset_right = -160.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_font_sizes/font_size = 72
+text = "Online"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.76, 0.68, 1)
+theme_override_font_sizes/font_size = 28
+text = "1v1 PvP — LAN / direct IP"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.84, 0.7, 1)
+theme_override_font_sizes/font_size = 26
+text = "Host a match or join one on your network."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="AddressLabel" type="Label" parent="Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.58, 1)
+theme_override_font_sizes/font_size = 24
+text = "Your LAN IP: …"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HostRow" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="HostPortLabel" type="Label" parent="Layout/HostRow"]
+layout_mode = 2
+text = "Port"
+
+[node name="HostPortField" type="LineEdit" parent="Layout/HostRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.55, 0.45, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_field")
+text = "7777"
+alignment = 1
+max_length = 5
+caret_blink = true
+
+[node name="HostButton" type="Button" parent="Layout/HostRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+text = "Host"
+
+[node name="JoinRow" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="JoinIpField" type="LineEdit" parent="Layout/JoinRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.55, 0.45, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_field")
+placeholder_text = "192.168.x.x"
+alignment = 1
+caret_blink = true
+
+[node name="JoinPortField" type="LineEdit" parent="Layout/JoinRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.55, 0.45, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_field")
+text = "7777"
+alignment = 1
+max_length = 5
+caret_blink = true
+
+[node name="JoinButton" type="Button" parent="Layout/JoinRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+text = "Join"
+
+[node name="PlayersPanel" type="VBoxContainer" parent="Layout"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LocalPlayerLabel" type="Label" parent="Layout/PlayersPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "You: …"
+horizontal_alignment = 1
+
+[node name="RemotePlayerLabel" type="Label" parent="Layout/PlayersPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Challenger: waiting…"
+horizontal_alignment = 1
+
+[node name="ReadyRow" type="HBoxContainer" parent="Layout/PlayersPanel"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="ReadyButton" type="Button" parent="Layout/PlayersPanel/ReadyRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+text = "Ready"
+
+[node name="StartButton" type="Button" parent="Layout/PlayersPanel/ReadyRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 72)
+layout_mode = 2
+text = "Start"
+
+[node name="BackButton" type="Button" parent="Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"

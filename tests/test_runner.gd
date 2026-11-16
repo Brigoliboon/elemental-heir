@@ -20,6 +20,7 @@ const TEST_SCRIPTS := [
 	preload("res://tests/test_leveling.gd"),
 	preload("res://tests/test_stats_panel.gd"),
 	preload("res://tests/test_player_progress.gd"),
+	preload("res://tests/test_net.gd"),
 	preload("res://tests/test_item_data.gd"),
 	preload("res://tests/test_virtual_joystick.gd"),
 	preload("res://tests/test_joystick_scene_change.gd"),
