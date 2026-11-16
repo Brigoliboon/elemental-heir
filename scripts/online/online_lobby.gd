@@ -1,10 +1,10 @@
 extends Control
 ## LAN / direct-IP lobby for 1v1 PvP. Host advertises an address; a second
 ## player joins by IP. When both have handshook, each can Ready and the host
-## can start the stub arena (the real arena art lands in the next PR).
+## can start the PvP arena.
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
-const ARENA_STUB_SCENE := "res://scenes/online/pvp_arena_stub.tscn"
+const ARENA_SCENE := "res://scenes/pvp/pvp_arena.tscn"
 const DEFAULT_PORT := 7777
 
 @onready var status_label: Label = %StatusLabel
@@ -46,7 +46,7 @@ func _ready() -> void:
 	Net.ready_changed.connect(_on_ready_changed)
 	Net.match_ready.connect(_on_match_ready)
 
-	# Returning from the stub arena should still show the live session.
+	# Returning from the arena should still show the live session.
 	if Net.is_session_active():
 		_refresh_session_ui()
 
@@ -173,7 +173,7 @@ func _on_ready_changed(_peer_id: int, _is_ready: bool) -> void:
 
 
 func _on_match_ready() -> void:
-	get_tree().change_scene_to_file(ARENA_STUB_SCENE)
+	get_tree().change_scene_to_file(ARENA_SCENE)
 
 
 func _set_hosting_controls(in_session: bool) -> void:

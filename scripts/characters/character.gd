@@ -98,6 +98,10 @@ var _active_tint := Color.WHITE
 var _step_distance := 0.0
 var _is_dead := false
 var _flash_tween: Tween
+## When set, this pawn is a PvP warrior: it leaves the `player` group, joins
+## `pvp_pawns`, and its hitboxes only resolve on the host.
+var pvp_mode := false
+var _config_localized := false
 var _death_tween: Tween
 
 @onready var skeleton: Skeleton2D = $Skeleton2D
@@ -394,6 +398,8 @@ func damage_number_anchor() -> Vector2:
 
 
 func _apply_scale() -> void:
+	if skeleton == null:
+		return
 	skeleton.position.x = -RIG_CENTER_X
 	scale = Vector2(render_scale if facing_right else -render_scale, render_scale)
 
@@ -423,6 +429,7 @@ func _build_sword_hitbox() -> void:
 	collision.position = SWORD_HITBOX_CENTER
 	sword_hitbox.add_child(collision)
 	sword_bone.add_child(sword_hitbox)
+	_configure_pvp_hitbox(sword_hitbox)
 
 
 ## Turns the sword hitbox on only during the active window of the current attack or
@@ -673,6 +680,124 @@ func apply_progress(saved_level: int, saved_experience: int) -> void:
 	_apply_level_stats()
 	level_changed.emit(level, experience, experience_to_next_level())
 	experience_changed.emit(experience, experience_to_next_level())
+
+
+## Prepares this warrior for a PvP match. Safe to call more than once. Offline
+## single-player never uses this, so `player` group lookups stay unchanged there.
+func configure_for_pvp() -> void:
+	pvp_mode = true
+	_ensure_local_config()
+	if is_in_group("player"):
+		remove_from_group("player")
+	if not is_in_group("pvp_pawns"):
+		add_to_group("pvp_pawns")
+	_configure_pvp_hitbox(sword_hitbox)
+
+
+## Applies a handshake loadout (level, equipped item paths, equipped skill paths).
+## Duplicates CharacterData first so two pawns can hold different skill orders
+## without mutating the shared `.tres`.
+func apply_loadout(loadout: Dictionary) -> void:
+	if loadout.is_empty():
+		return
+	_ensure_local_config()
+	var saved_level := maxi(1, int(loadout.get("level", level)))
+	apply_progress(saved_level, 0)
+	_apply_equipped_items(loadout.get("equipped", []))
+	_apply_equipped_skills(loadout.get("equipped_skills", []))
+	if health != null and stats != null:
+		health.set_max_health(int(stats.get_stat(Stats.MAX_HEALTH)))
+		health.reset()
+	if sword_hitbox != null and stats != null:
+		sword_hitbox.damage = int(stats.get_stat(Stats.ATTACK))
+	energy = max_energy
+	energy_changed.emit(energy, max_energy)
+
+
+## Applies a host-resolved hit on a client pawn. Does not run on the host.
+func apply_replicated_hit(remaining: int, maximum: int, died_now: bool, knockback: Vector2) -> void:
+	if health == null:
+		return
+	if maximum > 0 and health.max_health != maximum:
+		health.set_max_health(maximum)
+	if died_now:
+		if is_alive():
+			health.kill()
+		return
+	if remaining > 0 and remaining != current_health:
+		health.set_current_health(remaining)
+		_flash_damage()
+	if knockback != Vector2.ZERO and not _is_knockback_immune():
+		knockback_velocity += knockback
+
+
+func _ensure_local_config() -> void:
+	if _config_localized or config == null:
+		return
+	config = config.duplicate()
+	_config_localized = true
+
+
+func _configure_pvp_hitbox(hitbox: Hitbox) -> void:
+	if hitbox == null or not pvp_mode:
+		return
+	hitbox.target_group = "pvp_pawns"
+	hitbox.collision_mask = 2  # Player layer, same as the warriors
+	hitbox.authority_only = true
+
+
+func _apply_equipped_items(equipped) -> void:
+	if stats == null:
+		return
+	var paths: Array = equipped if equipped is Array else []
+	for path_value in paths:
+		var path := str(path_value)
+		if path.is_empty() or not ResourceLoader.exists(path):
+			continue
+		var item := load(path)
+		if not (item is EquipmentData):
+			continue
+		var equipment := item as EquipmentData
+		stats.remove_modifier(equipment.id)
+		for mod in equipment.stat_modifiers:
+			if mod != null:
+				stats.add_modifier(equipment.id, mod.stat, mod.flat, mod.pct)
+		if inventory != null and inventory.count_of(equipment) <= 0:
+			inventory.add_item(equipment, 1)
+
+
+func _apply_equipped_skills(equipped_skills) -> void:
+	if config == null:
+		return
+	var skills := config.skills
+	if skills.is_empty():
+		return
+	var paths: Array = equipped_skills if equipped_skills is Array else []
+	var ordered: Array[PlayerSkill] = []
+	for path_value in paths:
+		var path := str(path_value)
+		if path.is_empty():
+			continue
+		var saved: PlayerSkill = null
+		if ResourceLoader.exists(path):
+			saved = load(path) as PlayerSkill
+		if saved == null:
+			continue
+		# Prefer the instance already in the (duplicated) loadout.
+		var owned: PlayerSkill = null
+		for existing in skills:
+			if existing != null and (existing == saved or existing.resource_path == path or existing.id == saved.id):
+				owned = existing
+				break
+		if owned != null and not ordered.has(owned):
+			ordered.append(owned)
+	if ordered.is_empty():
+		return
+	for skill in skills:
+		if skill != null and not ordered.has(skill):
+			ordered.append(skill)
+	skills.assign(ordered)
+	skill_loadout_changed.emit()
 
 
 ## Recomputes base stats and raises the health pool when a level is gained.
@@ -955,6 +1080,7 @@ func _spawn_area_hitbox(center: Vector2, skill: GroundSlamSkill) -> Hitbox:
 	hitbox.add_child(shape)
 	anchor.add_child(hitbox)
 	hitbox.activate()
+	_configure_pvp_hitbox(hitbox)
 
 	var tree := get_tree()
 	if tree != null:

@@ -506,20 +506,30 @@ See `docs/MULTIPLAYER.md` for the architecture and device-testing steps.
   - `Net` autoload wraps `ENetMultiplayerPeer`: host, join, leave, max two
     players, protocol-version handshake that exchanges the local
     `PlayerProgress` loadout (level, equipped item and skill paths).
-  - Online lobby replaces the old placeholder: Host (LAN IP + port), Join
-    (IP and port), ready flags, host Start, and a stub arena until the real
-    PvP map art lands.
+  - Online lobby: Host (LAN IP + port), Join (IP and port), ready flags, and
+    host Start, which loads the dedicated PvP arena on both peers.
   - Default port `7777`. Android export presets enable `INTERNET` and
     `ACCESS_NETWORK_STATE`.
   - Tests: `tests/test_net.gd`, plus the two-instance smoke test
     `tests/mp_sanity.tscn`.
-- [ ] MP2 - Two pawns in the dedicated PvP arena
-  - Input authority and remote interpolation. Boon will provide the arena
-    background art.
-- [ ] MP3 - Host-authoritative combat
-  - Clients send attack/block/skill intents; the host resolves hits and damage.
+- [x] MP2 - Two pawns in the dedicated PvP arena
+  - `scenes/pvp/pvp_arena.tscn` with a swappable `Background` Sprite2D
+    (`assets/backgrounds/pvp/pvp_arena.png`, Boon's 1536x720 pixel-art
+    colosseum, cover-scaled and nearest-filtered), floor bounds, and two
+    spawn markers. No monsters, loot, or XP.
+  - `MultiplayerSpawner` creates one `pvp_warrior` per peer, each with that
+    peer's handshake loadout. The owning peer has input authority; the
+    camera follows the local pawn. Remotes interpolate through
+    `MultiplayerSynchronizer`.
+- [x] MP3 - Host-authoritative combat
+  - Clients send attack/block/skill intents; the host runs hitbox resolution
+    and damage, then replicates health, knockback, and death. PvP pawns
+    leave the `player` group so arena code never uses
+    `get_first_node_in_group("player")`.
 - [ ] MP4 - Match flow
-  - Rounds, win, rematch. No loot or XP in PvP unless we decide otherwise.
+  - [x] First KO wins, result banner, host Rematch, Leave for both. No loot
+    or XP in PvP.
+  - [ ] Best-of rounds / more structured match flow, if we want it later.
 - [ ] MP5 - Optional relay
   - For play over the internet, not just LAN.
 
