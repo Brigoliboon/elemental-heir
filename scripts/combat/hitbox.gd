@@ -31,6 +31,10 @@ signal hit_landed(target: Node2D)
 ## transparent colour leaves the target's own hit feedback untouched.
 @export var flash_color := Color(0.0, 0.0, 0.0, 0.0)
 @export var flash_seconds := 0.22
+## When true, only the multiplayer authority (the host, or offline play) applies
+## damage. Clients still spawn and animate the same hitbox, but they skip the
+## resolution so a swing cannot land twice.
+@export var authority_only := false
 
 var _active := false
 var _hit_targets: Dictionary = {}
@@ -100,6 +104,11 @@ func _on_area_entered(area: Area2D) -> void:
 func _try_hit(node: Node) -> void:
 	if not _active or node == null or not is_instance_valid(node):
 		return
+	if authority_only and not _is_damage_authority():
+		return
+	var owner_attacker := _get_attacker()
+	if owner_attacker != null and node == owner_attacker:
+		return
 	if target_group != "" and not node.is_in_group(target_group):
 		return
 	var id := node.get_instance_id()
@@ -122,6 +131,16 @@ func _try_hit(node: Node) -> void:
 	if flash_color.a > 0.0 and node.has_method("flash_impact"):
 		node.flash_impact(flash_color, flash_seconds)
 	hit_landed.emit(node as Node2D)
+
+
+func _is_damage_authority() -> bool:
+	var tree := get_tree()
+	if tree == null or tree.multiplayer == null:
+		return true
+	var peer: MultiplayerPeer = tree.multiplayer.multiplayer_peer
+	if peer == null or peer is OfflineMultiplayerPeer:
+		return true
+	return tree.multiplayer.is_server()
 
 
 ## Resolves the outgoing attack from the attacker's Stats. The target applies its

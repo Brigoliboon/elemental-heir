@@ -15,6 +15,8 @@ signal server_disconnected
 signal handshake_received(peer_id: int, loadout: Dictionary)
 signal ready_changed(peer_id: int, is_ready: bool)
 signal match_ready
+## Host-resolved PvP combat state for one pawn, delivered to the client.
+signal combat_state(peer_id: int, remaining: int, maximum: int, died_now: bool, knockback: Vector2)
 
 enum Role { NONE, HOST, CLIENT }
 
@@ -166,6 +168,12 @@ func request_start() -> void:
 		return
 	last_error = ""
 	_rpc_start_match.rpc()
+
+
+func broadcast_combat_state(peer_id: int, remaining: int, maximum: int, died_now: bool, knockback: Vector2) -> void:
+	if not is_host():
+		return
+	_rpc_combat_state.rpc(peer_id, remaining, maximum, died_now, knockback)
 
 
 func local_loadout() -> Dictionary:
@@ -332,6 +340,13 @@ func _rpc_set_ready(is_ready: bool) -> void:
 @rpc("authority", "reliable", "call_local")
 func _rpc_start_match() -> void:
 	match_ready.emit()
+
+
+@rpc("authority", "reliable")
+func _rpc_combat_state(peer_id: int, remaining: int, maximum: int, died_now: bool, knockback: Vector2) -> void:
+	if is_host():
+		return
+	combat_state.emit(peer_id, remaining, maximum, died_now, knockback)
 
 
 @rpc("authority", "reliable")

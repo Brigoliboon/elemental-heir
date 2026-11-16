@@ -4,7 +4,7 @@ extends Control
 ## can start the stub arena (the real arena art lands in the next PR).
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
-const ARENA_STUB_SCENE := "res://scenes/online/pvp_arena_stub.tscn"
+const ARENA_SCENE := "res://scenes/pvp/pvp_arena.tscn"
 const DEFAULT_PORT := 7777
 
 @onready var status_label: Label = %StatusLabel
@@ -173,7 +173,7 @@ func _on_ready_changed(_peer_id: int, _is_ready: bool) -> void:
 
 
 func _on_match_ready() -> void:
-	get_tree().change_scene_to_file(ARENA_STUB_SCENE)
+	get_tree().change_scene_to_file(ARENA_SCENE)
 
 
 func _set_hosting_controls(in_session: bool) -> void:
