@@ -16,8 +16,8 @@ fields are consumed where the current runtime already exposes them.
 
 ### Character
 
-- `CharacterData` is the single per-character resource. It replaces
-  `CharacterConfig` and holds identity, stats/progression, rig settings, draw
+- `CharacterData` is the single per-character resource. It replaced the
+  earlier `CharacterConfig` and holds identity, stats/progression, rig settings, draw
   order and the attack combo.
 - `Character` (runtime) extends `CharacterBody2D` so enemies can detect and
   damage it through physics areas. It owns runtime health and `take_damage()`.
@@ -28,11 +28,11 @@ fields are consumed where the current runtime already exposes them.
 
 ### Enemy
 
-- `EnemyData` remains a stats-only blueprint.
-- `mob.gd` exports `EnemyData`, initializes health/damage from it and exposes
+- `EnemyData` / `MonsterData` remains a stats-only blueprint.
+- `monster.gd` (`class_name Monster`) exports that data, initializes health/damage from it and exposes
   `take_damage()`.
-- `mob.tscn` references `goblin.tres`, uses the project physics layers
-  (Enemies = 3, Player = 2, World = 1) and its attack area detects the Player
+- `mob.tscn` (and the other monster scenes) reference their `.tres` data, use the project physics layers
+  (Enemies = 3, Player = 2, World = 1) and their attack area detects the Player
   layer.
 - The attack clip is non-looping so `animation_finished` fires.
 
@@ -60,7 +60,7 @@ fields are consumed where the current runtime already exposes them.
   - Replace inline player nodes in `area_base.tscn` and `warrior_rig_test.tscn`.
   - Test: `tests/test_player_entity.gd`.
 - [x] M3 - Enemy data wiring
-  - `mob.gd` exports `EnemyData`; `mob.tscn` references `goblin.tres`.
+  - `monster.gd` exports `EnemyData`; `mob.tscn` references `goblin.tres`.
   - Fix attack loop, physics layers and attack-area detection.
   - Remove unused `hostile-mob.gd`.
   - Test: `tests/test_mob_entity.gd`.
@@ -84,7 +84,7 @@ fields are consumed where the current runtime already exposes them.
 
 ## Enemy chase and attack (current)
 
-- `mob.gd` chases the player in 2.5D ground space (using feet-to-feet distance and depth anchors via `DepthSort.get_feet_y()`) while within `aggro_radius` (default `325`).
+- `monster.gd` chases the player in 2.5D ground space (using feet-to-feet distance and depth anchors via `DepthSort.get_feet_y()`) while within `aggro_radius` (default `325`).
 - The mob maintains attack spacing (`attack_space = 110`, `attack_range = 135`, `min_attack_space = 85`), avoiding crowding or overlapping into the player's sprite body.
 - When too close (`dist_x < min_attack_space`), the mob backs up slightly to maintain attack spacing.
 - The mob stops chasing and attacks only when **both** conditions are met:
@@ -108,7 +108,7 @@ fields are consumed where the current runtime already exposes them.
 - `DepthSort.is_in_depth(a, b, tolerance)` verifies whether two entities share roughly the same depth lane.
 - Moving up the screen (smaller y) always produces a lower index; moving down (larger y) produces a higher index.
 - `area.gd:_apply_depth()` applies the rule to the player using the **feet line** (`_feet_y`), not the Character origin.
-- `mob.gd:_apply_depth()` applies it using `get_feet_y()`.
+- `monster.gd:_apply_depth()` applies it using `get_feet_y()`.
 - `DepthOverlay` (`scripts/world/depth_overlay.gd`) derives the index from a sprite's bottom edge, so props such as the forest fountain let the player pass behind (when above the base) or in front (when below it).
 - Do not hand-author gameplay z-indices in scenes; they are overwritten every frame. Only backgrounds keep a fixed negative z-index.
 
@@ -126,7 +126,7 @@ fields are consumed where the current runtime already exposes them.
   - `AttackData.hit_start` / `hit_end` define the live fraction of each clip; `AttackData.damage` (0 = use `CharacterData.attack_damage`) sets per-hit damage.
   - `Character.SWORD_KNOCKBACK` is pushed into enemies through `Hitbox.knockback_force`.
 - Enemy attack:
-  - `mob.tscn` contains `AttackHitbox`; `mob.gd` sets its damage from `EnemyData.attack_damage` and assigns `attacker = self`.
+  - `mob.tscn` contains `AttackHitbox`; `monster.gd` sets its damage from `EnemyData.attack_damage` and assigns `attacker = self`.
 - Physics layers now follow Godot bit values (see the corrected table below). `collision_layer` is a mask, not a layer number.
 
 ## Shared health, death and feedback (current)
@@ -136,12 +136,12 @@ fields are consumed where the current runtime already exposes them.
   - `take_damage(amount)` clamps at zero, ignores dead/invulnerable targets and emits `damaged`, `health_changed` and `died`;
   - `heal`, `kill`, `reset`, `set_max_health(keep_ratio)` and `clear_invulnerability()` cover respawn, debug tools and future potions;
   - `invulnerability_seconds` is opt-in i-frames. Damage is refused while the timer runs.
-- `warrior.tscn` and `mob.tscn` each own a `Health` child. `Character` and `Mob` delegate to it and keep their public API (`current_health`, `max_health`, `take_damage`, `is_alive`, `health_changed`, `died`) so existing HUD/tests do not need to know about the component. Both also expose `damaged` and `is_dead()`.
+- `warrior.tscn` and `mob.tscn` each own a `Health` child. `Character` and `Monster` delegate to it and keep their public API (`current_health`, `max_health`, `take_damage`, `is_alive`, `health_changed`, `died`) so existing HUD/tests do not need to know about the component. Both also expose `damaged` and `is_dead()`.
 - A runtime `Health` is created as a fallback if a hand-built scene forgets the child, so the entity never silently loses health.
 - Damage feedback:
   - `Character` and `Mob` flash red on `Health.damaged`;
   - the player's block reduction stays in `Character.take_damage` before forwarding to `Health`;
-  - `Hitbox.knockback_force` pushes mobs away from the hit; `mob.gd` decays that impulse (`knockback_decay`) and feeds it through `move_and_slide()`;
+  - `Hitbox.knockback_force` pushes mobs away from the hit; `monster.gd` decays that impulse (`knockback_decay`) and feeds it through `move_and_slide()`;
   - `mob.tscn` owns a `WorldHealthBar` (`scripts/ui/world_health_bar.gd`) above the sprite. It binds to the sibling `Health` node, draws in world space, hides while full and fades with the corpse.
 - Player death/respawn:
   - `Character` cancels the combo, deactivates the sword hitbox, locks movement/attack/block and fades the rig when `Health` reaches zero;
@@ -241,20 +241,21 @@ fields are consumed where the current runtime already exposes them.
 
 ## Phase 3 - Item System (DESIGN_ROADMAP §3)
 
-- [ ] I3.1 - Item and equipment data
+- [x] I3.1 - Item and equipment data
   - Add `ItemData`, `EquipmentData` and `StatModifier` resources with item
     type/group, rarity, icon, stacking, class restriction, equip slot and stat
     modifiers.
   - Test: `tests/test_item_data.gd`.
-- [ ] I3.2 - Inventory
+- [x] I3.2 - Inventory
   - Add a fixed-capacity `Inventory` component with stacking, add/remove,
     slot swap, stack split and type sorting.
-  - Test: `tests/test_inventory.gd`.
-- [ ] I3.3 - Equipment manager
-  - Add an `EquipmentManager` that validates slots/class rules, applies and
-    removes `Stats` modifiers, and returns unequipped items to the inventory.
-  - Test: `tests/test_equipment.gd`.
-- [ ] I3.4 - Default warrior gear
+  - Tests: `tests/test_inventory_items.gd`, `tests/test_inventory_stats.gd`.
+- [x] I3.3 - Equipment manager
+  - Equip/unequip validation, stat modifiers and returning items to the bag
+    live on `Inventory` and `InventoryPanel` (no standalone `EquipmentManager`
+    class).
+  - Test: `tests/test_inventory_equipment.gd`.
+- [x] I3.4 - Default warrior gear
   - Create `default_sword.tres` and `default_buckler.tres` from the warrior
     sprites, with names, descriptions, icons and stat modifiers.
   - Equip both on the warrior entity and keep `Health`/sword damage in sync
@@ -494,6 +495,33 @@ fields are consumed where the current runtime already exposes them.
     inventory is shorter than the pool.
   - Wire the painted Sort button to the inventory type sort.
   - Test: `tests/test_inventory_items.gd`.
+
+
+## Multiplayer (current)
+
+Real-time 1v1 PvP over LAN or a direct IP. No co-op and no turn-based mode.
+See `docs/MULTIPLAYER.md` for the architecture and device-testing steps.
+
+- [x] MP1 - Foundation
+  - `Net` autoload wraps `ENetMultiplayerPeer`: host, join, leave, max two
+    players, protocol-version handshake that exchanges the local
+    `PlayerProgress` loadout (level, equipped item and skill paths).
+  - Online lobby replaces the old placeholder: Host (LAN IP + port), Join
+    (IP and port), ready flags, host Start, and a stub arena until the real
+    PvP map art lands.
+  - Default port `7777`. Android export presets enable `INTERNET` and
+    `ACCESS_NETWORK_STATE`.
+  - Tests: `tests/test_net.gd`, plus the two-instance smoke test
+    `tests/mp_sanity.tscn`.
+- [ ] MP2 - Two pawns in the dedicated PvP arena
+  - Input authority and remote interpolation. Boon will provide the arena
+    background art.
+- [ ] MP3 - Host-authoritative combat
+  - Clients send attack/block/skill intents; the host resolves hits and damage.
+- [ ] MP4 - Match flow
+  - Rounds, win, rematch. No loot or XP in PvP unless we decide otherwise.
+- [ ] MP5 - Optional relay
+  - For play over the internet, not just LAN.
 
 ## Next milestones
 

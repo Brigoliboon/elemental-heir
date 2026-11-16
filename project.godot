@@ -21,6 +21,7 @@ MusicPlayer="*res://scripts/music_player.gd"
 SfxPlayer="*res://scripts/sfx_player.gd"
 PlayerProgress="*res://scripts/player_progress.gd"
 SpawnState="*res://scripts/world/spawn_state.gd"
+Net="*res://scripts/net/net.gd"
 
 [display]
 

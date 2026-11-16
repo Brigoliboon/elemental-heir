@@ -13,7 +13,7 @@ const TEX_SOUND_OFF_PRESSED: Texture2D = preload("res://assets/ui/title/btn_soun
 const TEX_SOUND_OFF_DISABLED: Texture2D = preload("res://assets/ui/title/btn_sound_off_disabled.png")
 
 const RIG_TEST_SCENE := "res://scenes/tests/warrior_rig_test.tscn"
-const ONLINE_SCENE := "res://scenes/online/online_placeholder.tscn"
+const ONLINE_SCENE := "res://scenes/online/online_lobby.tscn"
 const SETTINGS_SCENE := "res://scenes/settings/settings_placeholder.tscn"
 const CREDITS_SCENE := "res://scenes/credits/credits_screen.tscn"
 const FOREST_SCENE := "res://scenes/areas/forest/forest_village_square.tscn"
@@ -41,7 +41,7 @@ func _ready() -> void:
 	online_button.pressed.connect(_on_online_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 
-	online_button.disabled = true
+	online_button.disabled = false
 	no_connection_label.visible = false
 
 	connectivity_check.timeout = 4.0
@@ -103,7 +103,9 @@ func _on_check_completed(result: int, response_code: int, _headers: PackedString
 
 func _set_online(online: bool, known: bool) -> void:
 	_online = online
-	online_button.disabled = not online
+	# LAN / direct-IP play does not need a public internet route, so the Online
+	# button stays available even when the connectivity check fails.
+	online_button.disabled = false
 	no_connection_label.visible = known and not online
 
 
@@ -112,8 +114,7 @@ func _on_offline_pressed() -> void:
 
 
 func _on_online_pressed() -> void:
-	if _online:
-		get_tree().change_scene_to_file(ONLINE_SCENE)
+	get_tree().change_scene_to_file(ONLINE_SCENE)
 
 
 func _on_settings_pressed() -> void:
