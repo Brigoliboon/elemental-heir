@@ -4,20 +4,23 @@ extends Node2D
 ## alive). Two warriors spawn from the handshake loadouts. There are no
 ## monsters, loot, or XP here.
 ##
-## Background swap: replace `BACKGROUND_PATH` (`assets/backgrounds/pvp/pvp_arena.png`)
-## with 1920x1080 art. The Sprite2D node is named `Background` (centered = false,
-## bottom-anchored like other areas). `ground_far_px` / `ground_near_px` are
-## measured in texture pixels from the top of that image.
+## Background: `BACKGROUND_PATH` (`assets/backgrounds/pvp/pvp_arena.png`).
+## Current art is 1536x720 pixel-art. It is cover-scaled by height (x1.5 on a
+## 1920x1080 view -> 2304x1080), centred, and cropped on the sides so the
+## aspect ratio is not stretched. The `Background` Sprite2D uses nearest
+## filtering, `centered = false`, and is bottom-anchored like other areas.
+## `ground_far_px` / `ground_near_px` are texture pixels from the top of the
+## image (wall base is around y=465; the walkable dirt starts just below it).
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
 const PVP_WARRIOR_SCENE := "res://entities/characters/pvp_warrior.tscn"
 const BACKGROUND_PATH := "res://assets/backgrounds/pvp/pvp_arena.png"
 const DESIGN_BACKGROUND_SCALE := 1.5
 const FEET_OFFSET_LOCAL := Character.FEET_OFFSET_LOCAL
-const EXPECTED_BACKGROUND_SIZE := Vector2(1920, 1080)
+const EXPECTED_BACKGROUND_SIZE := Vector2(1536, 720)
 
-@export var ground_far_px := 420.0
-@export var ground_near_px := 850.0
+@export var ground_far_px := 478.0
+@export var ground_near_px := 700.0
 @export var edge_margin := 110.0
 @export var far_character_scale := 1.5
 @export var near_character_scale := 2.0
@@ -49,8 +52,10 @@ const EXPECTED_BACKGROUND_SIZE := Vector2(1920, 1080)
 @onready var result_leave_button: Button = $HUD/UI/ResultPanel/Banner/LeaveButton
 
 var world_width := 1920.0
-var ground_far_y := 420.0
-var ground_near_y := 850.0
+var playable_left := 0.0
+var playable_right := 1920.0
+var ground_far_y := 478.0
+var ground_near_y := 700.0
 var _feet_y := 0.0
 var _local_pawn: Character
 var _match_over := false
@@ -260,7 +265,7 @@ func _move_local_pawn(direction: Vector2, delta: float) -> void:
 	_local_pawn.move_2d(direction, delta)
 	var new_feet := Vector2(_local_pawn.position.x, _feet_y + _local_pawn.position.y - before.y)
 	new_feet.y = clampf(new_feet.y, ground_far_y, ground_near_y)
-	new_feet.x = clampf(new_feet.x, edge_margin, maxf(edge_margin, world_width - edge_margin))
+	new_feet.x = clampf(new_feet.x, playable_left + edge_margin, maxf(playable_left + edge_margin, playable_right - edge_margin))
 	_feet_y = new_feet.y
 	_apply_depth_to(_local_pawn, new_feet)
 
@@ -284,7 +289,7 @@ func _apply_depth_to_remotes() -> void:
 func _follow_camera(delta: float) -> void:
 	if camera == null:
 		return
-	var target := Vector2(world_width * 0.5, get_viewport_rect().size.y * 0.5)
+	var target := Vector2((playable_left + playable_right) * 0.5, get_viewport_rect().size.y * 0.5)
 	var depth := 0.5
 	if _local_pawn != null and is_instance_valid(_local_pawn):
 		var feet_y := _local_pawn.get_feet_y()
@@ -313,7 +318,7 @@ func _spawn_feet(peer_id: int) -> Vector2:
 	if marker != null:
 		var y := clampf(marker.position.y, ground_far_y, ground_near_y)
 		return Vector2(marker.position.x, y)
-	var x := edge_margin * 3.0 if peer_id == 1 else world_width - edge_margin * 3.0
+	var x := playable_left + (playable_right - playable_left) * (1.0 / 6.0 if peer_id == 1 else 5.0 / 6.0)
 	return Vector2(x, lerpf(ground_far_y, ground_near_y, 0.55))
 
 
@@ -329,17 +334,25 @@ func _layout_background() -> void:
 			texture = loaded
 	if texture == null or background == null:
 		world_width = view.x
+		playable_left = 0.0
+		playable_right = view.x
 		ground_far_y = view.y * 0.4
 		ground_near_y = view.y * 0.85
 		_background_scale = 1.0
 		return
 	var tex_size := texture.get_size()
-	var bg_scale := maxf(1.0, maxf(view.y / tex_size.y, view.x / tex_size.x))
+	# Cover the viewport without stretching, same scale-to-cover idea as Area,
+	# then centre so a wider image crops equally on both sides.
+	var bg_scale := maxf(view.y / maxf(1.0, tex_size.y), view.x / maxf(1.0, tex_size.x))
+	var scaled := tex_size * bg_scale
 	background.centered = false
+	background.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	background.scale = Vector2(bg_scale, bg_scale)
-	background.position = Vector2(0.0, view.y - tex_size.y * bg_scale)
+	background.position = Vector2((view.x - scaled.x) * 0.5, view.y - scaled.y)
 	_background_scale = bg_scale
-	world_width = tex_size.x * bg_scale
+	playable_left = maxf(0.0, background.position.x)
+	playable_right = minf(view.x, background.position.x + scaled.x)
+	world_width = playable_right
 	ground_far_y = background.position.y + ground_far_px * bg_scale
 	ground_near_y = background.position.y + ground_near_px * bg_scale
 	if ground_near_y < ground_far_y:
@@ -347,9 +360,9 @@ func _layout_background() -> void:
 		ground_far_y = ground_near_y
 		ground_near_y = tmp
 	if camera != null:
-		camera.limit_left = 0
-		camera.limit_right = int(world_width)
-		camera.limit_top = int(background.position.y)
+		camera.limit_left = int(playable_left)
+		camera.limit_right = int(playable_right)
+		camera.limit_top = int(minf(background.position.y, 0.0))
 		camera.limit_bottom = int(view.y)
 	_layout_spawn_markers(tex_size, bg_scale)
 
@@ -360,12 +373,12 @@ func _layout_spawn_markers(tex_size: Vector2, bg_scale: float) -> void:
 		var pos: Vector2 = spawn_host.get_meta("tex_pos")
 		spawn_host.position = background.position + pos * bg_scale
 	elif spawn_host != null:
-		spawn_host.position = Vector2(world_width * 0.22, lerpf(ground_far_y, ground_near_y, 0.55))
+		spawn_host.position = Vector2(lerpf(playable_left, playable_right, 1.0 / 6.0), lerpf(ground_far_y, ground_near_y, 0.5))
 	if spawn_challenger != null and spawn_challenger.has_meta("tex_pos"):
 		var pos_b: Vector2 = spawn_challenger.get_meta("tex_pos")
 		spawn_challenger.position = background.position + pos_b * bg_scale
 	elif spawn_challenger != null:
-		spawn_challenger.position = Vector2(world_width * 0.78, lerpf(ground_far_y, ground_near_y, 0.55))
+		spawn_challenger.position = Vector2(lerpf(playable_left, playable_right, 5.0 / 6.0), lerpf(ground_far_y, ground_near_y, 0.5))
 	# Silence unused warning when tex_size is only needed for docs / future art.
 	if tex_size.x <= 0.0:
 		pass

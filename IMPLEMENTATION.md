@@ -514,9 +514,9 @@ See `docs/MULTIPLAYER.md` for the architecture and device-testing steps.
     `tests/mp_sanity.tscn`.
 - [x] MP2 - Two pawns in the dedicated PvP arena
   - `scenes/pvp/pvp_arena.tscn` with a swappable `Background` Sprite2D
-    (`assets/backgrounds/pvp/pvp_arena.png`, 1920x1080 placeholder until
-    Boon's art lands), floor bounds, and two spawn markers. No monsters,
-    loot, or XP.
+    (`assets/backgrounds/pvp/pvp_arena.png`, Boon's 1536x720 pixel-art
+    colosseum, cover-scaled and nearest-filtered), floor bounds, and two
+    spawn markers. No monsters, loot, or XP.
   - `MultiplayerSpawner` creates one `pvp_warrior` per peer, each with that
     peer's handshake loadout. The owning peer has input authority; the
     camera follows the local pawn. Remotes interpolate through

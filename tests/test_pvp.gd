@@ -56,8 +56,8 @@ func _test_arena_scene(tree: SceneTree) -> Array[String]:
 		failures.append("%s did not load" % BACKGROUND_PATH)
 	else:
 		var size := texture.get_size()
-		if size != Vector2(1920, 1080):
-			failures.append("arena background should be 1920x1080, got %s" % size)
+		if size != Vector2(1536, 720):
+			failures.append("arena background should be 1536x720, got %s" % size)
 	var far_y := float(arena.get("ground_far_y"))
 	var near_y := float(arena.get("ground_near_y"))
 	if not is_equal_approx(near_y, far_y) and near_y <= far_y:

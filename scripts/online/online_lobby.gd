@@ -1,7 +1,7 @@
 extends Control
 ## LAN / direct-IP lobby for 1v1 PvP. Host advertises an address; a second
 ## player joins by IP. When both have handshook, each can Ready and the host
-## can start the stub arena (the real arena art lands in the next PR).
+## can start the PvP arena.
 
 const TITLE_SCENE := "res://scenes/title/title_screen.tscn"
 const ARENA_SCENE := "res://scenes/pvp/pvp_arena.tscn"
@@ -46,7 +46,7 @@ func _ready() -> void:
 	Net.ready_changed.connect(_on_ready_changed)
 	Net.match_ready.connect(_on_match_ready)
 
-	# Returning from the stub arena should still show the live session.
+	# Returning from the arena should still show the live session.
 	if Net.is_session_active():
 		_refresh_session_ui()
 

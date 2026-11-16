@@ -32,17 +32,24 @@ intents; the host resolves hits and replicates health.
 The match plays in `scenes/pvp/pvp_arena.tscn` (`scripts/pvp/pvp_arena.gd`).
 There is no `Player` node, no monsters, and no loot or XP.
 
-**Background art.** Drop the final image over this file, keeping the size:
+**Background art.** The current map is Boon's pixel-art colosseum:
 
 - Path: `assets/backgrounds/pvp/pvp_arena.png`
-- Node: `Background` (Sprite2D, `centered = false`, bottom-anchored and
-  scaled like the other areas)
-- Expected size: **1920 × 1080**
+- Node: `Background` (Sprite2D, `centered = false`, bottom-anchored)
+- Source size: **1536 × 720**
+- Filtering: nearest (`texture_filter = Nearest`) so the pixel art stays
+  crisp. The image is never stretched. On a 1920×1080 view it is
+  cover-scaled by height (×1.5 → 2304×1080), centred, and cropped by
+  about 192 px of the side pillars on each side.
 - Floor band, in texture pixels from the top of the image: `ground_far_px`
-  420 and `ground_near_px` 850 (exports on `PvpArena`). Tweak these if the
-  new art's floor sits elsewhere.
+  **478** (just below the wall base around y=465) and `ground_near_px`
+  **700** (a short margin above the bottom edge). Exports on `PvpArena`.
 - Spawn points: `SpawnHost` and `SpawnChallenger` (Marker2D), authored in
-  the same texture-pixel space (defaults: `(420, 650)` and `(1500, 650)`).
+  the same texture-pixel space at mid-depth in the left and right thirds
+  of the visible floor (defaults: `(341, 589)` and `(1195, 589)`).
+- Character scale still uses the same far/near values as other areas
+  (1.5–2.0). The 1.5 cover scale matches `DESIGN_BACKGROUND_SCALE`, so
+  warriors stay the same size as in the forest.
 
 **Pawns.** `MultiplayerSpawner` under the arena root spawns
 `entities/characters/pvp_warrior.tscn` into `Pawns`. Each pawn is named
